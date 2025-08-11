@@ -16,7 +16,6 @@ const config = {
   apiUrl: getApiUrl(),
   featureFlag: import.meta.env.VITE_FEATURE_FLAG,
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-  googleMapKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
   mapboxApiKey: import.meta.env.VITE_MAPBOX_API,
 };
 

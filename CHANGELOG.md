@@ -11,18 +11,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Features
 
 * initial setup ([74157d5](https://github.com/chikrice/chikrice-user-frontend/commit/74157d51d0ce2a8e0e39c1daf169bfe73ead0ac8))
-
-## [Unreleased]
-
-### Added
-- Initial project setup
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
