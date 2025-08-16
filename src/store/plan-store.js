@@ -1,79 +1,146 @@
-import axios, { endpoints } from 'src/utils/axios';
+import { isToday } from 'date-fns';
 
-import { getDefaultWeekAndDayFromPlan } from './helpers';
+import axios, { endpoints } from 'src/utils/axios';
 
 export const createPlanStore = (set, get) => ({
   roadmap: null,
-  planMonth: null,
-  planMonthId: null,
-  planDay: null,
+  plans: null,
   todayPlan: null,
-  thisWeekNumber: null,
-  loading: false,
+  isLoading: false,
   error: null,
-  //
+
+  // =====================================
+  // CREATE THE USER ROADMAP ON REGISTER
+  // =====================================
+  createUserJourney: async (userInputs) => {
+    try {
+      set({ isLoading: true });
+      const roadmap = await get().createRoadmap(userInputs);
+      const plans = await get().createPlans(roadmap, 1);
+      get().getTodayPlan(plans);
+    } catch (error) {
+      set({ error: error.message || 'Failed to create user journey' });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  // =====================================
+  // INITIALIZE USER DATA
+  // =====================================
+  loadUserJourney: async (roadmapId) => {
+    try {
+      set({ isLoading: true });
+      const roadmap = await get().getRoadmap(roadmapId);
+      const { milestones, onGoingMonth } = roadmap;
+      const milestone = milestones[onGoingMonth - 1];
+      const { id: milestoneId, plans } = milestone;
+
+      if (!plans) {
+        const plans = await get().createPlans(roadmap, onGoingMonth);
+        get().getTodayPlan(plans);
+      } else {
+        const plans = await get().getPlans({ roadmapId, milestoneId });
+        get().getTodayPlan(plans);
+      }
+    } catch (error) {
+      set({ error: error.message || 'Failed to load user journey' });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  // =====================================
+  // CREATES NEW ROADMAP
+  // =====================================
   createRoadmap: async (data) => {
-    set({ loading: true });
     try {
       const { data: roadmap } = await axios.post(endpoints.roadmap.create, data);
-      console.log(roadmap);
-      await get().createPlanMonth(roadmap.id);
-
       set({ roadmap, error: null });
+      return roadmap;
     } catch (error) {
+      console.log(error);
       set({ error: error.message || 'Failed to initialize roadmap' });
-    } finally {
-      set({ loading: false });
     }
   },
-  //
-  createPlanMonth: async (roadmapId) => {
+
+  // =====================================
+  // CREATE PLANS FOR ROADMAP MILESTONES
+  // =====================================
+  createPlans: async (roadmap, month) => {
     try {
-      set({ loading: true });
-      const { data: planMonth } = await axios.post(endpoints.plan_month.create, { roadmapId });
-      const { data: roadmap } = await axios.get(endpoints.roadmap.root(roadmapId));
+      const data = get().transformRoadmapToPlanData(roadmap, month);
+      const { data: plans } = await axios.post(endpoints.plans.create, data);
 
-      const { thisWeekNumber, todayPlan } = getDefaultWeekAndDayFromPlan(planMonth);
-      const planDay = planMonth.data.flatMap((week) => week.days);
-      const planMonthId = planMonth.id;
-
-      set({ roadmap, planMonth, planDay, todayPlan, thisWeekNumber, planMonthId, error: null });
+      set({ plans, error: null });
+      return plans;
     } catch (error) {
       set({ error: error.message || 'Failed to create plan_month' });
-    } finally {
-      set({ loading: false });
     }
   },
-  //
+
+  // =====================================
+  // GET THE ROADMAP
+  // =====================================
   getRoadmap: async (roadmapId) => {
     try {
-      set({ loading: true });
       const { data: roadmap } = await axios.get(endpoints.roadmap.root(roadmapId));
-
-      const planMonthId = roadmap.milestones[roadmap.onGoingMonth - 1].planId;
-      await get().getPlanMonth(planMonthId);
-
       set({ roadmap });
+
+      return roadmap;
     } catch (error) {
       set({ error: error.message || 'Failed to get roadmap' });
-    } finally {
-      set({ loading: false });
     }
   },
-  //
-  getPlanMonth: async (planMonthId) => {
+
+  // =====================================
+  // GET ROADMAP MILESTONE PLANS
+  // =====================================
+  getPlans: async (data) => {
     try {
-      set({ loading: true });
-      const { data: planMonth } = await axios.get(endpoints.plan_month.get(planMonthId));
-
-      const { thisWeekNumber, todayPlan } = getDefaultWeekAndDayFromPlan(planMonth);
-      const planDay = planMonth.data.flatMap((week) => week.days);
-
-      set({ planMonth, planDay, todayPlan, thisWeekNumber, planMonthId, error: null });
+      const { data: plans } = await axios.get(endpoints.plans.query, { params: data });
+      set({ plans });
+      return plans;
     } catch (error) {
       set({ error: error.message || 'Failed to get plan_month' });
-    } finally {
-      set({ loading: false });
     }
+  },
+
+  // =====================================
+  // GET THE DASHBOARD TODAY PLAN
+  // =====================================
+  getTodayPlan: (plans) => {
+    try {
+      console.log(plans);
+      const todayPlan = plans.find((plan) => {
+        const planDate = new Date(plan.date);
+        return isToday(planDate);
+      });
+
+      if (todayPlan) {
+        set({ todayPlan, error: null });
+      } else {
+        set({ todayPlan: null, error: 'No plan found for today' });
+      }
+    } catch (error) {
+      set({ error: error.message || 'Failed to get today plan' });
+    }
+  },
+
+  // =====================================
+  // HELPER FUNCTIONS
+  // =====================================
+  transformRoadmapToPlanData: (roadmap, month) => {
+    const { id: roadmapId, milestones } = roadmap;
+    const { id: milestoneId, startDate, endDate, macrosRatio, targetCalories } = milestones[month - 1];
+
+    return {
+      roadmapId,
+      milestoneId,
+      startDate,
+      endDate,
+      macrosRatio,
+      targetCalories,
+    };
   },
 });

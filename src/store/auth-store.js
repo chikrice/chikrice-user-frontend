@@ -50,12 +50,12 @@ export const createAuthStore = (set, get) => ({
   user: null,
   tokens: null,
   error: null,
-  loading: false,
+  isLoading: false,
   method: 'jwt',
   authenticated: false,
   //
   bootstrap: async () => {
-    set({ loading: true, error: null });
+    set({ isLoading: true, error: null });
     try {
       const access = getStoredAccess();
       if (access && !isTokenExpired(access.expires)) {
@@ -63,7 +63,7 @@ export const createAuthStore = (set, get) => ({
         const user = await fetchUserByAccess(access.token);
         set({ user, authenticated: true });
         if (user?.roadmapId) {
-          await get().getRoadmap(user.roadmapId);
+          await get().loadUserJourney(user.roadmapId);
         }
         return;
       }
@@ -83,7 +83,7 @@ export const createAuthStore = (set, get) => ({
     } catch {
       set({ user: null, authenticated: false });
     } finally {
-      set({ loading: false });
+      set({ isLoading: false });
     }
   },
   //
@@ -108,7 +108,7 @@ export const createAuthStore = (set, get) => ({
       } = await axios.post(endpoints.auth.register, { ...credentials, ...userInputs });
       applyTokens(tokens);
       set({ user, tokens, authenticated: true });
-      await get().createRoadmap({ ...userInputs, userId: user.id });
+      await get().createUserJourney({ ...userInputs, userId: user.id });
       resetUserInputs();
       router.push(paths.progress);
     } catch (error) {
