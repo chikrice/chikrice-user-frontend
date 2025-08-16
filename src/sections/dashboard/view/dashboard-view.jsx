@@ -14,11 +14,13 @@ import PlanDashboardDay from '../day/plan-dashboard-day';
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
-  const { planMonth, planDay, todayPlan, loading, error } = useStore((state) => state);
-
+  const { roadmap, plans, todayPlan, isLoading, error } = useStore((state) => state);
+  console.log('Roadmap', roadmap);
+  console.table('Plans', plans);
+  console.log('todayPlay', todayPlan);
   const [activeDay, setActiveDay] = useState(todayPlan);
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
@@ -36,11 +38,11 @@ export default function DashboardView() {
   return (
     <Box>
       <PlanDashboardDay
-        planDay={planDay}
+        planDay={plans}
         activeDay={activeDay || todayPlan}
         setActiveDay={setActiveDay}
-        totalDays={planMonth.totalDays}
-        planMonth={planMonth.data}
+        totalDays={plans.length}
+        planMonth={[]}
       />
     </Box>
   );

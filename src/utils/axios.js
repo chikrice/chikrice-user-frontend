@@ -79,7 +79,6 @@ export const endpoints = {
   },
   plan_day: {
     root: (id) => `${API_VERSION}/plans-day/${id}`,
-
     meal: {
       root: (id) => `${API_VERSION}/plans-day/meal/${id}`,
       copy: (id) => `${API_VERSION}/plans-day/meal/copy/${id}`,
@@ -90,6 +89,10 @@ export const endpoints = {
       addSuggestedMeal: (id) => `${API_VERSION}/plans-day/meal/add-suggested/${id}`,
       toggleIngredient: (id) => `${API_VERSION}/plans-day/meal/toggle-ingredient/${id}`,
     },
+  },
+  plans: {
+    create: `${API_VERSION}/plans/`,
+    query: `${API_VERSION}/plans/`,
   },
   faqs: `${API_VERSION}/faqs`,
 };

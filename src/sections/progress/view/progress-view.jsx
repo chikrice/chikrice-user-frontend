@@ -15,19 +15,18 @@ import MilestonesBreakdown from '../milestones-breakdown';
 export default function ProgressView() {
   const { isFirstLogin } = useTourContext();
 
-  const { roadmap, loading, error } = useStore((state) => state);
-  // console.log('🚀 ~ ProgressView ~ error:', error);
-
-  if (loading) return <LoadingScreen />;
+  const { roadmap, plans, todayPlan, isLoading, error } = useStore((state) => state);
+  console.log('Roadmap', roadmap);
+  console.table('Plans', plans);
+  console.log('TodaPlan', todayPlan);
+  if (isLoading) return <LoadingScreen />;
 
   if (error) return <div>{error}</div>;
 
   return (
     <Container>
       <Stack spacing={3} mt={2} pb={20}>
-        {isFirstLogin && (
-          <StartTuorPoint isWeightChangeOverLimit={roadmap.isWeightChangeOverLimit} />
-        )}
+        {isFirstLogin && <StartTuorPoint isWeightChangeOverLimit={roadmap.isWeightChangeOverLimit} />}
 
         <RoadmapOverview overview={roadmap.overview} />
 

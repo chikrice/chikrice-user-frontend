@@ -12,13 +12,7 @@ import PlanFree from './free/plan-free';
 import MacrosBar from './common/macros-bar';
 import DayNavigator from './common/day-navigator';
 
-export default function PlanDashboardDay({
-  planDay,
-  planMonth,
-  activeDay,
-  totalDays,
-  setActiveDay,
-}) {
+export default function PlanDashboardDay({ planDay, planMonth, activeDay, totalDays, setActiveDay }) {
   const { roadmap, updateRoadmap } = useStore();
 
   const initCustomMeal = useInitCustomMeal(activeDay?.id);

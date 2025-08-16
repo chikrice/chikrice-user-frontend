@@ -34,8 +34,9 @@ export default function GoogleAuth({ userInputs }) {
 
       if (user?.roadmapId) {
         router.push(paths.dashboard);
+        await store.loadUserJourney(user.roadmapId);
       } else if (!user?.roadmapId && isValid) {
-        await store.createRoadmap({ ...userInputs, userId: user.id });
+        await store.createUserJourney({ ...userInputs, userId: user.id });
         router.push(paths.dashboard);
       } else {
         router.push(paths.steps.user);
