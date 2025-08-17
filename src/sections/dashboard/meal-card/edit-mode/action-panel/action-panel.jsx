@@ -18,16 +18,10 @@ import { togglePlanDayMealIngredient, toggleMealMode, deletePlanDayMeal } from '
 import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
 import SearchIngredient from './search-ingredient';
+import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
-import DeleteMealDialog from '../../../../common/delete-meal-dialog';
 
-export default function ActionPanel({
-  planDayId,
-  mealId,
-  canSave,
-  selectedIngredients,
-  mealNotes,
-}) {
+export default function ActionPanel({ planDayId, mealId, canSave, selectedIngredients, mealNotes }) {
   const loading = useBoolean();
 
   const { t } = useTranslate();

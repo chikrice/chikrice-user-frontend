@@ -6,6 +6,7 @@ export const createPlanStore = (set, get) => ({
   roadmap: null,
   plans: null,
   todayPlan: null,
+  totalDays: null,
   isLoading: false,
   error: null,
 
@@ -70,9 +71,9 @@ export const createPlanStore = (set, get) => ({
   createPlans: async (roadmap, month) => {
     try {
       const data = get().transformRoadmapToPlanData(roadmap, month);
-      const { data: plans } = await axios.post(endpoints.plans.create, data);
+      const { data: plans } = await axios.post(endpoints.plans.root, data);
 
-      set({ plans, error: null });
+      set({ plans, totalDays: plans.length, error: null });
       return plans;
     } catch (error) {
       set({ error: error.message || 'Failed to create plan_month' });
@@ -98,8 +99,8 @@ export const createPlanStore = (set, get) => ({
   // =====================================
   getPlans: async (data) => {
     try {
-      const { data: plans } = await axios.get(endpoints.plans.query, { params: data });
-      set({ plans });
+      const { data: plans } = await axios.get(endpoints.plans.root, { params: data });
+      set({ plans, totalDays: plans.length });
       return plans;
     } catch (error) {
       set({ error: error.message || 'Failed to get plan_month' });

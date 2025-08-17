@@ -3,16 +3,16 @@ import { Box, Typography } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import { useMealSuggestions } from 'src/api/plan-month';
+import { useMealSuggestions } from 'src/api/plans';
 
 import SuggestionItem from './suggestion-item';
 
-export default function MealSuggestion({ planDayId, mealNumber }) {
+export default function MealSuggestion({ planId, mealNumber }) {
   const { t } = useTranslate();
-  const { planMonthId } = useStore();
+  const { todayPlan, roadmap } = useStore((state) => state);
 
-  const { suggestions, suggestionsLoading } = useMealSuggestions(planMonthId, {
-    planDayId,
+  const { suggestions, suggestionsLoading } = useMealSuggestions(todayPlan.planId, {
+    roadmapId: roadmap.id,
     mealNumber,
   });
 
@@ -40,7 +40,7 @@ export default function MealSuggestion({ planDayId, mealNumber }) {
           <SuggestionItem
             key={index}
             meal={meal}
-            planDayId={planDayId}
+            planId={planId}
             ingredients={Object.values(meal?.activeMeal?.ingredients).flat()}
           />
         ))}
@@ -50,7 +50,7 @@ export default function MealSuggestion({ planDayId, mealNumber }) {
 }
 
 MealSuggestion.propTypes = {
-  planDayId: PropTypes.string,
+  planId: PropTypes.string,
   planMonthId: PropTypes.string,
   mealNumber: PropTypes.number,
 };

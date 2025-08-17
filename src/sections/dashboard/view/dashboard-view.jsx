@@ -1,24 +1,57 @@
-import { useState } from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
 
 import useStore from 'src/store';
+import { useGetPlan } from 'src/api/plans';
 import { LoadingScreen } from 'src/components/loading-screen';
 
-import PlanDashboardDay from '../day/plan-dashboard-day';
-// import ContinueTour from 'src/components/welcome-guide/continue-tour';
-// import { useTourContext } from 'src/context/hooks/use-tour-hook';
+import MacrosBar from '../macros-bar';
+import Meals from '../meals-list/meals';
+import AddNewMeal from '../add-new-meal';
+import DayNavigator from '../day-navigator';
 
-// import { useTranslate } from 'src/locales';
-
-// import { HomeSkeleton } from '../home-skeleton';
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
-  const { roadmap, plans, todayPlan, isLoading, error } = useStore((state) => state);
-  console.log('Roadmap', roadmap);
-  console.table('Plans', plans);
-  console.log('todayPlay', todayPlan);
-  const [activeDay, setActiveDay] = useState(todayPlan);
+  const { plans, todayPlan, totalDays, isLoading, error } = useStore((state) => state);
+
+  const [activePlan, setActivePlan] = useState(todayPlan);
+  const [currentDay, setCurrentDay] = useState(todayPlan?.number);
+  const { plan, planLoading } = useGetPlan(activePlan?.id);
+
+  const handleBack = useCallback(() => {
+    if (currentDay > 1) {
+      setCurrentDay((prevDay) => prevDay - 1);
+    }
+  }, [setCurrentDay, currentDay]);
+
+  const handleNext = useCallback(() => {
+    if (currentDay < totalDays) {
+      setCurrentDay((prevDay) => prevDay + 1);
+    }
+  }, [setCurrentDay, currentDay, totalDays]);
+
+  const handleNavigateTo = useCallback(
+    (day) => {
+      if (day && day <= totalDays) {
+        setCurrentDay(day);
+      }
+    },
+    [setCurrentDay, totalDays]
+  );
+
+  useEffect(() => {
+    setActivePlan({ number: currentDay, id: plans[currentDay - 1]?.id });
+  }, [currentDay, setActivePlan, plans]);
+
+  useEffect(() => {
+    // TODO: update activity log base on the consoumed calories
+    // light green if calories are less than target
+    // green if calories are equal to target
+    // red if calories are more than target
+    // dark red if calories are more than target
+    // eslint-disable-next-line
+  }, [plan?.consumedMacros]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -36,14 +69,32 @@ export default function DashboardView() {
   }
 
   return (
-    <Box>
-      <PlanDashboardDay
-        planDay={plans}
-        activeDay={activeDay || todayPlan}
-        setActiveDay={setActiveDay}
-        totalDays={plans.length}
-        planMonth={[]}
+    <Stack>
+      <MacrosBar
+        isPro={true}
+        className="dash__tour__2"
+        isLoading={planLoading}
+        targetMacros={plan?.targetMacros}
+        consumedMacros={plan?.consumedMacros}
       />
-    </Box>
+
+      <Meals plan={plan} plans={plans} currentDay={currentDay} />
+
+      <AddNewMeal planId={plan.id} />
+
+      <DayNavigator
+        date={plan?.date}
+        onBack={handleBack}
+        onNext={handleNext}
+        planDayIds={plans}
+        totalDays={totalDays}
+        planMonth={[]}
+        activePlan={activePlan}
+        currentDay={currentDay}
+        isLoading={planLoading}
+        onNavigateTo={handleNavigateTo}
+        isDisableMealsActions={!plan?.meals.length}
+      />
+    </Stack>
   );
 }

@@ -33,12 +33,7 @@ export default function DeleteMealDialog({ open, onClose, planDayId, mealId }) {
         <Button variant="outlined" onClick={onClose}>
           {t('cancel')}
         </Button>
-        <LoadingButton
-          loading={loading.value}
-          variant="contained"
-          color="error"
-          onClick={handleDeleteMeal}
-        >
+        <LoadingButton loading={loading.value} variant="contained" color="error" onClick={handleDeleteMeal}>
           {t('delete')}
         </LoadingButton>
       </DialogActions>

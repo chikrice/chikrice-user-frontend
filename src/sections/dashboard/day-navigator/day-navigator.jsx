@@ -22,11 +22,11 @@ export default function DayNavigator({
   date,
   onBack,
   onNext,
-  activeDay,
+  activePlan,
   totalDays,
   isLoading,
   planMonth,
-  planDayIds,
+  plans,
   currentDay,
   onNavigateTo,
   isDisableMealsActions,
@@ -43,35 +43,34 @@ export default function DayNavigator({
   const [highlightedDate, setHighlightedDate] = useState(null);
 
   useEffect(() => {
-    const activePlanDay = planDayIds[activeDay?.number - 1];
-    setHighlightedDate(parseISO(activePlanDay?.date));
-  }, [activeDay, planDayIds]);
+    setHighlightedDate(parseISO(activePlan?.date));
+  }, [activePlan, plans]);
 
   const handleCopyMeal = useCallback(
     async (newDate) => {
       try {
         const date = new Date(newDate);
         date.setUTCHours(0, 0, 0, 0);
-        const planDay = planDayIds.find((plan) => plan.date === date.toISOString());
+        const planDay = plans.find((plan) => plan.date === date.toISOString());
         setTargetDate(planDay);
-        await copyMeals(planDay.id, { sourcePlanId: activeDay.id });
+        await copyMeals(planDay.id, { sourcePlanId: activePlan.id });
         setIsCopied(true);
       } catch (error) {
         console.error('Error copying meals:', error);
       }
     },
-    [activeDay, planDayIds]
+    [activePlan, plans]
   );
 
   const handleChangeAllMeals = useCallback(async () => {
     try {
-      await updateAllMeals(activeDay.id);
+      await updateAllMeals(activePlan.id);
     } catch (error) {
       console.log(error);
     } finally {
-      await mutate(endpoints.plan_day.root(activeDay.id));
+      await mutate(endpoints.plan_day.root(activePlan.id));
     }
-  }, [activeDay]);
+  }, [activePlan]);
 
   const handleCheckCopy = useCallback(() => {
     setIsCopied(false);
@@ -102,22 +101,22 @@ export default function DayNavigator({
 
   const handleDeletePlan = useCallback(async () => {
     try {
-      await deletePlanDay(activeDay.id);
+      await deletePlanDay(activePlan.id);
     } catch (error) {
       console.log('error');
     } finally {
-      await mutate(endpoints.plan_day.root(activeDay.id));
+      await mutate(endpoints.plan_day.root(activePlan.id));
     }
-  }, [activeDay]);
+  }, [activePlan]);
 
   const handleToggleSavePlan = useCallback(async () => {
     try {
-      await toogleSavePlanDay(activeDay.id, { userId: user.id });
+      await toogleSavePlanDay(activePlan.id, { userId: user.id });
       await refreshUserInfo(user.id);
     } catch (error) {
       console.error(error);
     }
-  }, [activeDay, user, refreshUserInfo]);
+  }, [activePlan, user, refreshUserInfo]);
 
   return (
     <StyledWrapper style={{ direction: 'ltr' }}>
@@ -127,7 +126,7 @@ export default function DayNavigator({
             <MoreActionsPopover
               open={true}
               date={date}
-              planDayId={activeDay.id}
+              planDayId={activePlan.id}
               onCopyPlan={() => handleOpenDrawer('copy')}
               onSavePlan={handleToggleSavePlan}
               onChangeAllMeals={handleChangeAllMeals}
@@ -135,17 +134,10 @@ export default function DayNavigator({
             />
           )}
 
-          <CustomIconButton
-            icon={'solar:calendar-outline'}
-            onClick={() => handleOpenDrawer('navigate')}
-          />
+          <CustomIconButton icon={'solar:calendar-outline'} onClick={() => handleOpenDrawer('navigate')} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CustomIconButton
-            icon={'eva:arrow-ios-back-fill'}
-            disabled={currentDay === 1}
-            onClick={onBack}
-          />
+          <CustomIconButton icon={'eva:arrow-ios-back-fill'} disabled={currentDay === 1} onClick={onBack} />
 
           {isLoading ? (
             <Skeleton variant="text" width={90} />
@@ -184,11 +176,7 @@ export default function DayNavigator({
             />
           )
         ) : (
-          <NavigationContent
-            currentDay={currentDay}
-            planMonth={planMonth}
-            onNavigateTo={handleNavigateTo}
-          />
+          <NavigationContent currentDay={currentDay} planMonth={planMonth} onNavigateTo={handleNavigateTo} />
         )}
       </CustomBottomDrawer>
     </StyledWrapper>
@@ -202,8 +190,8 @@ DayNavigator.propTypes = {
   isLoading: PropTypes.bool,
   planMonth: PropTypes.array,
   totalDays: PropTypes.number,
-  activeDay: PropTypes.object,
-  planDayIds: PropTypes.array,
+  activePlan: PropTypes.object,
+  plans: PropTypes.array,
   currentDay: PropTypes.number,
   onNavigateTo: PropTypes.func,
   isDisableMealsActions: PropTypes.bool,

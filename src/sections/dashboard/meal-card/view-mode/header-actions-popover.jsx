@@ -13,19 +13,11 @@ import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { deletePlanDayMeal, mutatePlanDay, toggleMealMode } from 'src/api/plan-day';
 
-import DeleteMealDialog from '../../../common/delete-meal-dialog';
+import DeleteMealDialog from '../delete-meal-dialog';
 
 // ----------------------------------------------------------------------
 
-export default function HeaderActionsPopover({
-  sx,
-  mode,
-  mealId,
-  isPast,
-  planDayId,
-  canSave,
-  mealNotes,
-}) {
+export default function HeaderActionsPopover({ sx, mode, mealId, isPast, planDayId, canSave, mealNotes }) {
   const popover = usePopover();
 
   const isDeleteMeal = useBoolean();

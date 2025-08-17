@@ -23,7 +23,8 @@ module.exports = {
         internalPattern: ['^src/.+', '^/src/.+', '^@/.+', '^~/.+'],
         groups: [
           'type-import',
-          ['value-builtin', 'value-external'],
+          'value-builtin',
+          'value-external',
           'type-internal',
           'value-internal',
           ['type-parent', 'type-sibling', 'type-index'],

@@ -1,41 +1,27 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Card, CardActions, CardContent, Stack, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
-import { isPastDate } from 'src/utils/format-time';
 import { useBoolean } from 'src/hooks/use-boolean';
+import CustomIconButton from 'src/components/custom-icon-button';
 
-import AlternativesDrawerFree from '../alternatives-drawer-free';
-import ViewActionsContent from '../../common/view-actions-content';
+// Import styles
+import { cardStyle, headerStyle, contentStyle, actionsStyle } from './styles';
+//
 import { InfoDialog, HeaderActionsPopover, ViewBodyContent } from './view-mode';
 import { EditActionPanel, EditBodyContent, EditFooterContent } from './edit-mode';
-// Import styles
-import { cardStyle, headerStyle, contentStyle, actionsStyle } from '../../common/styles';
 
 //-----------------------------------------------------------------------
 
-export default function MealCardFree({
-  date,
-  mode,
-  index,
-  notes,
-  macros,
-  mealId,
-  planDayId,
-  mealNumber,
-  ingredients,
-  alternatives,
-}) {
+export default function MealCard({ meal, isPast, planId, ingredients }) {
   const { t } = useTranslate();
-  const isPast = useMemo(() => isPastDate(date), [date]);
 
   const isInfo = useBoolean();
-  const isAlternatives = useBoolean();
 
   const cardRef = useRef(null);
 
-  const [mealNotes, setMealNotes] = useState(notes);
+  const [mealNotes, setMealNotes] = useState(meal.notes);
 
   useEffect(() => {
     if (!ingredients.length && cardRef.current) {
@@ -50,32 +36,32 @@ export default function MealCardFree({
         <Box sx={headerStyle}>
           <Stack>
             <Typography variant="subtitle2" textTransform={'capitalize'}>
-              {t('meal')} {mealNumber}
+              {t('meal')} {meal.number}
             </Typography>
             <Typography variant="body2" color={'text.secondary'}>
-              {macros.cal.toFixed()} {t('calorie')}
+              {meal.macros.cal.toFixed()} {t('calorie')}
             </Typography>
           </Stack>
 
           <HeaderActionsPopover
-            mode={mode}
+            mode={meal.mode}
             isPast={isPast}
-            mealId={mealId}
+            mealId={meal._id}
             mealNotes={mealNotes}
-            planDayId={planDayId}
+            planId={planId}
             canSave={!!ingredients.length}
           />
         </Box>
 
         {/* Content */}
         <CardContent sx={contentStyle}>
-          {mode === 'view' ? (
+          {meal.mode === 'view' ? (
             <ViewBodyContent ingredients={ingredients} mealNotes={mealNotes} />
           ) : (
             <EditBodyContent
               ingredients={ingredients}
-              planDayId={planDayId}
-              mealId={mealId}
+              planId={planId}
+              mealId={meal._id}
               mealNotes={mealNotes}
               setMealNotes={setMealNotes}
             />
@@ -84,24 +70,18 @@ export default function MealCardFree({
 
         {/* Actions */}
         <CardActions className={'dash__tour__4'} sx={actionsStyle}>
-          {mode === 'view' ? (
-            <ViewActionsContent
-              index={index}
-              isPast={isPast}
-              planDayId={planDayId}
-              onShowInfo={isInfo.onTrue}
-              onListAlternatives={isAlternatives.onTrue}
-            />
+          {meal.mode === 'view' ? (
+            <CustomIconButton icon={'fluent:info-28-regular'} onClick={isInfo.onTrue} />
           ) : (
-            <EditFooterContent macros={macros} />
+            <EditFooterContent macros={meal.macros} />
           )}
         </CardActions>
       </Card>
 
-      {mode === 'edit' && (
+      {meal.mode === 'edit' && (
         <EditActionPanel
-          mealId={mealId}
-          planDayId={planDayId}
+          mealId={meal._id}
+          planId={planId}
           canSave={!!ingredients.length}
           mealNotes={mealNotes}
           selectedIngredients={ingredients}
@@ -110,36 +90,18 @@ export default function MealCardFree({
 
       <InfoDialog
         open={isInfo.value}
-        macros={macros}
+        macros={meal.macros}
         ingredients={ingredients}
         onClose={isInfo.onFalse}
-      />
-
-      <AlternativesDrawerFree
-        index={index}
-        planDayId={planDayId}
-        open={isAlternatives.value}
-        alternatives={alternatives}
-        onOpen={isAlternatives.onTrue}
-        onClose={isAlternatives.onFalse}
-        currentMeal={{ macros, mealNumber, ingredients }}
       />
     </>
   );
 }
 
-MealCardFree.propTypes = {
-  date: PropTypes.string,
+MealCard.propTypes = {
   index: PropTypes.number,
-  notes: PropTypes.string,
-  mode: PropTypes.string,
-  isFree: PropTypes.bool,
-  mealId: PropTypes.string,
-  macros: PropTypes.object,
+  meal: PropTypes.object,
+  isPast: PropTypes.bool,
+  planId: PropTypes.string,
   ingredients: PropTypes.array,
-  alternatives: PropTypes.array,
-  planDayId: PropTypes.string,
-  mealNumber: PropTypes.number,
-  onListAlternatives: PropTypes.func,
-  recommendedMacros: PropTypes.object,
 };
