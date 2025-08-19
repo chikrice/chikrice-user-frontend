@@ -1,3 +1,4 @@
+import { StateCreator } from 'zustand';
 import { enqueueSnackbar } from 'notistack';
 
 import { paths } from 'src/routes/paths';
@@ -7,6 +8,16 @@ import { getStorage, setStorage } from 'src/hooks/use-local-storage';
 import { userInputsInitialState } from 'src/sections/steps/user/user-inputs';
 
 import { handleTokensSession, isTokenExpired } from './helpers';
+
+import type {
+  Store,
+  Tokens,
+  AuthState,
+  UserInputs,
+  AuthActions,
+  Credentials,
+  GoogleCredentials,
+} from 'src/types';
 
 // -------------------------------------
 
@@ -22,7 +33,7 @@ const resetUserInputs = () => {
   setStorage(COACH_INPUTS_KEY, { experience: null, speciality: [] });
 };
 
-const setAuthHeader = (token) => {
+const setAuthHeader = (token: string) => {
   if (token) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   } else {
@@ -30,7 +41,7 @@ const setAuthHeader = (token) => {
   }
 };
 
-const applyTokens = (tokens) => {
+const applyTokens = (tokens: Tokens) => {
   handleTokensSession(tokens);
   setAuthHeader(tokens?.access?.token);
 };
@@ -38,7 +49,7 @@ const applyTokens = (tokens) => {
 const getStoredAccess = () => getStorage(ACCESS_TOKEN_KEY);
 const getStoredRefresh = () => getStorage(REFRESH_TOKEN_KEY);
 
-const fetchUserByAccess = async (accessToken) => {
+const fetchUserByAccess = async (accessToken: string) => {
   const {
     data: { user },
   } = await axios.post(endpoints.auth.me, { accessToken });
@@ -46,16 +57,17 @@ const fetchUserByAccess = async (accessToken) => {
 };
 
 // -------------------------------------
-export const createAuthStore = (set, get) => ({
+export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthActions> = (set, get) => ({
   user: null,
   tokens: null,
-  error: null,
-  isLoading: false,
+  authError: null,
+  isAuthLoading: false,
+  isFirstLogin: true,
   method: 'jwt',
   authenticated: false,
   //
   bootstrap: async () => {
-    set({ isLoading: true, error: null });
+    set({ isAuthLoading: true, authError: null });
     try {
       const access = getStoredAccess();
       if (access && !isTokenExpired(access.expires)) {
@@ -83,11 +95,11 @@ export const createAuthStore = (set, get) => ({
     } catch {
       set({ user: null, authenticated: false });
     } finally {
-      set({ isLoading: false });
+      set({ isAuthLoading: false });
     }
   },
   //
-  login: async (credentials) => {
+  login: async (credentials: Credentials) => {
     try {
       const {
         data: { user, tokens },
@@ -101,13 +113,14 @@ export const createAuthStore = (set, get) => ({
     }
   },
   //
-  register: async (credentials, userInputs) => {
+  register: async (credentials: Credentials, userInputs: UserInputs) => {
     try {
       const {
         data: { user, tokens },
       } = await axios.post(endpoints.auth.register, { ...credentials, ...userInputs });
       applyTokens(tokens);
       set({ user, tokens, authenticated: true });
+
       await get().createUserJourney({ ...userInputs, userId: user.id });
       resetUserInputs();
       router.push(paths.progress);
@@ -116,11 +129,11 @@ export const createAuthStore = (set, get) => ({
     }
   },
   //
-  googleAuth: async (data) => {
+  googleAuth: async (credentials: GoogleCredentials) => {
     try {
       const {
         data: { user, tokens, isFirstLogin },
-      } = await axios.post(endpoints.auth.google, data);
+      } = await axios.post(endpoints.auth.google, credentials);
       applyTokens(tokens);
       set({ user, tokens, isFirstLogin, authenticated: true });
       return user;
@@ -151,7 +164,7 @@ export const createAuthStore = (set, get) => ({
     }
   },
 
-  refreshUserInfo: async (id) => {
+  refreshUserInfo: async (id: string) => {
     try {
       const {
         data: { user },

@@ -10,25 +10,28 @@ import MealSuggestion from '../meal-suggestion';
 
 export default function MealsList({ plan }) {
   const { t } = useTranslate();
-  const isPast = useMemo(() => isPastDate(plan.date), [plan]);
+  const isPast = useMemo(() => isPastDate(plan?.date), [plan]);
 
-  const isMealSuggestions = plan.meals?.some((meal) => meal?.mode === 'edit');
+  const isMealSuggestions = plan?.meals?.some((meal) => meal?.mode === 'edit');
+  console.log();
+
   return (
     <Box sx={{ pb: 45 }}>
-      {plan.meals.length ? (
+      {plan.meals?.length ? (
         <Container sx={{ mt: 2 }}>
           <Stack spacing={1.5}>
-            {plan.meals.map((meal, index) => (
+            hii
+            {/* {plan?.meals?.map((meal, index) => (
               <MealCard
                 key={meal.id}
                 index={index}
                 meal={meal}
                 isPast={isPast}
-                date={plan.date}
-                planId={plan.id}
-                ingredients={Object.values(meal?.activeMeal?.ingredients).flat()}
+                date={plan?.date}
+                planId={plan?.id}
+                ingredients={Object.values(plan?.ingredients).flat()}
               />
-            ))}
+            ))} */}
           </Stack>
         </Container>
       ) : (
@@ -41,9 +44,9 @@ export default function MealsList({ plan }) {
         )
       )}
 
-      {!isMealSuggestions && !isPast && (
-        <MealSuggestion planId={plan.id} mealNumber={plan.meals.length + 1} />
-      )}
+      {/* {!isMealSuggestions && !isPast && (
+        <MealSuggestion planId={plan.id} mealNumber={plan.meals?.length + 1} />
+      )} */}
     </Box>
   );
 }

@@ -107,9 +107,3 @@ export const getNewAccessTokenWithRefreshToken = async () => {
 // =====================================
 // PLAN HELPERS
 //=====================================
-
-export const getTodayPlan = () => {
-  const plan = {};
-
-  return plan;
-};

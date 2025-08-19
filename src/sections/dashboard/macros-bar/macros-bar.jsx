@@ -17,7 +17,7 @@ import {
   overConsumedCalFillStyles,
 } from './styles';
 
-export default function MacrosBar({ isPro, targetMacros, consumedMacros, isLoading, ...other }) {
+export default function MacrosBar({ plan, isLoading, ...other }) {
   const theme = useTheme();
   const [isShowMacros, setIsShowMacros] = useState(true);
 
@@ -25,10 +25,10 @@ export default function MacrosBar({ isPro, targetMacros, consumedMacros, isLoadi
     <Box>
       <Collapse in={isShowMacros}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <CalorieInfo label="targetCalories" value={targetMacros?.cal} isLoading={isLoading} />
+          <CalorieInfo label="targetCalories" value={plan?.targetMacros?.cal} isLoading={isLoading} />
           <CalorieInfo
             label="todayCalories"
-            value={consumedMacros?.cal.toFixed(0)}
+            value={plan?.consumedMacros?.cal.toFixed(0)}
             isLoading={isLoading}
           />
         </Box>
@@ -51,9 +51,9 @@ export default function MacrosBar({ isPro, targetMacros, consumedMacros, isLoadi
           >
             <Box sx={allowedCalFillWrapper}>
               {/* Allowed Calories Fill */}
-              <Box sx={allowedCalFillStyles(targetMacros?.cal, consumedMacros?.cal)} />
+              <Box sx={allowedCalFillStyles(plan?.targetMacros?.cal, plan?.consumedMacros?.cal)} />
               {/* Over-consumed Calories Fill */}
-              <Box sx={overConsumedCalFillStyles(targetMacros?.cal, consumedMacros?.cal)} />
+              <Box sx={overConsumedCalFillStyles(plan?.targetMacros?.cal, plan?.consumedMacros?.cal)} />
             </Box>
           </Box>
         </Box>
@@ -66,24 +66,24 @@ export default function MacrosBar({ isPro, targetMacros, consumedMacros, isLoadi
 
       {/* Macros Breakdown */}
       <Collapse in={isShowMacros}>
-        {!!consumedMacros?.cal && (
+        {!!plan?.consumedMacros?.cal && (
           <Box sx={macroBreakdownStyles}>
             <MacroItem
               icon="🥩"
               label="pro"
-              value={consumedMacros?.pro.toFixed(0)}
+              value={plan?.consumedMacros?.pro.toFixed(0)}
               isLoading={isLoading}
             />
             <MacroItem
               icon="🥔"
               label="carb"
-              value={consumedMacros?.carb.toFixed(0)}
+              value={plan?.consumedMacros?.carb.toFixed(0)}
               isLoading={isLoading}
             />
             <MacroItem
               icon="🌻"
               label="fat"
-              value={consumedMacros?.fat.toFixed(0)}
+              value={plan?.consumedMacros?.fat.toFixed(0)}
               isLoading={isLoading}
             />
           </Box>
@@ -101,15 +101,13 @@ export default function MacrosBar({ isPro, targetMacros, consumedMacros, isLoadi
         backgroundColor: theme.palette.background.default,
       }}
     >
-      {isPro ? renderMacroBar() : <Box>Free</Box>}
+      {renderMacroBar()}
       <MacrosBarCollapseBtn isIn={isShowMacros} onClick={() => setIsShowMacros(!isShowMacros)} />
     </Box>
   );
 }
 
 MacrosBar.propTypes = {
-  isPro: PropTypes.bool,
+  plan: PropTypes.object,
   isLoading: PropTypes.bool,
-  targetMacros: PropTypes.object,
-  consumedMacros: PropTypes.object,
 };

@@ -17,7 +17,7 @@ export default function SuggestionItem({ ingredients, meal, planDayId }) {
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planDayId));
+      await mutate(endpoints.plans.id(planDayId));
     }
   }, [planDayId, meal]);
 

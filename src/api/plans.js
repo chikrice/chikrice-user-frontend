@@ -9,7 +9,8 @@ import axios, { endpoints, fetcher } from 'src/utils/axios';
 // GET PLAN
 // =====================================
 export function useGetPlan(planId) {
-  const URL = planId ? endpoints.plan_day.root(planId) : null;
+  console.log('planId: ', planId);
+  const URL = planId ? endpoints.plans.id(planId) : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     revalidateOnFocus: false,
@@ -17,7 +18,7 @@ export function useGetPlan(planId) {
 
   const memoizedValue = useMemo(
     () => ({
-      plan: data || { meals: [] },
+      plan: data,
       planLoading: isLoading,
       planError: error,
       planValidating: isValidating,

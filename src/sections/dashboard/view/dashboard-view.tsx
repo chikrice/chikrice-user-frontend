@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 
 import useStore from 'src/store';
 import { useGetPlan } from 'src/api/plans';
@@ -10,14 +10,32 @@ import Meals from '../meals-list/meals';
 import AddNewMeal from '../add-new-meal';
 import DayNavigator from '../day-navigator';
 
+import type { PlanType } from 'chikrice-types';
+
+// ----------------------------------------------------------------------
+interface UseGetPlanReturn {
+  plan: PlanType;
+  planLoading: boolean;
+  planError: unknown;
+  planValidating: boolean;
+}
 // ----------------------------------------------------------------------
 
 export default function DashboardView() {
   const { plans, todayPlan, totalDays, isLoading, error } = useStore((state) => state);
 
-  const [activePlan, setActivePlan] = useState(todayPlan);
-  const [currentDay, setCurrentDay] = useState(todayPlan?.number);
-  const { plan, planLoading } = useGetPlan(activePlan?.id);
+  const [currentDay, setCurrentDay] = useState(todayPlan?.number ?? 1);
+
+  const activePlan = useMemo(
+    () => ({
+      number: currentDay,
+      planId: plans[currentDay - 1]?.planId,
+    }),
+    [currentDay, plans]
+  );
+  console.log('plans: ', plans);
+  console.log('activePlan: ', activePlan);
+  const { plan, planLoading }: UseGetPlanReturn = useGetPlan(activePlan?.planId);
 
   const handleBack = useCallback(() => {
     if (currentDay > 1) {
@@ -41,19 +59,15 @@ export default function DashboardView() {
   );
 
   useEffect(() => {
-    setActivePlan({ number: currentDay, id: plans[currentDay - 1]?.id });
-  }, [currentDay, setActivePlan, plans]);
-
-  useEffect(() => {
     // TODO: update activity log base on the consoumed calories
-    // light green if calories are less than target
-    // green if calories are equal to target
-    // red if calories are more than target
-    // dark red if calories are more than target
     // eslint-disable-next-line
   }, [plan?.consumedMacros]);
 
-  if (isLoading) {
+  console.log('isLoading: ', isLoading);
+  console.log('planLoading: ', planLoading);
+  console.log('plan: ', plan);
+
+  if (isLoading || planLoading || !plan) {
     return <LoadingScreen />;
   }
 
@@ -70,17 +84,11 @@ export default function DashboardView() {
 
   return (
     <Stack>
-      <MacrosBar
-        isPro={true}
-        className="dash__tour__2"
-        isLoading={planLoading}
-        targetMacros={plan?.targetMacros}
-        consumedMacros={plan?.consumedMacros}
-      />
+      <MacrosBar plan={plan} className="dash__tour__2" isLoading={planLoading} />
 
       <Meals plan={plan} plans={plans} currentDay={currentDay} />
 
-      <AddNewMeal planId={plan.id} />
+      <AddNewMeal plan={plan} />
 
       <DayNavigator
         date={plan?.date}
@@ -93,7 +101,7 @@ export default function DashboardView() {
         currentDay={currentDay}
         isLoading={planLoading}
         onNavigateTo={handleNavigateTo}
-        isDisableMealsActions={!plan?.meals.length}
+        isDisableMealsActions={true}
       />
     </Stack>
   );
