@@ -1,5 +1,4 @@
 import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import { useTheme } from '@emotion/react';
 import { useCallback, useEffect } from 'react';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
@@ -15,37 +14,56 @@ import { deletePlanDayMeal, mutatePlanDay, toggleMealMode } from 'src/api/plan-d
 
 import DeleteMealDialog from '../delete-meal-dialog';
 
-// ----------------------------------------------------------------------
+import type { SxProps, Theme } from '@mui/material';
 
-export default function HeaderActionsPopover({ sx, mode, mealId, isPast, planDayId, canSave, mealNotes }) {
+// -------------------------------------
+
+interface HeaderActionsPopoverProps {
+  sx?: SxProps<Theme>;
+  mode: 'view' | 'edit';
+  mealId: string;
+  planId: string;
+  isPast: boolean;
+  canSave: boolean;
+}
+
+// -------------------------------------
+
+export default function HeaderActionsPopover({
+  sx,
+  mode,
+  mealId,
+  isPast,
+  planId,
+  canSave,
+}: HeaderActionsPopoverProps) {
   const popover = usePopover();
 
   const isDeleteMeal = useBoolean();
 
   const { t } = useTranslate();
-  const user = useStore();
+  const user = useStore((state) => state.user);
   const theme = useTheme();
+
   const isRTL = theme.direction === 'rtl';
   const userId = user.id;
 
   const handleToggleMode = useCallback(
-    async (mode) => {
+    async (mode: 'view' | 'edit') => {
       try {
-        await toggleMealMode(planDayId, {
+        await toggleMealMode(planId, {
           mealId,
           userId,
           mode,
-
-          notes: mealNotes,
         });
         popover.onClose();
       } catch (error) {
         console.log(error);
       } finally {
-        await mutate(endpoints.plan_day.root(planDayId), mutatePlanDay(planDayId));
+        await mutate(endpoints.plan_day.root(planId), mutatePlanDay(planId));
       }
     },
-    [planDayId, mealId, mealNotes, userId, popover]
+    [planId, mealId, userId, popover]
   );
 
   const handleCloseEditMode = useCallback(async () => {
@@ -53,19 +71,19 @@ export default function HeaderActionsPopover({ sx, mode, mealId, isPast, planDay
       if (canSave) {
         await handleToggleMode('view');
       } else {
-        await deletePlanDayMeal(planDayId, mealId);
+        await deletePlanDayMeal(planId, mealId);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planDayId));
+      await mutate(endpoints.plan_day.root(planId));
     }
-  }, [canSave, mealId, planDayId, handleToggleMode]);
+  }, [canSave, mealId, planId, handleToggleMode]);
 
   useEffect(() => {
-    return async () => {
+    return () => {
       if (mode === 'edit') {
-        await handleToggleMode('view');
+        handleToggleMode('view');
       }
     };
     // eslint-disable-next-line
@@ -127,19 +145,9 @@ export default function HeaderActionsPopover({ sx, mode, mealId, isPast, planDay
       <DeleteMealDialog
         open={isDeleteMeal.value}
         onClose={isDeleteMeal.onFalse}
-        planDayId={planDayId}
+        planId={planId}
         mealId={mealId}
       />
     </>
   );
 }
-
-HeaderActionsPopover.propTypes = {
-  sx: PropTypes.object,
-  mode: PropTypes.string,
-  mealId: PropTypes.string,
-  isPast: PropTypes.bool,
-  planDayId: PropTypes.string,
-  canSave: PropTypes.bool,
-  mealNotes: PropTypes.oneOfType([PropTypes.string, undefined]),
-};

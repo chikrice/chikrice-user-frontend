@@ -21,7 +21,7 @@ import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
 
-export default function ActionPanel({ planDayId, mealId, canSave, selectedIngredients, mealNotes }) {
+export default function ActionPanel({ planId, mealId, canSave, selectedIngredients }) {
   const loading = useBoolean();
 
   const { t } = useTranslate();
@@ -38,18 +38,18 @@ export default function ActionPanel({ planDayId, mealId, canSave, selectedIngred
   const handleToggleIngredient = useCallback(
     async (ingredient) => {
       try {
-        await togglePlanDayMealIngredient(planDayId, {
+        await togglePlanDayMealIngredient(planId, {
           mealId,
           userId,
           ingredient,
         });
-        await mutate(endpoints.plan_day.root(planDayId));
+        await mutate(endpoints.plan_day.root(planId));
         setSearchQuery('');
       } catch (error) {
         console.log(error);
       }
     },
-    [mealId, planDayId, userId]
+    [mealId, planId, userId]
   );
 
   const handleSaveMeal = useCallback(async () => {
@@ -57,22 +57,21 @@ export default function ActionPanel({ planDayId, mealId, canSave, selectedIngred
       loading.onTrue();
 
       if (canSave) {
-        await toggleMealMode(planDayId, {
+        await toggleMealMode(planId, {
           mealId,
           userId,
           mode: 'view',
-          notes: mealNotes,
         });
       } else {
-        await deletePlanDayMeal(planDayId, mealId);
+        await deletePlanDayMeal(planId, mealId);
       }
     } catch (error) {
       console.log(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planDayId));
+      await mutate(endpoints.plan_day.root(planId));
       loading.onFalse();
     }
-  }, [planDayId, mealId, canSave, mealNotes, userId, loading]);
+  }, [planId, mealId, canSave, userId, loading]);
 
   const { searchResults, resultType, searchLoading } = useSearchIngredients(userId, debouncedQuery);
 
@@ -120,7 +119,7 @@ export default function ActionPanel({ planDayId, mealId, canSave, selectedIngred
         <Scrollbar sx={{ height: 320, pt: 2 }}>
           <Stack pb={24}>
             {isTellAi.value ? (
-              <MealInputAi planDayId={planDayId} mealId={mealId} />
+              <MealInputAi planId={planId} mealId={mealId} />
             ) : (
               <>
                 {resultType === 'query' ? (
@@ -151,7 +150,7 @@ export default function ActionPanel({ planDayId, mealId, canSave, selectedIngred
       <DeleteMealDialog
         open={isDeleteMeal.value}
         onClose={isDeleteMeal.onFalse}
-        planDayId={planDayId}
+        planId={planId}
         mealId={mealId}
       />
     </>
@@ -161,8 +160,7 @@ export default function ActionPanel({ planDayId, mealId, canSave, selectedIngred
 ActionPanel.propTypes = {
   mealId: PropTypes.string,
   canSave: PropTypes.bool,
-  mealNotes: PropTypes.string,
-  planDayId: PropTypes.string,
+  planId: PropTypes.string,
   ingredients: PropTypes.array,
   selectedIngredients: PropTypes.array,
 };

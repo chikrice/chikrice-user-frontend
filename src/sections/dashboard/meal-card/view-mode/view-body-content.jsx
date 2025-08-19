@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
 import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
-import { useLocales, useTranslate } from 'src/locales';
+import { useLocales } from 'src/locales';
 
-export default function ViewBodyContent({ ingredients, mealNotes }) {
+export default function ViewBodyContent({ ingredients }) {
   const { lang } = useLocales();
-  const { t } = useTranslate();
 
   return (
     <Stack>
@@ -23,20 +21,6 @@ export default function ViewBodyContent({ ingredients, mealNotes }) {
           </Box>
         </ListItem>
       ))}
-
-      {!!mealNotes && (
-        <Stack pt={1} sx={{ borderTop: (theme) => `solid 1px ${theme.palette.divider}` }}>
-          <Typography variant="h6">{t('notes')}</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {mealNotes}
-          </Typography>
-        </Stack>
-      )}
     </Stack>
   );
 }
-
-ViewBodyContent.propTypes = {
-  ingredients: PropTypes.array,
-  mealNotes: PropTypes.string,
-};

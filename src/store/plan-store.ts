@@ -7,9 +7,9 @@ import axios, { endpoints } from 'src/utils/axios';
 import type { CreateRoadmapInputs, PlanActions, PlanState, Store } from 'src/types';
 
 export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanActions> = (set, get) => ({
-  roadmap: {},
+  roadmap: null,
   plans: [],
-  todayPlan: {},
+  todayPlan: null,
   totalDays: 30,
   roadmapLoading: false,
   roadmapError: null,

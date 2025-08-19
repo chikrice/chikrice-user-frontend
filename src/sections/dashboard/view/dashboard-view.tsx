@@ -12,45 +12,51 @@ import DayNavigator from '../day-navigator';
 
 import type { PlanType } from 'chikrice-types';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
+
 interface UseGetPlanReturn {
   plan: PlanType;
   planLoading: boolean;
   planError: unknown;
   planValidating: boolean;
 }
-// ----------------------------------------------------------------------
+
+interface ActivePlan {
+  number: number;
+  planId: string;
+}
+
+// -------------------------------------
 
 export default function DashboardView() {
-  const { plans, todayPlan, totalDays, isLoading, error } = useStore((state) => state);
+  const { plans, todayPlan, totalDays, roadmapLoading, roadmapError } = useStore((state) => state);
 
-  const [currentDay, setCurrentDay] = useState(todayPlan?.number ?? 1);
+  const [currentDay, setCurrentDay] = useState(todayPlan.number);
 
-  const activePlan = useMemo(
+  const activePlan = useMemo<ActivePlan>(
     () => ({
       number: currentDay,
       planId: plans[currentDay - 1]?.planId,
     }),
     [currentDay, plans]
   );
-  console.log('plans: ', plans);
-  console.log('activePlan: ', activePlan);
+
   const { plan, planLoading }: UseGetPlanReturn = useGetPlan(activePlan?.planId);
 
   const handleBack = useCallback(() => {
     if (currentDay > 1) {
-      setCurrentDay((prevDay) => prevDay - 1);
+      setCurrentDay((prevDay: number) => prevDay - 1);
     }
   }, [setCurrentDay, currentDay]);
 
   const handleNext = useCallback(() => {
     if (currentDay < totalDays) {
-      setCurrentDay((prevDay) => prevDay + 1);
+      setCurrentDay((prevDay: number) => prevDay + 1);
     }
   }, [setCurrentDay, currentDay, totalDays]);
 
   const handleNavigateTo = useCallback(
-    (day) => {
+    (day: number) => {
       if (day && day <= totalDays) {
         setCurrentDay(day);
       }
@@ -63,15 +69,14 @@ export default function DashboardView() {
     // eslint-disable-next-line
   }, [plan?.consumedMacros]);
 
-  console.log('isLoading: ', isLoading);
   console.log('planLoading: ', planLoading);
   console.log('plan: ', plan);
 
-  if (isLoading || planLoading || !plan) {
+  if (roadmapLoading) {
     return <LoadingScreen />;
   }
 
-  if (error) {
+  if (roadmapError) {
     return (
       <Stack sx={{ mt: '40svh', px: 3, textAlign: 'center' }} spacing={2}>
         <Typography variant="body1">There was a problem fetching your data</Typography>
@@ -86,22 +91,23 @@ export default function DashboardView() {
     <Stack>
       <MacrosBar plan={plan} className="dash__tour__2" isLoading={planLoading} />
 
-      <Meals plan={plan} plans={plans} currentDay={currentDay} />
+      <Meals plan={plan} planLoading={planLoading} />
 
       <AddNewMeal plan={plan} />
 
       <DayNavigator
         date={plan?.date}
-        onBack={handleBack}
-        onNext={handleNext}
-        planDayIds={plans}
-        totalDays={totalDays}
+        plans={plans}
         planMonth={[]}
+        totalDays={totalDays}
         activePlan={activePlan}
         currentDay={currentDay}
         isLoading={planLoading}
-        onNavigateTo={handleNavigateTo}
         isDisableMealsActions={true}
+        //
+        onBack={handleBack}
+        onNext={handleNext}
+        onNavigateTo={handleNavigateTo}
       />
     </Stack>
   );

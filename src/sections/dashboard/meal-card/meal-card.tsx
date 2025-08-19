@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Box, Card, CardActions, CardContent, Stack, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
@@ -12,16 +11,25 @@ import { cardStyle, headerStyle, contentStyle, actionsStyle } from './styles';
 import { InfoDialog, HeaderActionsPopover, ViewBodyContent } from './view-mode';
 import { EditActionPanel, EditBodyContent, EditFooterContent } from './edit-mode';
 
-//-----------------------------------------------------------------------
+import type { Ingredient, Meal, PlanType } from 'chikrice-types';
 
-export default function MealCard({ meal, isPast, planId, ingredients }) {
+// -------------------------------------
+
+interface MealCardProps {
+  meal: Meal;
+  plan: PlanType;
+  isPast: boolean;
+  ingredients: Ingredient[];
+}
+
+// -------------------------------------
+
+export default function MealCard({ meal, isPast, plan, ingredients }: MealCardProps) {
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
 
-  const cardRef = useRef(null);
-
-  const [mealNotes, setMealNotes] = useState(meal.notes);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ingredients.length && cardRef.current) {
@@ -46,25 +54,17 @@ export default function MealCard({ meal, isPast, planId, ingredients }) {
           <HeaderActionsPopover
             mode={meal.mode}
             isPast={isPast}
-            mealId={meal._id}
-            mealNotes={mealNotes}
-            planId={planId}
+            mealId={meal.id}
+            planId={plan.id}
             canSave={!!ingredients.length}
           />
         </Box>
 
-        {/* Content */}
         <CardContent sx={contentStyle}>
           {meal.mode === 'view' ? (
-            <ViewBodyContent ingredients={ingredients} mealNotes={mealNotes} />
+            <ViewBodyContent ingredients={ingredients} />
           ) : (
-            <EditBodyContent
-              ingredients={ingredients}
-              planId={planId}
-              mealId={meal._id}
-              mealNotes={mealNotes}
-              setMealNotes={setMealNotes}
-            />
+            <EditBodyContent ingredients={ingredients} planId={plan.id} mealId={meal.id} />
           )}
         </CardContent>
 
@@ -80,10 +80,9 @@ export default function MealCard({ meal, isPast, planId, ingredients }) {
 
       {meal.mode === 'edit' && (
         <EditActionPanel
-          mealId={meal._id}
-          planId={planId}
+          mealId={meal.id}
+          planId={plan.id}
           canSave={!!ingredients.length}
-          mealNotes={mealNotes}
           selectedIngredients={ingredients}
         />
       )}
@@ -97,11 +96,3 @@ export default function MealCard({ meal, isPast, planId, ingredients }) {
     </>
   );
 }
-
-MealCard.propTypes = {
-  index: PropTypes.number,
-  meal: PropTypes.object,
-  isPast: PropTypes.bool,
-  planId: PropTypes.string,
-  ingredients: PropTypes.array,
-};

@@ -1,36 +1,27 @@
 import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import { useCallback } from 'react';
-import { Box, ListItem, ListItemIcon, Stack, TextField, Typography } from '@mui/material';
+import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
-import useStore from 'src/store';
 import { endpoints } from 'src/utils/axios';
 import { updatePlanDayMeal } from 'src/api/plan-day';
 import { useLocales, useTranslate } from 'src/locales';
 import CustomIconButton from 'src/components/custom-icon-button';
 
-export default function EditBodyContent({
-  ingredients,
-  mealNotes,
-  planDayId,
-  mealId,
-  setMealNotes,
-}) {
+export default function EditBodyContent({ ingredients, planId, mealId }) {
   const { lang } = useLocales();
   const { t } = useTranslate();
-  const { user } = useStore();
 
   const handleUpdatePlanDayMeal = useCallback(
     async (ingredient, isAdd) => {
       try {
-        await updatePlanDayMeal(planDayId, { mealId, ingredient, isAdd });
+        await updatePlanDayMeal(planId, { mealId, ingredient, isAdd });
       } catch (error) {
         console.error(error);
       } finally {
-        await mutate(endpoints.plan_day.root(planDayId));
+        await mutate(endpoints.plan_day.root(planId));
       }
     },
-    [planDayId, mealId]
+    [planId, mealId]
   );
 
   return (
@@ -50,10 +41,7 @@ export default function EditBodyContent({
                   icon={'icons8:minus'}
                   onClick={() => handleUpdatePlanDayMeal(item, false)}
                 />
-                <CustomIconButton
-                  icon={'gg:add'}
-                  onClick={() => handleUpdatePlanDayMeal(item, true)}
-                />
+                <CustomIconButton icon={'gg:add'} onClick={() => handleUpdatePlanDayMeal(item, true)} />
               </Stack>
             }
           >
@@ -83,25 +71,6 @@ export default function EditBodyContent({
           {t('addFirstItemToMeal')}
         </Typography>
       )}
-
-      {user?.role === 'coach' && (
-        <TextField
-          value={mealNotes}
-          onChange={(e) => setMealNotes(e.target.value)}
-          sx={{ mt: 2 }}
-          size="small"
-          variant="filled"
-          label={t('notes')}
-        />
-      )}
     </Stack>
   );
 }
-
-EditBodyContent.propTypes = {
-  ingredients: PropTypes.array,
-  planDayId: PropTypes.string,
-  mealId: PropTypes.string,
-  mealNotes: PropTypes.string,
-  setMealNotes: PropTypes.func,
-};

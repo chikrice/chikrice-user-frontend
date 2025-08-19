@@ -1,9 +1,24 @@
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 import { IconButton } from '@mui/material';
 
 import Iconify from '../iconify';
 import { varHover } from '../animate';
+
+import type { SxProps, Theme } from '@mui/material';
+
+// -------------------------------------
+
+interface CustomIconButtonProps {
+  icon: string;
+  sx?: SxProps<Theme>;
+  color?: 'success' | 'info' | 'error' | 'warning';
+  width?: number;
+  height?: number;
+  onClick: () => void;
+  [key: string]: unknown;
+}
+
+// -------------------------------------
 
 export default function CustomIconButton({
   icon,
@@ -13,11 +28,11 @@ export default function CustomIconButton({
   width = 35,
   height = 35,
   ...other
-}) {
+}: CustomIconButtonProps) {
   return (
     <IconButton
       color={color}
-      component={m.button}
+      component={m.button as React.ElementType}
       whileTap="tap"
       whileHover="hover"
       variants={varHover(1.05)}
@@ -25,7 +40,6 @@ export default function CustomIconButton({
       sx={{
         width,
         height,
-
         ...sx,
       }}
       {...other}
@@ -34,12 +48,3 @@ export default function CustomIconButton({
     </IconButton>
   );
 }
-
-CustomIconButton.propTypes = {
-  sx: PropTypes.object,
-  icon: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  onClick: PropTypes.func,
-  color: PropTypes.oneOf(['success', 'info', 'error', 'warning', undefined]),
-};

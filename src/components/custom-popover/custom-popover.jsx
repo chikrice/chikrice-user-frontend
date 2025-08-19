@@ -12,7 +12,7 @@ export default function CustomPopover({
   children,
   arrow = 'top-right',
   hiddenArrow,
-  sx,
+  sx = {},
   ...other
 }) {
   const { style, anchorOrigin, transformOrigin } = getPosition(arrow);

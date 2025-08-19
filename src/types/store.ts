@@ -62,9 +62,9 @@ export interface AuthActions {
 // ============================================
 
 export interface PlanState {
-  roadmap: RoadmapType | object;
-  plans: PlanReference[] | [];
-  todayPlan: PlanReference | object;
+  roadmap: RoadmapType | null;
+  plans: PlanReference[];
+  todayPlan: PlanReference | null;
   totalDays: number;
   roadmapLoading: boolean;
   roadmapError: unknown | null;

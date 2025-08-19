@@ -1,10 +1,16 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
+import type { SxProps, Theme } from '@mui/material';
+
 // ----------------------------------------------------------------------
 
-export default function LoadingScreen({ sx, ...other }) {
+interface LoadingScreenProps {
+  sx?: SxProps<Theme>;
+  [key: string]: unknown;
+}
+
+export default function LoadingScreen({ sx, ...other }: LoadingScreenProps) {
   return (
     <Box
       sx={{
@@ -23,7 +29,3 @@ export default function LoadingScreen({ sx, ...other }) {
     </Box>
   );
 }
-
-LoadingScreen.propTypes = {
-  sx: PropTypes.object,
-};

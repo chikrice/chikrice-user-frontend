@@ -1,12 +1,30 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import { Container, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-// ----------------------------------------------------------------------
+import type { SxProps, Theme } from '@mui/material';
 
-export default function EmptyContent({ title, imgUrl, action, filled, description, sx, ...other }) {
+// -------------------------------------
+
+interface EmptyContentProps {
+  title?: string;
+  imgUrl?: string;
+  action?: React.ReactNode;
+  filled?: boolean;
+  description?: string;
+  sx?: SxProps<Theme>;
+  [key: string]: unknown;
+}
+export default function EmptyContent({
+  sx,
+  title,
+  imgUrl,
+  action,
+  filled,
+  description,
+  ...other
+}: EmptyContentProps) {
   return (
     <Container>
       <Stack
@@ -53,12 +71,3 @@ export default function EmptyContent({ title, imgUrl, action, filled, descriptio
     </Container>
   );
 }
-
-EmptyContent.propTypes = {
-  action: PropTypes.node,
-  description: PropTypes.string,
-  filled: PropTypes.bool,
-  imgUrl: PropTypes.string,
-  sx: PropTypes.object,
-  title: PropTypes.string,
-};

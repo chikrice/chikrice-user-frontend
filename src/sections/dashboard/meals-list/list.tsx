@@ -8,30 +8,35 @@ import EmptyContent from 'src/components/empty-content';
 import MealCard from '../meal-card';
 import MealSuggestion from '../meal-suggestion';
 
-export default function MealsList({ plan }) {
+import type { PlanType } from 'chikrice-types';
+
+// -------------------------------------
+interface MealsListProps {
+  plan: PlanType;
+}
+export default function MealsList({ plan }: MealsListProps) {
   const { t } = useTranslate();
-  const isPast = useMemo(() => isPastDate(plan?.date), [plan]);
+
+  const isPast = useMemo(() => isPastDate(plan.date), [plan]);
 
   const isMealSuggestions = plan?.meals?.some((meal) => meal?.mode === 'edit');
+
   console.log();
 
   return (
     <Box sx={{ pb: 45 }}>
-      {plan.meals?.length ? (
+      {plan?.meals?.length ? (
         <Container sx={{ mt: 2 }}>
           <Stack spacing={1.5}>
-            hii
-            {/* {plan?.meals?.map((meal, index) => (
+            {plan?.meals?.map((meal) => (
               <MealCard
                 key={meal.id}
-                index={index}
                 meal={meal}
+                plan={plan}
                 isPast={isPast}
-                date={plan?.date}
-                planId={plan?.id}
-                ingredients={Object.values(plan?.ingredients).flat()}
+                ingredients={Object.values(meal.ingredients).flat()}
               />
-            ))} */}
+            ))}
           </Stack>
         </Container>
       ) : (
@@ -44,9 +49,9 @@ export default function MealsList({ plan }) {
         )
       )}
 
-      {/* {!isMealSuggestions && !isPast && (
+      {!isMealSuggestions && !isPast && (
         <MealSuggestion planId={plan.id} mealNumber={plan.meals?.length + 1} />
-      )} */}
+      )}
     </Box>
   );
 }

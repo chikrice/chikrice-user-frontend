@@ -1,5 +1,4 @@
 import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
@@ -9,22 +8,33 @@ import { endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { deletePlanDayMeal } from 'src/api/plan-day';
 
-export default function DeleteMealDialog({ open, onClose, planDayId, mealId }) {
+// -------------------------------------
+
+interface DeleteMealDialogProps {
+  open: boolean;
+  planId: string;
+  mealId: string;
+  onClose: () => void;
+}
+
+// -------------------------------------
+
+export default function DeleteMealDialog({ open, planId, mealId, onClose }: DeleteMealDialogProps) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
 
   const handleDeleteMeal = useCallback(async () => {
     try {
       loading.onTrue();
-      await deletePlanDayMeal(planDayId, mealId);
+      await deletePlanDayMeal(planId, mealId);
     } catch (error) {
       console.log(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planDayId));
+      await mutate(endpoints.plan_day.root(planId));
       loading.onFalse();
       onClose();
     }
-  }, [planDayId, mealId, onClose, loading]);
+  }, [planId, mealId, onClose, loading]);
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -40,10 +50,3 @@ export default function DeleteMealDialog({ open, onClose, planDayId, mealId }) {
     </Dialog>
   );
 }
-
-DeleteMealDialog.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-  planDayId: PropTypes.string,
-  mealId: PropTypes.string,
-};
