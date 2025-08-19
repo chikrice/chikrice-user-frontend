@@ -11,8 +11,9 @@ export default defineConfig({
   plugins: [
     react(),
     checker({
+      typescript: true,
       eslint: {
-        lintCommand: 'eslint "./src/**/*.{js,jsx,ts,tsx}"',
+        lintCommand: 'eslint . --ext js,jsx,ts,tsx',
       },
     }),
     VitePWA({

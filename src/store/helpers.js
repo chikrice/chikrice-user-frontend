@@ -99,6 +99,7 @@ export const getNewAccessTokenWithRefreshToken = async () => {
     const tokens = response.data;
     handleTokensSession(tokens);
   } catch (error) {
+    console.log(error);
     alert('Your session has expired. Please log in again.');
     window.location.href = paths.auth.login;
   }
@@ -107,9 +108,3 @@ export const getNewAccessTokenWithRefreshToken = async () => {
 // =====================================
 // PLAN HELPERS
 //=====================================
-
-export const getTodayPlan = () => {
-  const plan = {};
-
-  return plan;
-};

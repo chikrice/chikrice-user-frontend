@@ -91,8 +91,14 @@ export const endpoints = {
     },
   },
   plans: {
-    create: `${API_VERSION}/plans/`,
-    query: `${API_VERSION}/plans/`,
+    root: `${API_VERSION}/plans/`,
+    id: (planId) => `${API_VERSION}/plans/${planId}`,
+
+    meals: {
+      id: (mealId) => `${API_VERSION}/plans/meal/${mealId}`,
+      create: (planId) => `${API_VERSION}/plans/meal/${planId}`,
+      suggestions: (mealId) => `${API_VERSION}/plans/meal/suggestions/${mealId}`,
+    },
   },
   faqs: `${API_VERSION}/faqs`,
 };
