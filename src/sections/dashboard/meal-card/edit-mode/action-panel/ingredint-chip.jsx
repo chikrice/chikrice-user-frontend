@@ -18,7 +18,7 @@ export default function IngredientChip({ ingredient, isSelected, onSelect }) {
           style={{ color: '#00b8d9' }}
         />
       }
-      onClick={() => onSelect(ingredient)}
+      onClick={() => onSelect(ingredient.id)}
       sx={{ borderRadius: 2, '& .MuiChip-label': { pt: '3px' } }}
     />
   );

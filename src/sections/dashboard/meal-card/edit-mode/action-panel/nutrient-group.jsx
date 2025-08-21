@@ -3,13 +3,7 @@ import { Box, Skeleton, Typography } from '@mui/material';
 
 import IngredientChip from './ingredint-chip';
 
-export default function NutrientGroup({
-  title,
-  ingredients,
-  onSelect,
-  isLoading,
-  selectedIngredients,
-}) {
+export default function NutrientGroup({ title, ingredients, onSelect, isLoading, selectedIngredients }) {
   return (
     <Box>
       <Typography pl={1.5} variant="subtitle2" textTransform={'capitalize'}>
@@ -31,7 +25,7 @@ export default function NutrientGroup({
       >
         {!isLoading
           ? ingredients.map((ingredient) => {
-              const isSelected = selectedIngredients.some((ing) => ing.id === ingredient.id);
+              const isSelected = selectedIngredients.some((ing) => ing.ingredientId === ingredient.id);
               return (
                 <IngredientChip
                   key={ingredient.id}

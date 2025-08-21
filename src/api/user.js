@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import axios, { fetcher, endpoints } from 'src/utils/axios';
+import { api, fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -50,9 +50,9 @@ export function useGetUser(userId) {
 }
 
 export async function updateUser(userId, data) {
-  return await axios.patch(endpoints.user.update(userId), data);
+  return await api.patch(endpoints.user.update(userId), data);
 }
 
 export async function initCoachCollab(userId, data) {
-  return await axios.post(endpoints.user.initCollab(userId), data);
+  return await api.post(endpoints.user.initCollab(userId), data);
 }

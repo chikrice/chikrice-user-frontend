@@ -3,7 +3,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { paths } from 'src/routes/paths';
 import { router } from 'src/routes/navigation';
-import axios, { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 import { getStorage, setStorage } from 'src/hooks/use-local-storage';
 import { userInputsInitialState } from 'src/sections/steps/user/user-inputs';
 
@@ -35,9 +35,9 @@ const resetUserInputs = () => {
 
 const setAuthHeader = (token: string) => {
   if (token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
   } else {
-    delete axios.defaults.headers.common.Authorization;
+    delete api.defaults.headers.common.Authorization;
   }
 };
 
@@ -52,7 +52,7 @@ const getStoredRefresh = () => getStorage(REFRESH_TOKEN_KEY);
 const fetchUserByAccess = async (accessToken: string) => {
   const {
     data: { user },
-  } = await axios.post(endpoints.auth.me, { accessToken });
+  } = await api.post(endpoints.auth.me, { accessToken });
   return user;
 };
 
@@ -82,7 +82,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
 
       const refresh = getStoredRefresh();
       if (refresh && !isTokenExpired(refresh.expires)) {
-        const { data: tokens } = await axios.post(endpoints.auth.refreshTokens, {
+        const { data: tokens } = await api.post(endpoints.auth.refreshTokens, {
           refreshToken: refresh.token,
         });
         applyTokens(tokens);
@@ -103,7 +103,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     try {
       const {
         data: { user, tokens },
-      } = await axios.post(endpoints.auth.login, credentials);
+      } = await api.post(endpoints.auth.login, credentials);
       applyTokens(tokens);
       set({ user, tokens, authenticated: true });
       resetUserInputs();
@@ -117,7 +117,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     try {
       const {
         data: { user, tokens },
-      } = await axios.post(endpoints.auth.register, { ...credentials, ...userInputs });
+      } = await api.post(endpoints.auth.register, { ...credentials, ...userInputs });
       applyTokens(tokens);
       set({ user, tokens, authenticated: true });
 
@@ -133,7 +133,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     try {
       const {
         data: { user, tokens, isFirstLogin },
-      } = await axios.post(endpoints.auth.google, credentials);
+      } = await api.post(endpoints.auth.google, credentials);
       applyTokens(tokens);
       set({ user, tokens, isFirstLogin, authenticated: true });
       return user;
@@ -146,7 +146,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     const refresh = getStoredRefresh();
     if (!refresh || isTokenExpired(refresh.expires)) throw new Error('Refresh token expired');
 
-    const { data: tokens } = await axios.post(endpoints.auth.refreshTokens, {
+    const { data: tokens } = await api.post(endpoints.auth.refreshTokens, {
       refreshToken: refresh.token,
     });
     applyTokens(tokens);
@@ -157,7 +157,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     try {
       const { token: refreshToken } = getStorage(REFRESH_TOKEN_KEY);
       applyTokens(null);
-      await axios.post(endpoints.auth.logout, { refreshToken });
+      await api.post(endpoints.auth.logout, { refreshToken });
       set({ user: null, authenticated: false, tokens: null });
     } catch (error) {
       enqueueSnackbar(error.message || 'Logout error', { variant: 'error' });
@@ -168,7 +168,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
     try {
       const {
         data: { user },
-      } = await axios.get(endpoints.user.get(id));
+      } = await api.get(endpoints.user.get(id));
       set({ user });
     } catch (error) {
       console.error(error);

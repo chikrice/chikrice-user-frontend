@@ -7,13 +7,12 @@ import { Box, Button, Stack } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
-import { togglePlanDayMealIngredient, toggleMealMode, deletePlanDayMeal } from 'src/api/plan-day';
 
 import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
@@ -36,17 +35,20 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
   const debouncedQuery = useDebounce(searchQuery);
 
   const handleToggleIngredient = useCallback(
-    async (ingredient) => {
+    async (ingredientId) => {
       try {
-        await togglePlanDayMealIngredient(planId, {
+        const URL = endpoints.plans.meals.toggleIngredient(planId);
+        const data = {
           mealId,
           userId,
-          ingredient,
-        });
-        await mutate(endpoints.plan_day.root(planId));
+          ingredientId,
+        };
+        await api.patch(URL, data);
         setSearchQuery('');
       } catch (error) {
         console.log(error);
+      } finally {
+        await mutate(endpoints.plans.id(planId));
       }
     },
     [mealId, planId, userId]
@@ -57,18 +59,20 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
       loading.onTrue();
 
       if (canSave) {
-        await toggleMealMode(planId, {
+        const URL = endpoints.plans.meals.toggleMode(planId);
+        await api.patch(URL, {
           mealId,
           userId,
           mode: 'view',
         });
       } else {
-        await deletePlanDayMeal(planId, mealId);
+        console.log('ran');
+        await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planId));
+      await mutate(endpoints.plans.id(planId));
       loading.onFalse();
     }
   }, [planId, mealId, canSave, userId, loading]);

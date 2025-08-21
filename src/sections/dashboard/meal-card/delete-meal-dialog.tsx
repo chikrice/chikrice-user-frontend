@@ -4,9 +4,8 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { deletePlanDayMeal } from 'src/api/plan-day';
 
 // -------------------------------------
 
@@ -26,11 +25,11 @@ export default function DeleteMealDialog({ open, planId, mealId, onClose }: Dele
   const handleDeleteMeal = useCallback(async () => {
     try {
       loading.onTrue();
-      await deletePlanDayMeal(planId, mealId);
+      await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
     } catch (error) {
       console.log(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planId));
+      await mutate(endpoints.plans.id(planId));
       loading.onFalse();
       onClose();
     }

@@ -16,7 +16,7 @@ interface MealsListProps {
 }
 export default function MealsList({ plan }: MealsListProps) {
   const { t } = useTranslate();
-
+  console.log(plan.id);
   const isPast = useMemo(() => isPastDate(plan.date), [plan]);
 
   const isMealSuggestions = plan?.meals?.some((meal) => meal?.mode === 'edit');

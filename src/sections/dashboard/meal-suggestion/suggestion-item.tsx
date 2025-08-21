@@ -1,5 +1,4 @@
 import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 import styled from '@emotion/styled';
 import { ListItem, ListItemIcon, Paper, Typography } from '@mui/material';
@@ -8,18 +7,30 @@ import { useLocales } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
 import { addSuggestedMealToPlanDayMeals } from 'src/api/plan-day';
 
-export default function SuggestionItem({ ingredients, meal, planDayId }) {
+import type { Ingredient, Meal } from 'chikrice-types';
+
+// -------------------------------------
+
+interface SuggestionItemProps {
+  ingredients: Ingredient[];
+  meal: Meal;
+  planId: string;
+}
+
+// -------------------------------------
+
+export default function SuggestionItem({ ingredients, meal, planId }: SuggestionItemProps) {
   const { lang } = useLocales();
 
   const handleClick = useCallback(async () => {
     try {
-      await addSuggestedMealToPlanDayMeals(planDayId, { meal });
+      await addSuggestedMealToPlanDayMeals(planId, { meal });
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plans.id(planDayId));
+      await mutate(endpoints.plans.id(planId));
     }
-  }, [planDayId, meal]);
+  }, [planId, meal]);
 
   return (
     <>
@@ -36,12 +47,6 @@ export default function SuggestionItem({ ingredients, meal, planDayId }) {
     </>
   );
 }
-
-SuggestionItem.propTypes = {
-  ingredients: PropTypes.array,
-  meal: PropTypes.object,
-  planDayId: PropTypes.string,
-};
 
 const StyledMealSuggestion = styled(Paper)(() => ({
   padding: '.7rem ',

@@ -10,7 +10,7 @@ axiosInstance.interceptors.response.use(
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
-export default axiosInstance;
+export { axiosInstance as api };
 
 // ----------------------------------------------------------------------
 
@@ -97,7 +97,9 @@ export const endpoints = {
     meals: {
       id: (mealId) => `${API_VERSION}/plans/meal/${mealId}`,
       create: (planId) => `${API_VERSION}/plans/meal/${planId}`,
+      toggleMode: (planId) => `${API_VERSION}/plans/meal/toggle-mode/${planId}`,
       suggestions: (mealId) => `${API_VERSION}/plans/meal/suggestions/${mealId}`,
+      toggleIngredient: (planId) => `${API_VERSION}/plans/meal/toggle-ingredient/${planId}`,
     },
   },
   faqs: `${API_VERSION}/faqs`,

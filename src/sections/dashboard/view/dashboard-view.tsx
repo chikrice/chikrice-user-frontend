@@ -31,7 +31,7 @@ interface ActivePlan {
 export default function DashboardView() {
   const { plans, todayPlan, totalDays, roadmapLoading, roadmapError } = useStore((state) => state);
 
-  const [currentDay, setCurrentDay] = useState(todayPlan.number);
+  const [currentDay, setCurrentDay] = useState(todayPlan?.number);
 
   const activePlan = useMemo<ActivePlan>(
     () => ({
@@ -68,9 +68,6 @@ export default function DashboardView() {
     // TODO: update activity log base on the consoumed calories
     // eslint-disable-next-line
   }, [plan?.consumedMacros]);
-
-  console.log('planLoading: ', planLoading);
-  console.log('plan: ', plan);
 
   if (roadmapLoading) {
     return <LoadingScreen />;
