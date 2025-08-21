@@ -11,7 +11,7 @@ import { cardStyle, headerStyle, contentStyle, actionsStyle } from './styles';
 import { InfoDialog, HeaderActionsPopover, ViewBodyContent } from './view-mode';
 import { EditActionPanel, EditBodyContent, EditFooterContent } from './edit-mode';
 
-import type { Ingredient, Meal, PlanType } from 'chikrice-types';
+import type { MealIngredient, Meal, PlanType } from 'chikrice-types';
 
 // -------------------------------------
 
@@ -19,7 +19,7 @@ interface MealCardProps {
   meal: Meal;
   plan: PlanType;
   isPast: boolean;
-  ingredients: Ingredient[];
+  ingredients: MealIngredient[];
 }
 
 // -------------------------------------
@@ -59,7 +59,6 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
             canSave={!!ingredients.length}
           />
         </Box>
-
         <CardContent sx={contentStyle}>
           {meal.mode === 'view' ? (
             <ViewBodyContent ingredients={ingredients} />

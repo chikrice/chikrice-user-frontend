@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useSWR, { mutate } from 'swr';
 
-import axios, { endpoints, fetcher } from 'src/utils/axios';
+import { api, endpoints, fetcher } from 'src/utils/axios';
 
 // -------------------------------------
 
@@ -56,6 +56,6 @@ export function useMealSuggestions(planId, params) {
 // CREATE EMPTY MEAL TEMPLATE
 // =====================================
 export async function createMeal(planId) {
-  await axios.post(endpoints.plans.meals.create(planId));
+  await api.post(endpoints.plans.meals.create(planId));
   await mutate(endpoints.plans.id(planId));
 }

@@ -1,15 +1,15 @@
-import axios, { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 
 export async function createAddress(data) {
   console.log(data);
 
-  return await axios.post(endpoints.address.create, data);
+  return await api.post(endpoints.address.create, data);
 }
 export async function updateAddress(id, data) {
-  return await axios.patch(endpoints.address.update(id), data);
+  return await api.patch(endpoints.address.update(id), data);
 }
 export async function deleteAddress(id, userId) {
-  return await axios.delete(endpoints.address.delete(id) + '?userId=' + userId);
+  return await api.delete(endpoints.address.delete(id) + '?userId=' + userId);
 }
 
 export async function getFullAddressFromlatLong(latitude, longitude) {
@@ -17,7 +17,7 @@ export async function getFullAddressFromlatLong(latitude, longitude) {
   const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
 
   try {
-    const response = await axios.get(geocodeUrl);
+    const response = await api.get(geocodeUrl);
     const { data } = response;
 
     if (data.status === 'OK') {

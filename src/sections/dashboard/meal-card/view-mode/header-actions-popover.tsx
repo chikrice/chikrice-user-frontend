@@ -5,12 +5,12 @@ import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } f
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
 import Iconify from 'src/components/iconify';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { deletePlanDayMeal } from 'src/api/plan-day';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { deletePlanDayMeal, mutatePlanDay, toggleMealMode } from 'src/api/plan-day';
 
 import DeleteMealDialog from '../delete-meal-dialog';
 
@@ -51,7 +51,7 @@ export default function HeaderActionsPopover({
   const handleToggleMode = useCallback(
     async (mode: 'view' | 'edit') => {
       try {
-        await toggleMealMode(planId, {
+        await api.patch(endpoints.plans.meals.toggleMode(planId), {
           mealId,
           userId,
           mode,
@@ -60,7 +60,7 @@ export default function HeaderActionsPopover({
       } catch (error) {
         console.log(error);
       } finally {
-        await mutate(endpoints.plan_day.root(planId), mutatePlanDay(planId));
+        await mutate(endpoints.plans.id(planId));
       }
     },
     [planId, mealId, userId, popover]
@@ -71,7 +71,7 @@ export default function HeaderActionsPopover({
       if (canSave) {
         await handleToggleMode('view');
       } else {
-        await deletePlanDayMeal(planId, mealId);
+        await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
       }
     } catch (error) {
       console.error(error);

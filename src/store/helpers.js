@@ -1,5 +1,5 @@
 import { paths } from 'src/routes/paths';
-import axios, { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
 
 // -------------------------------------
@@ -52,10 +52,10 @@ export const setAccessTokenSession = (token) => {
   if (token) {
     setStorage(ACCESS_TOKEN_KEY, token);
     handleSessionLife(token.expires);
-    axios.defaults.headers.common.Authorization = `Bearer ${token.token}`;
+    api.defaults.headers.common.Authorization = `Bearer ${token.token}`;
   } else {
     removeStorage(ACCESS_TOKEN_KEY);
-    delete axios.defaults.headers.common.Authorization;
+    delete api.defaults.headers.common.Authorization;
   }
 };
 
@@ -92,7 +92,7 @@ export const getNewAccessTokenWithRefreshToken = async () => {
       throw new Error('Refresh token expired');
     }
 
-    const response = await axios.post(endpoints.auth.refreshTokens, {
+    const response = await api.post(endpoints.auth.refreshTokens, {
       refreshToken: refreshToken.token,
     });
 

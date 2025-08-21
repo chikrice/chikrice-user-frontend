@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Box, Typography } from '@mui/material';
 
 import useStore from 'src/store';
@@ -7,11 +6,22 @@ import { useMealSuggestions } from 'src/api/plans';
 
 import SuggestionItem from './suggestion-item';
 
-export default function MealSuggestion({ planId, mealNumber }) {
-  const { t } = useTranslate();
-  const { todayPlan, roadmap } = useStore((state) => state);
+import type { Meal } from 'chikrice-types';
 
-  const { suggestions, suggestionsLoading } = useMealSuggestions(todayPlan.planId, {
+// -------------------------------------
+
+interface MealSuggestionProps {
+  planId: string;
+  mealNumber: number;
+}
+
+// -------------------------------------
+
+export default function MealSuggestion({ planId, mealNumber }: MealSuggestionProps) {
+  const { t } = useTranslate();
+  const { roadmap } = useStore((state) => state);
+
+  const { suggestions, suggestionsLoading } = useMealSuggestions(planId, {
     roadmapId: roadmap.id,
     mealNumber,
   });
@@ -36,21 +46,15 @@ export default function MealSuggestion({ planId, mealNumber }) {
           gap: 1.5,
         }}
       >
-        {suggestions.map((meal, index) => (
+        {suggestions.map((meal: Meal) => (
           <SuggestionItem
-            key={index}
+            key={meal.id}
             meal={meal}
             planId={planId}
-            ingredients={Object.values(meal?.activeMeal?.ingredients).flat()}
+            ingredients={Object.values(meal?.ingredients).flat()}
           />
         ))}
       </Box>
     </Box>
   );
 }
-
-MealSuggestion.propTypes = {
-  planId: PropTypes.string,
-  planMonthId: PropTypes.string,
-  mealNumber: PropTypes.number,
-};

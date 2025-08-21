@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import axios, { endpoints, fetcher } from 'src/utils/axios';
+import { api, endpoints, fetcher } from 'src/utils/axios';
 
 export function useGetRoadmap(roadmapId) {
   const URL = endpoints.roadmap.root(roadmapId);
@@ -25,15 +25,15 @@ export function useGetRoadmap(roadmapId) {
 
 export async function getUserRoadmap(roadmapId) {
   const URL = endpoints.roadmap.root(roadmapId);
-  return await axios.get(URL);
+  return await api.get(URL);
 }
 
 export async function createUserRoadmap(data) {
   const URL = endpoints.roadmap.create;
-  return await axios.post(URL, data);
+  return await api.post(URL, data);
 }
 
 export async function updateActivityLog(roadmapId, data) {
   const URL = endpoints.roadmap.updateActivityLog(roadmapId);
-  return await axios.patch(URL, data);
+  return await api.patch(URL, data);
 }

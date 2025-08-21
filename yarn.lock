@@ -3178,9 +3178,9 @@ check-error@^2.1.1:
   integrity sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==
 
 chikrice-types@^1.0.1:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/chikrice-types/-/chikrice-types-1.0.4.tgz#8dee5392c37d2048146fd73b8b1200e60f725d05"
-  integrity sha512-3jGOJleAMhqKKtdFqAjPO18Jvj22OXTeU1haRCha/qECGJxVrCQOZQo65XkJ+5v2ux4w8EAcgafiFaXzOWdg/Q==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/chikrice-types/-/chikrice-types-1.0.5.tgz#11dce701d93399bcff6ef1d03aeac8deb3ada189"
+  integrity sha512-J9c6gdyQQk3+YeGQ90xec0CPJHWOfC+YcoRCiXIrmesnlYSTM6uNNRQ9l1otEhnmuMCmW9odabi02wi35GVuGA==
 
 chokidar@^3.5.1:
   version "3.6.0"

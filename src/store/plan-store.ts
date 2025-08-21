@@ -2,7 +2,7 @@ import { isToday } from 'date-fns';
 import { StateCreator } from 'zustand';
 import { RoadmapType } from 'chikrice-types';
 
-import axios, { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 
 import type { CreateRoadmapInputs, PlanActions, PlanState, Store } from 'src/types';
 
@@ -60,7 +60,7 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   // =====================================
   createRoadmap: async (createRoadmapInputs) => {
     try {
-      const { data: roadmap } = await axios.post(endpoints.roadmap.create, createRoadmapInputs);
+      const { data: roadmap } = await api.post(endpoints.roadmap.create, createRoadmapInputs);
       set({ roadmap, roadmapError: null });
       return roadmap;
     } catch (error) {
@@ -75,7 +75,7 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   createPlans: async (roadmap, month) => {
     try {
       const data = get().transformRoadmapToPlanData(roadmap, month);
-      const { data: plans } = await axios.post(endpoints.plans.root, data);
+      const { data: plans } = await api.post(endpoints.plans.root, data);
 
       set({ plans, totalDays: plans.length, roadmapError: null });
       return plans;
@@ -89,7 +89,7 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   // =====================================
   getRoadmap: async (roadmapId) => {
     try {
-      const { data: roadmap } = await axios.get(endpoints.roadmap.root(roadmapId));
+      const { data: roadmap } = await api.get(endpoints.roadmap.root(roadmapId));
       set({ roadmap });
 
       return roadmap;
@@ -103,7 +103,7 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   // =====================================
   getPlans: async (params) => {
     try {
-      const { data: plans } = await axios.get(endpoints.plans.root, { params });
+      const { data: plans } = await api.get(endpoints.plans.root, { params });
       set({ plans, totalDays: plans.length });
       return plans;
     } catch (error) {

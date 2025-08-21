@@ -2,13 +2,23 @@ import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
 import { useLocales } from 'src/locales';
 
-export default function ViewBodyContent({ ingredients }) {
+import type { Ingredient } from 'chikrice-types';
+
+// -------------------------------------
+
+interface ViewBodyContentProps {
+  ingredients: Ingredient[];
+}
+
+// -------------------------------------
+
+export default function ViewBodyContent({ ingredients }: ViewBodyContentProps) {
   const { lang } = useLocales();
 
   return (
     <Stack>
-      {ingredients.map((item, index) => (
-        <ListItem key={index} sx={{ pl: 0 }}>
+      {ingredients.map((item) => (
+        <ListItem key={item.id} sx={{ pl: 0 }}>
           <ListItemIcon>{item.icon}</ListItemIcon>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="subtitle2" color={'text.secondary'}>

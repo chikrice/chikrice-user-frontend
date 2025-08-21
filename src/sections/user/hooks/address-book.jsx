@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import axios, { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 
 const useAddressBook = () => {
   const { t } = useTranslate();
@@ -13,7 +13,7 @@ const useAddressBook = () => {
   const handleUpdateUser = useCallback(
     async (data) => {
       try {
-        await axios.put(endpoints.user.update(user?._id), data);
+        await api.put(endpoints.user.update(user?._id), data);
         enqueueSnackbar(t('updateSuccess'));
       } catch (error) {
         enqueueSnackbar(t('somethingWentWrong'), {
@@ -28,9 +28,7 @@ const useAddressBook = () => {
 
   const handleAddAddressToAddressBook = useCallback(
     (address) => {
-      const newAddressBook = user.addressBook.map((a) =>
-        address.primary ? { ...a, primary: false } : a
-      );
+      const newAddressBook = user.addressBook.map((a) => (address.primary ? { ...a, primary: false } : a));
 
       const addressBook = [...newAddressBook, address];
       handleUpdateUser({ addressBook });
