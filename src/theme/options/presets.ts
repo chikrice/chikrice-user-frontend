@@ -1,13 +1,29 @@
 import { alpha } from '@mui/material/styles';
 
-import { grey, primary } from '../palette';
+import { grey, primary, ColorPalette } from '../palette';
 
 // ----------------------------------------------------------------------
 
-export function createPresets(preset) {
+export type PresetName = 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red';
+
+export type PresetOption = {
+  name: PresetName;
+  value: string;
+};
+
+export type PresetTheme = {
+  palette: {
+    primary: ColorPalette;
+  };
+  customShadows: {
+    primary: string;
+  };
+};
+
+export function createPresets(preset: PresetName): PresetTheme {
   const primaryColor = getPrimary(preset);
 
-  const theme = {
+  const theme: PresetTheme = {
     palette: {
       primary: primaryColor,
     },
@@ -23,7 +39,7 @@ export function createPresets(preset) {
 
 // ----------------------------------------------------------------------
 
-const cyan = {
+const cyan: ColorPalette = {
   lighter: '#CCF4FE',
   light: '#68CDF9',
   main: '#078DEE',
@@ -32,7 +48,7 @@ const cyan = {
   contrastText: '#FFFFFF',
 };
 
-const purple = {
+const purple: ColorPalette = {
   lighter: '#EBD6FD',
   light: '#B985F4',
   main: '#7635dc',
@@ -41,7 +57,7 @@ const purple = {
   contrastText: '#FFFFFF',
 };
 
-const blue = {
+const blue: ColorPalette = {
   lighter: '#D1E9FC',
   light: '#76B0F1',
   main: '#2065D1',
@@ -50,7 +66,7 @@ const blue = {
   contrastText: '#FFFFFF',
 };
 
-const orange = {
+const orange: ColorPalette = {
   lighter: '#FEF4D4',
   light: '#FED680',
   main: '#fda92d',
@@ -59,7 +75,7 @@ const orange = {
   contrastText: grey[800],
 };
 
-const red = {
+const red: ColorPalette = {
   lighter: '#FFE3D5',
   light: '#FFC1AC',
   main: '#FF3030',
@@ -68,7 +84,7 @@ const red = {
   contrastText: '#FFFFFF',
 };
 
-export const presetOptions = [
+export const presetOptions: PresetOption[] = [
   { name: 'default', value: primary.main },
   { name: 'cyan', value: cyan.main },
   { name: 'purple', value: purple.main },
@@ -77,13 +93,15 @@ export const presetOptions = [
   { name: 'red', value: red.main },
 ];
 
-export function getPrimary(preset) {
-  return {
+export function getPrimary(preset: PresetName): ColorPalette {
+  const presets: Record<PresetName, ColorPalette> = {
     default: primary,
     cyan,
     purple,
     blue,
     orange,
     red,
-  }[preset];
+  };
+
+  return presets[preset];
 }

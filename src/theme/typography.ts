@@ -1,14 +1,24 @@
+import { TypographyVariantsOptions } from '@mui/material/styles';
+
 // ----------------------------------------------------------------------
 
-export function remToPx(value) {
+export function remToPx(value: string): number {
   return Math.round(parseFloat(value) * 16);
 }
 
-export function pxToRem(value) {
+export function pxToRem(value: number): string {
   return `${value / 16}rem`;
 }
 
-export function responsiveFontSizes({ sm, md, lg }) {
+export function responsiveFontSizes({
+  sm,
+  md,
+  lg,
+}: {
+  sm: number;
+  md: number;
+  lg: number;
+}): Record<string, { fontSize: string }> {
   return {
     '@media (min-width:600px)': {
       fontSize: pxToRem(sm),
@@ -27,7 +37,7 @@ export const secondaryFont = 'Barlow, sans-serif';
 
 // ----------------------------------------------------------------------
 
-export const typography = {
+export const typography: TypographyVariantsOptions = {
   fontFamily: primaryFont,
   fontSecondaryFamily: secondaryFont,
   fontWeightRegular: 400,
@@ -105,3 +115,22 @@ export const typography = {
     textTransform: 'unset',
   },
 };
+
+// Extend the Material-UI Theme type for custom typography properties
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    fontSecondaryFamily: string;
+    fontWeightRegular: number;
+    fontWeightMedium: number;
+    fontWeightSemiBold: number;
+    fontWeightBold: number;
+  }
+
+  interface TypographyVariantsOptions {
+    fontSecondaryFamily?: string;
+    fontWeightRegular?: number;
+    fontWeightMedium?: number;
+    fontWeightSemiBold?: number;
+    fontWeightBold?: number;
+  }
+}

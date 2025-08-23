@@ -1,4 +1,4 @@
-import type { MacrosRatio, PlanReference, RoadmapType, UserClient } from 'chikrice-types';
+import type { MacrosRatio, PlanReference, PlanType, RoadmapType, UserClient } from 'chikrice-types';
 
 // ============================================
 // AUTH TYPES
@@ -58,13 +58,12 @@ export interface AuthActions {
 }
 
 // ============================================
-// PLAN TYPES
+// ROADMAP TYPES
 // ============================================
 
-export interface PlanState {
+export interface RoadmapState {
   roadmap: RoadmapType | null;
   plans: PlanReference[];
-  todayPlan: PlanReference | null;
   totalDays: number;
   roadmapLoading: boolean;
   roadmapError: unknown | null;
@@ -88,20 +87,34 @@ export interface CreatePlansData {
   targetCalories: number;
 }
 
-export interface PlanActions {
+export interface RoadmapActions {
   createUserJourney: (userInputs: CreateRoadmapInputs) => Promise<void>;
   loadUserJourney: (roadmapId: string) => Promise<void>;
   createRoadmap: (createRoadmapInputs: CreateRoadmapInputs) => Promise<RoadmapType>;
   getRoadmap: (roadmapId: string) => Promise<RoadmapType>;
   createPlans: (roadmap: RoadmapType, month: number) => Promise<PlanReference[]>;
   getPlans: (params: GetPlansParams) => Promise<PlanReference[]>;
-  setTodayPlan: (plans: PlanReference[]) => void;
   transformRoadmapToPlanData: (roadmap: RoadmapType, month: number) => CreatePlansData;
 }
 
 // ============================================
+// PLAN TYPES
+// ============================================
+export interface PlanState {
+  day: number;
+  plan: PlanType | null;
+  planLoading: boolean;
+  planError: unknown | null;
+}
+
+export interface PlanActions {
+  initializePlan: (plans: PlanReference[]) => Promise<void>;
+  getPlan: (planId: string) => Promise<void>;
+  updateDay: (day: number) => Promise<void>;
+}
+// ============================================
 // STORE TYPE
 // ============================================
-export interface StoreState extends AuthState, PlanState {}
-export interface StoreActions extends AuthActions, PlanActions {}
+export interface StoreState extends AuthState, RoadmapState, PlanState {}
+export interface StoreActions extends AuthActions, RoadmapActions, PlanActions {}
 export type Store = StoreState & StoreActions;

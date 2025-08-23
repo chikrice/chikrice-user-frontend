@@ -8,7 +8,7 @@ import type { PlanType } from 'chikrice-types';
 
 interface MealsProps {
   planLoading: boolean;
-  plan: PlanType;
+  plan: PlanType | null;
 }
 
 // -------------------------------------

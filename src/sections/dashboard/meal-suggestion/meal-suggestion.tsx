@@ -48,7 +48,7 @@ export default function MealSuggestion({ planId, mealNumber }: MealSuggestionPro
       >
         {suggestions.map((meal: Meal) => (
           <SuggestionItem
-            key={meal.id}
+            key={meal._id}
             meal={meal}
             planId={planId}
             ingredients={Object.values(meal?.ingredients).flat()}

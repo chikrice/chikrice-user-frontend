@@ -2,23 +2,31 @@ import { mutate } from 'swr';
 import { useCallback } from 'react';
 import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
-import { endpoints } from 'src/utils/axios';
-import { updatePlanDayMeal } from 'src/api/plan-day';
+import { api, endpoints } from 'src/utils/axios';
 import { useLocales, useTranslate } from 'src/locales';
 import CustomIconButton from 'src/components/custom-icon-button';
 
-export default function EditBodyContent({ ingredients, planId, mealId }) {
+import type { MealIngredient } from 'chikrice-types';
+
+// -------------------------------------
+interface EditBodyContentProps {
+  ingredients: MealIngredient[];
+  planId: string;
+  mealId: string;
+}
+
+export default function EditBodyContent({ ingredients, planId, mealId }: EditBodyContentProps) {
   const { lang } = useLocales();
   const { t } = useTranslate();
 
   const handleUpdatePlanDayMeal = useCallback(
-    async (ingredient, isAdd) => {
+    async (ingredient: MealIngredient, isAdd: boolean) => {
       try {
-        await updatePlanDayMeal(planId, { mealId, ingredient, isAdd });
+        await api.patch(endpoints.plans.meals.id(planId), { mealId, ingredient, isAdd });
       } catch (error) {
         console.error(error);
       } finally {
-        await mutate(endpoints.plan_day.root(planId));
+        await mutate(endpoints.plans.id(planId));
       }
     },
     [planId, mealId]

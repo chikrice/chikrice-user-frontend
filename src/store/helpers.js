@@ -104,7 +104,3 @@ export const getNewAccessTokenWithRefreshToken = async () => {
     window.location.href = paths.auth.login;
   }
 };
-
-// =====================================
-// PLAN HELPERS
-//=====================================

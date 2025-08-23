@@ -40,7 +40,6 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
   return (
     <>
       <Card className={'dash__tour__3'} sx={cardStyle} ref={cardRef}>
-        {/* Header */}
         <Box sx={headerStyle}>
           <Stack>
             <Typography variant="subtitle2" textTransform={'capitalize'}>
@@ -59,6 +58,7 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
             canSave={!!ingredients.length}
           />
         </Box>
+
         <CardContent sx={contentStyle}>
           {meal.mode === 'view' ? (
             <ViewBodyContent ingredients={ingredients} />
@@ -67,7 +67,6 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
           )}
         </CardContent>
 
-        {/* Actions */}
         <CardActions className={'dash__tour__4'} sx={actionsStyle}>
           {meal.mode === 'view' ? (
             <CustomIconButton icon={'fluent:info-28-regular'} onClick={isInfo.onTrue} />
