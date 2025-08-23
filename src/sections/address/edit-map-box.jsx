@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useTheme } from '@emotion/react';
 import { Map, Marker } from 'react-map-gl';
+import { useTheme } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
 
 import config from 'src/config-global';

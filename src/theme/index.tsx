@@ -70,3 +70,6 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     </MuiThemeProvider>
   );
 }
+
+// Export the extended Theme type
+export type { Theme } from '@mui/material/styles';

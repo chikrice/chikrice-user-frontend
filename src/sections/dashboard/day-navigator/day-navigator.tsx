@@ -87,13 +87,13 @@ export default function DayNavigator({
 
   const handleDeletePlan = useCallback(async () => {
     try {
-      await api.delete(endpoints.plans.id(plan.id));
+      await api.delete(endpoints.plans.id(plan?.id));
     } catch (error) {
       console.error(error);
     } finally {
       await mutate(endpoints.plans.id(plan.id));
     }
-  }, [plan.id]);
+  }, [plan?.id]);
 
   const handleToggleSavePlan = useCallback(async () => {
     try {
@@ -111,7 +111,7 @@ export default function DayNavigator({
           {!isDisableMealsActions && (
             <MoreActionsPopover
               sx={{}}
-              date={plan.date}
+              date={plan?.date}
               planDayId={plan.id}
               onCopyPlan={() => handleOpenDrawer('copy')}
               onSavePlan={handleToggleSavePlan}
@@ -138,7 +138,7 @@ export default function DayNavigator({
               textAlign={'center'}
               style={{ direction: 'ltr' }}
             >
-              {isToday ? t('today') : fDate(plan.date, 'dd MMM')} {day}/{totalDays}
+              {isToday ? t('today') : fDate(plan?.date, 'dd MMM')} {day}/{totalDays}
             </Typography>
           )}
 

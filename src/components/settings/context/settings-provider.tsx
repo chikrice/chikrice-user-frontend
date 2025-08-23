@@ -6,14 +6,16 @@ import { localStorageGetItem } from 'src/utils/storage-available';
 
 import { SettingsContext } from './settings-context';
 
+import type { PresetName } from 'src/theme/options/presets';
+
 // ----------------------------------------------------------------------
 
 const STORAGE_KEY = 'settings';
 
-interface Settings {
+export interface Settings {
   themeMode: 'light' | 'dark';
   themeDirection: 'ltr' | 'rtl';
-  themeColorPresets: string;
+  themeColorPresets: PresetName;
   themeContrast: 'default' | 'bold';
   [key: string]: unknown;
 }

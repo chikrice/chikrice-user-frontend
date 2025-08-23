@@ -26,9 +26,10 @@ export default function MealsList({ plan }: MealsListProps) {
       {plan?.meals?.length ? (
         <Container sx={{ mt: 2 }}>
           <Stack spacing={1.5}>
-            {plan?.meals?.map((meal) => (
+            {plan?.meals?.map((meal, index) => (
               <MealCard
                 key={meal.id}
+                index={index}
                 meal={meal}
                 plan={plan}
                 isPast={isPast}

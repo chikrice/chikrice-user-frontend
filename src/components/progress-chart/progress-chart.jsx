@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 
 import { useTranslate } from 'src/locales';
 
@@ -79,11 +79,7 @@ export default function ProgressChart({ weightProgression }) {
   });
 
   return (
-    <Box
-      className="progress__tour__1"
-      sx={{ px: 1.5, overflowX: 'auto' }}
-      style={{ direction: 'ltr' }}
-    >
+    <Box className="progress__tour__1" sx={{ px: 1.5, overflowX: 'auto' }} style={{ direction: 'ltr' }}>
       <Box sx={{ minWidth: categories?.length * 50 + 'px' }}>
         {/* Dynamically set min width */}
         <Chart type="area" series={series} options={chartOptions} height={250} />

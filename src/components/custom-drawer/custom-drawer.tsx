@@ -1,15 +1,11 @@
 import { ReactNode } from 'react';
 import styled from '@emotion/styled';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import { Box, SwipeableDrawer } from '@mui/material';
 
-import type { SxProps, Theme } from '@mui/material';
+import type { Theme } from 'src/theme';
 
-interface ExtendedTheme extends Theme {
-  customShadows: {
-    [key: string]: string;
-  };
-}
+import type { SxProps } from '@mui/material';
 
 interface CustomBottomDrawerProps {
   children: ReactNode;
@@ -29,7 +25,7 @@ export default function CustomBottomDrawer({
   sx,
   ...other
 }: CustomBottomDrawerProps) {
-  const theme = useTheme() as ExtendedTheme;
+  const theme = useTheme();
 
   return (
     <SwipeableDrawer
@@ -64,7 +60,7 @@ export default function CustomBottomDrawer({
   );
 }
 
-const StyledDrawerCloseBar = styled(Box)(({ theme }: { theme?: ExtendedTheme }) => ({
+const StyledDrawerCloseBar = styled(Box)(({ theme }: { theme?: Theme }) => ({
   height: '4px',
   width: '60px',
   borderRadius: '8px',

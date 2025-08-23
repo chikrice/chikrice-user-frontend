@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { alpha } from '@mui/material';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 
 export function useJoyrideStyles() {
   const theme = useTheme();

@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import { alpha, Box, Button, Stack, Typography } from '@mui/material';
 
 import Image from 'src/components/image';
@@ -78,12 +78,7 @@ export default function Hero({ onCallToAction }) {
             <Button fullWidth size="large" variant="contained" onClick={onCallToAction}>
               {t('startForFree')}
             </Button>
-            <Button
-              fullWidth
-              size="large"
-              variant="outlined"
-              onClick={() => router.push(paths.auth.login)}
-            >
+            <Button fullWidth size="large" variant="outlined" onClick={() => router.push(paths.auth.login)}>
               {t('login')}
             </Button>
           </Stack>

@@ -1,5 +1,3 @@
-import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { LoadingButton } from '@mui/lab';
 import { useCallback, useState } from 'react';
@@ -20,11 +18,30 @@ import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
 
-export default function ActionPanel({ planId, mealId, canSave, selectedIngredients }) {
+import type { MealIngredient, IngredientType } from 'chikrice-types';
+
+// -------------------------------------
+interface ActionPanelProps {
+  planId: string;
+  mealId: string;
+  mealIndex: number;
+  canSave: boolean;
+  selectedIngredients: MealIngredient[];
+}
+
+// -------------------------------------
+
+export default function ActionPanel({
+  planId,
+  mealId,
+  mealIndex,
+  canSave,
+  selectedIngredients,
+}: ActionPanelProps) {
   const loading = useBoolean();
 
   const { t } = useTranslate();
-  const { user } = useStore((store) => store);
+  const { user, getPlan, toggleIngredient } = useStore((store) => store);
   const userId = user.id;
 
   const isDeleteMeal = useBoolean();
@@ -35,20 +52,21 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
   const debouncedQuery = useDebounce(searchQuery);
 
   const handleToggleIngredient = useCallback(
-    async (ingredientId) => {
+    async (ingredient: IngredientType) => {
       try {
-        const URL = endpoints.plans.meals.toggleIngredient(planId);
-        const data = {
-          mealId,
-          userId,
-          ingredientId,
-        };
-        await api.patch(URL, data);
+        toggleIngredient(ingredient, mealIndex);
+        // const URL = endpoints.plans.meals.toggleIngredient(planId);
+        // const data = {
+        //   mealId,
+        //   userId,
+        //   ingredientId,
+        // };
+        // await api.patch(URL, data);
         setSearchQuery('');
       } catch (error) {
         console.log(error);
       } finally {
-        await mutate(endpoints.plans.id(planId));
+        // await getPlan(planId);
       }
     },
     [mealId, planId, userId]
@@ -66,16 +84,15 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
           mode: 'view',
         });
       } else {
-        console.log('ran');
         await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
       }
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plans.id(planId));
+      await getPlan(planId);
       loading.onFalse();
     }
-  }, [planId, mealId, canSave, userId, loading]);
+  }, [planId, mealId, canSave, userId, loading, getPlan]);
 
   const { searchResults, resultType, searchLoading } = useSearchIngredients(userId, debouncedQuery);
 
@@ -160,14 +177,6 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
     </>
   );
 }
-
-ActionPanel.propTypes = {
-  mealId: PropTypes.string,
-  canSave: PropTypes.bool,
-  planId: PropTypes.string,
-  ingredients: PropTypes.array,
-  selectedIngredients: PropTypes.array,
-};
 
 const StyledWrapper = styled(Box)(({ theme }) => ({
   left: 0,

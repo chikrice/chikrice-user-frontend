@@ -2,12 +2,12 @@ import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
 import { useLocales } from 'src/locales';
 
-import type { Ingredient } from 'chikrice-types';
+import type { MealIngredient } from 'chikrice-types';
 
 // -------------------------------------
 
 interface ViewBodyContentProps {
-  ingredients: Ingredient[];
+  ingredients: MealIngredient[];
 }
 
 // -------------------------------------

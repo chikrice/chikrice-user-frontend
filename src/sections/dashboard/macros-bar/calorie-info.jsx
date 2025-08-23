@@ -12,13 +12,13 @@ export default function CalorieInfo({ label, value, isLoading }) {
   return (
     <Box sx={calorieInfoStyles}>
       <span>{t(label)}</span>
-      {isLoading ? (
+      {/* {isLoading ? (
         <Skeleton variant="text" width={30} height={24} />
-      ) : (
-        <Label color="info" variant="ghost">
-          {value}
-        </Label>
-      )}
+      ) : ( */}
+      <Label color="info" variant="ghost">
+        {value}
+      </Label>
+      {/* )} */}
     </Box>
   );
 }

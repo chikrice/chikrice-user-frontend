@@ -17,6 +17,7 @@ import type { MealIngredient, Meal, PlanType } from 'chikrice-types';
 
 interface MealCardProps {
   meal: Meal;
+  index: number;
   plan: PlanType;
   isPast: boolean;
   ingredients: MealIngredient[];
@@ -24,7 +25,7 @@ interface MealCardProps {
 
 // -------------------------------------
 
-export default function MealCard({ meal, isPast, plan, ingredients }: MealCardProps) {
+export default function MealCard({ meal, index, isPast, plan, ingredients }: MealCardProps) {
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
@@ -79,6 +80,7 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
       {meal.mode === 'edit' && (
         <EditActionPanel
           mealId={meal.id}
+          mealIndex={index}
           planId={plan.id}
           canSave={!!ingredients.length}
           selectedIngredients={ingredients}

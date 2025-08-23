@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 
 import Iconify from '../iconify';
 

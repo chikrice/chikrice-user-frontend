@@ -1,4 +1,15 @@
-import type { MacrosRatio, PlanReference, PlanType, RoadmapType, UserClient } from 'chikrice-types';
+import type {
+  IngredientType,
+  Macros,
+  MacrosRatio,
+  MacroType,
+  Meal,
+  MealIngredient,
+  PlanReference,
+  PlanType,
+  RoadmapType,
+  UserClient,
+} from 'chikrice-types';
 
 // ============================================
 // AUTH TYPES
@@ -110,8 +121,13 @@ export interface PlanState {
 export interface PlanActions {
   initializePlan: (plans: PlanReference[]) => Promise<void>;
   getPlan: (planId: string) => Promise<void>;
-  updateDay: (day: number) => Promise<void>;
+  toggleIngredient: (ingrediet: IngredientType, mealIndex: number) => void;
+  calculateOptimalPortionSize: (ingredient: IngredientType, meal: Meal) => number;
+  getUserPortionPreference: (ingredientId: string, macroType: MacroType) => number | null;
+  calcDefaultPortionQty: (ingredient: IngredientType, recommendedMacros: Macros) => number;
+  buildPortionedIngredient: (ingredient: IngredientType, qty: number) => MealIngredient;
 }
+
 // ============================================
 // STORE TYPE
 // ============================================

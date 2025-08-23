@@ -10,18 +10,16 @@ import DayNavigator from '../day-navigator';
 // -------------------------------------
 
 export default function DashboardView() {
-  const { day, plan, plans, totalDays, planLoading, roadmapLoading, roadmapError, updateDay } = useStore(
-    (state) => state
-  );
+  const { day, plan, plans, totalDays, roadmapLoading, roadmapError, updateDay } = useStore((state) => state);
 
   if (roadmapLoading) <LoadingScreen />;
   if (roadmapError) <ReloadPage />;
 
   return (
     <>
-      <MacrosBar plan={plan} className="dash__tour__2" isLoading={planLoading} />
+      <MacrosBar plan={plan} className="dash__tour__2" />
 
-      <Meals plan={plan} planLoading={planLoading} />
+      <Meals plan={plan} planLoading={false} />
 
       <AddNewMeal plan={plan} />
 
@@ -30,7 +28,7 @@ export default function DashboardView() {
         plan={plan}
         plans={plans}
         totalDays={totalDays}
-        planLoading={planLoading}
+        planLoading={false}
         isDisableMealsActions={true}
         //
         updateDay={updateDay}

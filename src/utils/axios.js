@@ -99,6 +99,7 @@ export const endpoints = {
       create: (planId) => `${API_VERSION}/plans/meal/${planId}`,
       toggleMode: (planId) => `${API_VERSION}/plans/meal/toggle-mode/${planId}`,
       suggestions: (mealId) => `${API_VERSION}/plans/meal/suggestions/${mealId}`,
+      addSuggested: (mealId) => `${API_VERSION}/plans/meal/add-suggested/${mealId}`,
       toggleIngredient: (planId) => `${API_VERSION}/plans/meal/toggle-ingredient/${planId}`,
     },
   },

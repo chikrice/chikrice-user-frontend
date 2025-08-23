@@ -1,6 +1,6 @@
 import { mutate } from 'swr';
-import { useTheme } from '@emotion/react';
 import { useCallback, useEffect } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
 import useStore from 'src/store';
@@ -8,7 +8,6 @@ import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { deletePlanDayMeal } from 'src/api/plan-day';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
@@ -42,7 +41,7 @@ export default function HeaderActionsPopover({
   const isDeleteMeal = useBoolean();
 
   const { t } = useTranslate();
-  const user = useStore((state) => state.user);
+  const { user, getPlan } = useStore((state) => state);
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';
@@ -60,10 +59,10 @@ export default function HeaderActionsPopover({
       } catch (error) {
         console.log(error);
       } finally {
-        await mutate(endpoints.plans.id(planId));
+        await getPlan(planId);
       }
     },
-    [planId, mealId, userId, popover]
+    [planId, mealId, userId, popover, getPlan]
   );
 
   const handleCloseEditMode = useCallback(async () => {
@@ -76,18 +75,9 @@ export default function HeaderActionsPopover({
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plan_day.root(planId));
+      await getPlan(planId);
     }
-  }, [canSave, mealId, planId, handleToggleMode]);
-
-  useEffect(() => {
-    return () => {
-      if (mode === 'edit') {
-        handleToggleMode('view');
-      }
-    };
-    // eslint-disable-next-line
-  }, [location]);
+  }, [canSave, mealId, planId, handleToggleMode, getPlan]);
 
   return (
     <>
