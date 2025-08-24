@@ -64,7 +64,7 @@ export default function MealCard({ meal, index, isPast, plan, ingredients }: Mea
           {meal.mode === 'view' ? (
             <ViewBodyContent ingredients={ingredients} />
           ) : (
-            <EditBodyContent ingredients={ingredients} planId={plan.id} mealId={meal.id} />
+            <EditBodyContent ingredients={ingredients} mealIndex={index} />
           )}
         </CardContent>
 

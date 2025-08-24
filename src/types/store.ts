@@ -1,9 +1,6 @@
 import type {
   IngredientType,
-  Macros,
   MacrosRatio,
-  MacroType,
-  Meal,
   MealIngredient,
   PlanReference,
   PlanType,
@@ -122,10 +119,8 @@ export interface PlanActions {
   initializePlan: (plans: PlanReference[]) => Promise<void>;
   getPlan: (planId: string) => Promise<void>;
   toggleIngredient: (ingrediet: IngredientType, mealIndex: number) => void;
-  calculateOptimalPortionSize: (ingredient: IngredientType, meal: Meal) => number;
-  getUserPortionPreference: (ingredientId: string, macroType: MacroType) => number | null;
-  calcDefaultPortionQty: (ingredient: IngredientType, recommendedMacros: Macros) => number;
-  buildPortionedIngredient: (ingredient: IngredientType, qty: number) => MealIngredient;
+  incrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
+  decrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
 }
 
 // ============================================
