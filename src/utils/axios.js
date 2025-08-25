@@ -164,7 +164,7 @@ export const endpoints = {
   roadmap: {
     root: (id) => `${API_VERSION}/roadmaps/${id}`,
     create: `${API_VERSION}/roadmaps/`,
-    updateActivityLog: (id) => `${API_VERSION}/roadmaps/activity-log/${id}`,
+    updateActivityLog: (roadmapId) => `${API_VERSION}/roadmaps/activity-log/${roadmapId}`,
   },
   ingredient: {
     search: `${API_VERSION}/ingredients/user/search/`,

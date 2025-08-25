@@ -71,7 +71,7 @@ export default function UserProfileView() {
       name: 'activityLevel',
       title: 'activity',
       value: user?.activityLevel,
-      translatedValue: t(activityOptions[user?.activityLevel - 1].title),
+      translatedValue: t(activityOptions[user?.activityLevel - 1]?.title),
       icon: activitySrc,
     },
     {

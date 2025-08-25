@@ -1,5 +1,7 @@
-import { api } from 'src/utils/axios';
-import { removeStorage, setStorage } from 'src/hooks/use-local-storage';
+import { Tokens } from 'src/types';
+import { api, endpoints } from 'src/utils/axios';
+import { userInputsInitialState } from 'src/sections/steps/user/user-inputs';
+import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
 
 import type {
   IngredientType,
@@ -17,14 +19,50 @@ import type {
 // AUTH HELPERS
 //=====================================
 
-// Constants
+// -------------------------------------
+const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free'];
+
+const USER_INPUTS_KEY = 'user-inputs';
+const COACH_INPUTS_KEY = 'coach-inputs';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
 // -------------------------------------
-const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free'];
 
-// -------------------------------------
+export const resetUserInputs = () => {
+  setStorage(USER_INPUTS_KEY, userInputsInitialState);
+  setStorage(COACH_INPUTS_KEY, { experience: null, speciality: [] });
+};
+
+export const applyTokens = (tokens: Tokens) => {
+  if (tokens) {
+    setStorage('accessToken', tokens.access);
+    setStorage('refreshToken', tokens.refresh);
+    api.defaults.headers.common.Authorization = `Bearer ${tokens.access.token}`;
+  } else {
+    removeStorage('accessToken');
+    removeStorage('refreshToken');
+    delete api.defaults.headers.common.Authorization;
+  }
+};
+
+export const getStoredAccess = () => getStorage(ACCESS_TOKEN_KEY);
+export const getStoredRefresh = () => getStorage(REFRESH_TOKEN_KEY);
+
+export const fetchUserByAccess = async (accessToken: string) => {
+  const {
+    data: { user },
+  } = await api.post(endpoints.auth.me, { accessToken });
+  return user;
+};
+
+export const setAuthHeader = (token: string) => {
+  if (token) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common.Authorization;
+  }
+};
 
 /**
  * Check if a token is expired based on its expiration time.

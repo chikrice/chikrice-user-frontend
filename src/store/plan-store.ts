@@ -50,13 +50,10 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   },
   getPlan: async (planId: string) => {
     try {
-      set({ planLoading: true });
       const { data: plan } = await api.get(endpoints.plans.id(planId));
       set({ plan: plan, planError: null });
     } catch (error) {
       set({ planError: error.message || 'Failed to get active plan' });
-    } finally {
-      set({ planLoading: false });
     }
   },
   updatePlan: async (planId: string) => {
@@ -64,6 +61,7 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
       const plan = get().plan;
       const { data: updatedPlan } = await api.patch(endpoints.plans.id(planId), { ...plan });
       set({ plan: updatedPlan, planError: null });
+      await get().updateActivtyLog(updatedPlan);
     } catch (error) {
       set({ planError: error.message || 'Failed to get active plan' });
     }

@@ -63,6 +63,7 @@ export interface AuthActions {
   register: (credentials: Credentials, userInputs: UserInputs) => Promise<void>;
   googleAuth: (googleCredentials: GoogleCredentials) => Promise<UserClient>;
   refreshUserInfo: (id: string) => Promise<void>;
+  updateUser: (userInputs: UserClient) => Promise<void>;
 }
 
 // ============================================
@@ -103,6 +104,7 @@ export interface RoadmapActions {
   createPlans: (roadmap: RoadmapType, month: number) => Promise<PlanReference[]>;
   getPlans: (params: GetPlansParams) => Promise<PlanReference[]>;
   transformRoadmapToPlanData: (roadmap: RoadmapType, month: number) => CreatePlansData;
+  updateActivtyLog: (plan: PlanType) => Promise<void>;
 }
 
 // ============================================

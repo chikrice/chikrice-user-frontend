@@ -17,7 +17,7 @@ interface MealsListProps {
 export default function MealsList({ plan }: MealsListProps) {
   const { t } = useTranslate();
 
-  const isPast = useMemo(() => isPastDate(plan.date), [plan]);
+  const isPast = useMemo(() => isPastDate(plan?.date), [plan]);
 
   const isMealSuggestions = plan?.meals?.some((meal) => meal?.mode === 'edit');
 
@@ -28,12 +28,12 @@ export default function MealsList({ plan }: MealsListProps) {
           <Stack spacing={1.5}>
             {plan?.meals?.map((meal, index) => (
               <MealCard
-                key={meal.id}
+                key={meal?.id}
                 index={index}
                 meal={meal}
                 plan={plan}
                 isPast={isPast}
-                ingredients={Object.values(meal.ingredients).flat()}
+                ingredients={Object.values(meal?.ingredients).flat()}
               />
             ))}
           </Stack>
@@ -49,7 +49,7 @@ export default function MealsList({ plan }: MealsListProps) {
       )}
 
       {!isMealSuggestions && !isPast && (
-        <MealSuggestion planId={plan.id} mealNumber={plan.meals?.length + 1} />
+        <MealSuggestion planId={plan?.id} mealNumber={plan?.meals?.length + 1} />
       )}
     </Box>
   );

@@ -5,7 +5,6 @@ import { useCallback, useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
 
 import useStore from 'src/store';
-import { useGetUser } from 'src/api/user';
 import { useTranslate } from 'src/locales';
 import { endpoints } from 'src/utils/axios';
 import Iconify from 'src/components/iconify';

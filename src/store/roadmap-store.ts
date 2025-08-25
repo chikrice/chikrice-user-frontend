@@ -1,7 +1,9 @@
 import { StateCreator } from 'zustand';
-import { RoadmapType } from 'chikrice-types';
+import { PlanType, RoadmapType } from 'chikrice-types';
 
 import { api, endpoints } from 'src/utils/axios';
+
+import { resetUserInputs } from './helpers';
 
 import type { CreateRoadmapInputs, RoadmapActions, RoadmapState, Store } from 'src/types';
 
@@ -21,6 +23,7 @@ export const createRoadmapStore: StateCreator<Store, [], [], RoadmapState & Road
       const roadmap = await get().createRoadmap(createRoadmapInputs);
       const plans = await get().createPlans(roadmap, 1);
       await get().initializePlan(plans);
+      resetUserInputs();
     } catch (error) {
       set({ roadmapError: error.message || 'Failed to create user journey' });
     } finally {
@@ -133,5 +136,23 @@ export const createRoadmapStore: StateCreator<Store, [], [], RoadmapState & Road
       macrosRatio,
       targetCalories,
     };
+  },
+  // ============================================
+  // UPDATE THE ACTIVITY LOG ON PLAN UPDATE
+  // ============================================
+  updateActivtyLog: async (plan: PlanType): Promise<void> => {
+    try {
+      const { targetMacros, consumedMacros, number } = plan;
+      const roadmap = get().roadmap;
+      const data = {
+        index: number - 1,
+        consumedCalories: consumedMacros.cal,
+        targetCalories: targetMacros.cal,
+      };
+      await api.patch(endpoints.roadmap.updateActivityLog(roadmap.id), data);
+      await get().getRoadmap(roadmap.id);
+    } catch (error) {
+      console.error(error);
+    }
   },
 });

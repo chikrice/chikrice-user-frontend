@@ -14,34 +14,15 @@ export default function DashboardView() {
     useStore((state) => state);
 
   // Add comprehensive loading checks
-  const isLoading = isAuthLoading || roadmapLoading || planLoading;
-  const isDataReady = !isLoading && plans && plans.length > 0 && plan;
-
-  console.log('📊 [DASHBOARD] State:', {
-    isAuthLoading,
-    roadmapLoading,
-    planLoading,
-    plansCount: plans?.length,
-    hasPlan: !!plan,
-    isDataReady,
-  });
+  const isLoading = isAuthLoading || roadmapLoading;
 
   if (isLoading) {
-    console.log('📊 [DASHBOARD] Showing loading screen');
     return <LoadingScreen />;
   }
 
   if (roadmapError) {
-    console.log('📊 [DASHBOARD] Showing error page');
     return <ReloadPage />;
   }
-
-  if (!isDataReady) {
-    console.log('📊 [DASHBOARD] Data not ready, showing loading');
-    return <LoadingScreen />;
-  }
-
-  console.log('📊 [DASHBOARD] Rendering dashboard with plan:', plan?.id);
 
   return (
     <>
