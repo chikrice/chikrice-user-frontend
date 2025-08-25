@@ -1,10 +1,32 @@
 import { alpha } from '@mui/material/styles';
 
+import { ThemeMode } from './palette';
 import { grey, info, error, common, primary, success, warning, secondary } from './palette';
 
 // ----------------------------------------------------------------------
 
-export function customShadows(mode) {
+export type CustomShadows = {
+  z1: string;
+  z4: string;
+  z8: string;
+  z12: string;
+  z16: string;
+  z20: string;
+  z24: string;
+  card: string;
+  dropdown: string;
+  dialog: string;
+  bottomNav: string;
+  macrosBar: string;
+  primary: string;
+  info: string;
+  secondary: string;
+  success: string;
+  warning: string;
+  error: string;
+};
+
+export function customShadows(mode: ThemeMode): CustomShadows {
   const color = mode === 'light' ? grey[500] : common.black;
 
   const transparent = alpha(color, 0.16);

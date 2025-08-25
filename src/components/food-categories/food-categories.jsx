@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { useTheme } from '@emotion/react';
 import { Box, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import Iconify from 'src/components/iconify';
 import { foodCategories } from 'src/sections/dashboard/data';

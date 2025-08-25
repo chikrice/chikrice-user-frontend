@@ -1,35 +1,29 @@
-import { mutate } from 'swr';
-import { useCallback } from 'react';
 import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
-import { endpoints } from 'src/utils/axios';
-import { updatePlanDayMeal } from 'src/api/plan-day';
+import useStore from 'src/store';
 import { useLocales, useTranslate } from 'src/locales';
 import CustomIconButton from 'src/components/custom-icon-button';
 
-export default function EditBodyContent({ ingredients, planId, mealId }) {
+import type { MealIngredient } from 'chikrice-types';
+
+// -------------------------------------
+interface EditBodyContentProps {
+  ingredients: MealIngredient[];
+  mealIndex: number;
+}
+
+export default function EditBodyContent({ ingredients, mealIndex }: EditBodyContentProps) {
   const { lang } = useLocales();
   const { t } = useTranslate();
 
-  const handleUpdatePlanDayMeal = useCallback(
-    async (ingredient, isAdd) => {
-      try {
-        await updatePlanDayMeal(planId, { mealId, ingredient, isAdd });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        await mutate(endpoints.plan_day.root(planId));
-      }
-    },
-    [planId, mealId]
-  );
+  const { incrementIngredient, decrementIngredient } = useStore((state) => state);
 
   return (
     <Stack sx={{ width: '100%' }}>
       {ingredients.length ? (
-        ingredients.map((item, index) => (
+        ingredients.map((item) => (
           <ListItem
-            key={index}
+            key={item.ingredientId}
             sx={{
               pl: 0,
               pr: 0,
@@ -39,9 +33,9 @@ export default function EditBodyContent({ ingredients, planId, mealId }) {
               <Stack flexDirection={'row'}>
                 <CustomIconButton
                   icon={'icons8:minus'}
-                  onClick={() => handleUpdatePlanDayMeal(item, false)}
+                  onClick={() => decrementIngredient(mealIndex, item)}
                 />
-                <CustomIconButton icon={'gg:add'} onClick={() => handleUpdatePlanDayMeal(item, true)} />
+                <CustomIconButton icon={'gg:add'} onClick={() => incrementIngredient(mealIndex, item)} />
               </Stack>
             }
           >

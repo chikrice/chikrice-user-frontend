@@ -1,1 +1,1 @@
-export { default } from './day-navigator.jsx';
+export { default } from './day-navigator';

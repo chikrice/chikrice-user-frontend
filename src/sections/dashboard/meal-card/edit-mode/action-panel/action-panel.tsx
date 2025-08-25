@@ -1,7 +1,4 @@
-import { mutate } from 'swr';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
-import { LoadingButton } from '@mui/lab';
 import { useCallback, useState } from 'react';
 import { Box, Button, Stack } from '@mui/material';
 
@@ -9,7 +6,6 @@ import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
@@ -20,13 +16,29 @@ import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
 
-export default function ActionPanel({ planId, mealId, canSave, selectedIngredients }) {
-  const loading = useBoolean();
+import type { MealIngredient, IngredientType } from 'chikrice-types';
 
+// -------------------------------------
+interface ActionPanelProps {
+  planId: string;
+  mealId: string;
+  mealIndex: number;
+  canSave: boolean;
+  selectedIngredients: MealIngredient[];
+}
+
+// -------------------------------------
+
+export default function ActionPanel({
+  planId,
+  mealId,
+  mealIndex,
+  canSave,
+  selectedIngredients,
+}: ActionPanelProps) {
   const { t } = useTranslate();
-  const { user } = useStore((store) => store);
-  const userId = user.id;
-
+  const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
+  console.log(user);
   const isDeleteMeal = useBoolean();
   const isTellAi = useBoolean();
 
@@ -35,49 +47,25 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
   const debouncedQuery = useDebounce(searchQuery);
 
   const handleToggleIngredient = useCallback(
-    async (ingredientId) => {
-      try {
-        const URL = endpoints.plans.meals.toggleIngredient(planId);
-        const data = {
-          mealId,
-          userId,
-          ingredientId,
-        };
-        await api.patch(URL, data);
-        setSearchQuery('');
-      } catch (error) {
-        console.log(error);
-      } finally {
-        await mutate(endpoints.plans.id(planId));
-      }
+    (ingredient: IngredientType) => {
+      toggleIngredient(ingredient, mealIndex);
+      setSearchQuery('');
     },
-    [mealId, planId, userId]
+    [mealIndex, toggleIngredient, setSearchQuery]
   );
 
   const handleSaveMeal = useCallback(async () => {
     try {
-      loading.onTrue();
-
-      if (canSave) {
-        const URL = endpoints.plans.meals.toggleMode(planId);
-        await api.patch(URL, {
-          mealId,
-          userId,
-          mode: 'view',
-        });
-      } else {
-        console.log('ran');
-        await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
-      }
+      toggleMealMode(mealIndex, 'view');
+      await updatePlan(planId);
     } catch (error) {
       console.error(error);
-    } finally {
-      await mutate(endpoints.plans.id(planId));
-      loading.onFalse();
+      // toggle back to edit mode
+      // show snack bar there was an erorr try again
     }
-  }, [planId, mealId, canSave, userId, loading]);
+  }, [planId, mealIndex, toggleMealMode, updatePlan]);
 
-  const { searchResults, resultType, searchLoading } = useSearchIngredients(userId, debouncedQuery);
+  const { searchResults, resultType, searchLoading } = useSearchIngredients(user?.id, debouncedQuery);
 
   return (
     <>
@@ -110,14 +98,13 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
             </Button>
           )}
 
-          <LoadingButton
+          <Button
             variant={canSave ? 'contained' : 'text'}
             sx={{ height: '30px', minWidth: '30px', p: 0, borderRadius: '50%' }}
-            loading={loading.value}
             onClick={handleSaveMeal}
           >
             <Iconify icon={`${!canSave ? 'mingcute:close-fill' : 'majesticons:arrow-up-line'}`} />
-          </LoadingButton>
+          </Button>
         </Box>
 
         <Scrollbar sx={{ height: 320, pt: 2 }}>
@@ -160,14 +147,6 @@ export default function ActionPanel({ planId, mealId, canSave, selectedIngredien
     </>
   );
 }
-
-ActionPanel.propTypes = {
-  mealId: PropTypes.string,
-  canSave: PropTypes.bool,
-  planId: PropTypes.string,
-  ingredients: PropTypes.array,
-  selectedIngredients: PropTypes.array,
-};
 
 const StyledWrapper = styled(Box)(({ theme }) => ({
   left: 0,

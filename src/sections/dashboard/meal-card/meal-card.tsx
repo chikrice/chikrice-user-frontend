@@ -17,6 +17,7 @@ import type { MealIngredient, Meal, PlanType } from 'chikrice-types';
 
 interface MealCardProps {
   meal: Meal;
+  index: number;
   plan: PlanType;
   isPast: boolean;
   ingredients: MealIngredient[];
@@ -24,7 +25,7 @@ interface MealCardProps {
 
 // -------------------------------------
 
-export default function MealCard({ meal, isPast, plan, ingredients }: MealCardProps) {
+export default function MealCard({ meal, index, isPast, plan, ingredients }: MealCardProps) {
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
@@ -40,7 +41,6 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
   return (
     <>
       <Card className={'dash__tour__3'} sx={cardStyle} ref={cardRef}>
-        {/* Header */}
         <Box sx={headerStyle}>
           <Stack>
             <Typography variant="subtitle2" textTransform={'capitalize'}>
@@ -55,19 +55,19 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
             mode={meal.mode}
             isPast={isPast}
             mealId={meal.id}
+            mealIndex={index}
             planId={plan.id}
-            canSave={!!ingredients.length}
           />
         </Box>
+
         <CardContent sx={contentStyle}>
           {meal.mode === 'view' ? (
             <ViewBodyContent ingredients={ingredients} />
           ) : (
-            <EditBodyContent ingredients={ingredients} planId={plan.id} mealId={meal.id} />
+            <EditBodyContent ingredients={ingredients} mealIndex={index} />
           )}
         </CardContent>
 
-        {/* Actions */}
         <CardActions className={'dash__tour__4'} sx={actionsStyle}>
           {meal.mode === 'view' ? (
             <CustomIconButton icon={'fluent:info-28-regular'} onClick={isInfo.onTrue} />
@@ -80,6 +80,7 @@ export default function MealCard({ meal, isPast, plan, ingredients }: MealCardPr
       {meal.mode === 'edit' && (
         <EditActionPanel
           mealId={meal.id}
+          mealIndex={index}
           planId={plan.id}
           canSave={!!ingredients.length}
           selectedIngredients={ingredients}

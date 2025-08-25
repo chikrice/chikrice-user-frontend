@@ -15,7 +15,7 @@ export const grey = {
   700: '#454F5B',
   800: '#212B36',
   900: '#161C24',
-};
+} as const;
 
 export const primary = {
   lighter: '#C8FAD6',
@@ -24,7 +24,7 @@ export const primary = {
   dark: '#007867',
   darker: '#004B50',
   contrastText: '#FFFFFF',
-};
+} as const;
 
 export const secondary = {
   lighter: '#EFD6FF',
@@ -33,7 +33,7 @@ export const secondary = {
   dark: '#5119B7',
   darker: '#27097A',
   contrastText: '#FFFFFF',
-};
+} as const;
 
 export const info = {
   lighter: '#CAFDF5',
@@ -42,7 +42,7 @@ export const info = {
   dark: '#006C9C',
   darker: '#003768',
   contrastText: '#FFFFFF',
-};
+} as const;
 
 export const success = {
   lighter: '#D3FCD2',
@@ -51,7 +51,7 @@ export const success = {
   dark: '#118D57',
   darker: '#065E49',
   contrastText: '#ffffff',
-};
+} as const;
 
 export const warning = {
   lighter: '#FFF5CC',
@@ -60,7 +60,7 @@ export const warning = {
   dark: '#B76E00',
   darker: '#7A4100',
   contrastText: grey[800],
-};
+} as const;
 
 export const error = {
   lighter: '#FFE9D5',
@@ -69,12 +69,12 @@ export const error = {
   dark: '#B71D18',
   darker: '#7A0916',
   contrastText: '#FFFFFF',
-};
+} as const;
 
 export const common = {
   black: '#000000',
   white: '#FFFFFF',
-};
+} as const;
 
 export const action = {
   hover: alpha(grey[500], 0.08),
@@ -84,9 +84,58 @@ export const action = {
   focus: alpha(grey[500], 0.24),
   hoverOpacity: 0.08,
   disabledOpacity: 0.48,
+  active: '' as string,
+} as const;
+
+// Type definitions
+export type ColorPalette = {
+  lighter: string;
+  light: string;
+  main: string;
+  dark: string;
+  darker: string;
+  contrastText: string;
 };
 
-const base = {
+export type GreyPalette = typeof grey;
+export type CommonColors = typeof common;
+export type ActionColors = typeof action;
+
+export type ThemeMode = 'light' | 'dark';
+
+export type CustomPalette = {
+  primary: ColorPalette;
+  secondary: ColorPalette;
+  info: ColorPalette;
+  success: ColorPalette;
+  warning: ColorPalette;
+  error: ColorPalette;
+  grey: GreyPalette;
+  common: CommonColors;
+  divider: string;
+  action: ActionColors;
+  mode: ThemeMode;
+  text: {
+    primary: string;
+    secondary: string;
+    disabled: string;
+  };
+  background: {
+    paper: string;
+    default: string;
+    neutral: string;
+  };
+  card: {
+    default: string;
+    soft: string;
+  };
+  nav: {
+    default: string;
+    soft: string;
+  };
+};
+
+const base: Omit<CustomPalette, 'mode' | 'text' | 'background' | 'card' | 'nav'> = {
   primary,
   secondary,
   info,
@@ -101,8 +150,8 @@ const base = {
 
 // ----------------------------------------------------------------------
 
-export function palette(mode) {
-  const light = {
+export function palette(mode: ThemeMode): CustomPalette {
+  const light: CustomPalette = {
     ...base,
     mode: 'light',
     text: {
@@ -129,7 +178,7 @@ export function palette(mode) {
     },
   };
 
-  const dark = {
+  const dark: CustomPalette = {
     ...base,
     mode: 'dark',
     text: {
@@ -146,7 +195,10 @@ export function palette(mode) {
       default: grey[800],
       soft: grey[800],
     },
-    nav: { default: grey[700], soft: grey[800] },
+    nav: {
+      default: grey[700],
+      soft: grey[800],
+    },
     action: {
       ...base.action,
       active: grey[500],
@@ -154,4 +206,31 @@ export function palette(mode) {
   };
 
   return mode === 'light' ? light : dark;
+}
+
+// Extend the Material-UI Theme type
+declare module '@mui/material/styles' {
+  interface Theme {
+    customShadows: ReturnType<typeof import('./custom-shadows').customShadows>;
+    card: {
+      default: string;
+      soft: string;
+    };
+    nav: {
+      default: string;
+      soft: string;
+    };
+  }
+
+  interface ThemeOptions {
+    customShadows?: ReturnType<typeof import('./custom-shadows').customShadows>;
+    card?: {
+      default: string;
+      soft: string;
+    };
+    nav?: {
+      default: string;
+      soft: string;
+    };
+  }
 }

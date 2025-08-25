@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import styled from '@emotion/styled';
 import Stack from '@mui/material/Stack';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
@@ -24,11 +24,7 @@ export default function DayOptions({ activeDay, setActiveDay }) {
         color: theme.palette.text.disabled,
       }}
     >
-      <Stack
-        className={'subs__tour__2'}
-        spacing={1}
-        sx={{ flexDirection: 'row', alignItems: 'center' }}
-      >
+      <Stack className={'subs__tour__2'} spacing={1} sx={{ flexDirection: 'row', alignItems: 'center' }}>
         {dayOptions.map((option) => (
           <StyledDayOption
             key={option}

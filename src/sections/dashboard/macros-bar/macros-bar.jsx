@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useTheme } from '@emotion/react';
 import { Box, Collapse } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import MacroItem from './macro-item';
 import CalorieInfo from './calorie-info';

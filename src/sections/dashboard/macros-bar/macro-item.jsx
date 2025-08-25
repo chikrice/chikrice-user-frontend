@@ -8,8 +8,8 @@ export default function MacroItem({ icon, label, value, isLoading }) {
 
   return (
     <Box display="flex" alignItems="center" gap={0.5} sx={{ width: 'fit-content' }}>
-      {icon} {t(label)} (
-      {isLoading ? <Skeleton variant="text" width={15} height={20} /> : `${value}g`})
+      {icon} {t(label)} ({`${value}g`})
+      {/* {isLoading ? <Skeleton variant="text" width={15} height={20} /> : `${value}g`}) */}
     </Box>
   );
 }

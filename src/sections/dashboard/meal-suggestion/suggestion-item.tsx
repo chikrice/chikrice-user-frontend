@@ -1,18 +1,17 @@
-import { mutate } from 'swr';
 import { useCallback } from 'react';
 import styled from '@emotion/styled';
 import { ListItem, ListItemIcon, Paper, Typography } from '@mui/material';
 
+import useStore from 'src/store';
 import { useLocales } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
-import { addSuggestedMealToPlanDayMeals } from 'src/api/plan-day';
+import { api, endpoints } from 'src/utils/axios';
 
-import type { Ingredient, Meal } from 'chikrice-types';
+import type { MealIngredient, Meal } from 'chikrice-types';
 
 // -------------------------------------
 
 interface SuggestionItemProps {
-  ingredients: Ingredient[];
+  ingredients: MealIngredient[];
   meal: Meal;
   planId: string;
 }
@@ -21,16 +20,16 @@ interface SuggestionItemProps {
 
 export default function SuggestionItem({ ingredients, meal, planId }: SuggestionItemProps) {
   const { lang } = useLocales();
-
+  const { getPlan } = useStore((state) => state);
   const handleClick = useCallback(async () => {
     try {
-      await addSuggestedMealToPlanDayMeals(planId, { meal });
+      await api.patch(endpoints.plans.meals.addSuggested(planId), { meal });
     } catch (error) {
       console.error(error);
     } finally {
-      await mutate(endpoints.plans.id(planId));
+      await getPlan(planId);
     }
-  }, [planId, meal]);
+  }, [planId, meal, getPlan]);
 
   return (
     <>

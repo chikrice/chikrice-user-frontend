@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { endpoints, fetcher } from 'src/utils/axios';
 
 export function useSearchIngredients(userId, query) {
-  const URL = [endpoints.ingredient.search, { params: { userId, query } }];
+  const URL = userId ? [endpoints.ingredient.search, { params: { userId, query } }] : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     keepPreviousData: true,

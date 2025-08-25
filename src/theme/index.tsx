@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import merge from 'lodash/merge';
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
 import { useLocales } from 'src/locales';
 import { useSettingsContext } from 'src/components/settings';
 
+import { shadows } from './shadows';
 // system
 import { palette } from './palette';
-import { shadows } from './shadows';
 import { typography } from './typography';
 // options
 import RTL from './options/right-to-left';
@@ -20,7 +20,11 @@ import { createContrast } from './options/contrast';
 
 // ----------------------------------------------------------------------
 
-export default function ThemeProvider({ children }) {
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+export default function ThemeProvider({ children }: ThemeProviderProps) {
   const { currentLang } = useLocales();
 
   const settings = useSettingsContext();
@@ -45,13 +49,7 @@ export default function ThemeProvider({ children }) {
       shape: { borderRadius: 8 },
       typography,
     }),
-    [
-      settings.themeMode,
-      settings.themeDirection,
-      presets.palette,
-      presets.customShadows,
-      contrast.palette,
-    ]
+    [settings.themeMode, settings.themeDirection, presets.palette, presets.customShadows, contrast.palette]
   );
 
   const theme = createTheme(memoizedValue);
@@ -73,6 +71,5 @@ export default function ThemeProvider({ children }) {
   );
 }
 
-ThemeProvider.propTypes = {
-  children: PropTypes.node,
-};
+// Export the extended Theme type
+export type { Theme } from '@mui/material/styles';

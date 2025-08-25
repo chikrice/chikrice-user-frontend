@@ -8,7 +8,7 @@ import type { PlanType } from 'chikrice-types';
 
 interface MealsProps {
   planLoading: boolean;
-  plan: PlanType;
+  plan: PlanType | null;
 }
 
 // -------------------------------------
@@ -16,7 +16,7 @@ interface MealsProps {
 export default function Meals({ planLoading, plan }: MealsProps) {
   return (
     <Box>
-      {planLoading || !plan ? (
+      {planLoading ? (
         <Box sx={{ px: 2 }}>
           {[...Array(3)].map((_, index) => (
             <Skeleton key={index} width={'100%'} height={329} sx={{ mb: 2 }} />

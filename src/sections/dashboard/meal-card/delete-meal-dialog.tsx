@@ -1,8 +1,8 @@
-import { mutate } from 'swr';
 import { useCallback } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
+import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -21,7 +21,7 @@ interface DeleteMealDialogProps {
 export default function DeleteMealDialog({ open, planId, mealId, onClose }: DeleteMealDialogProps) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
-
+  const { getPlan } = useStore((state) => state);
   const handleDeleteMeal = useCallback(async () => {
     try {
       loading.onTrue();
@@ -29,11 +29,11 @@ export default function DeleteMealDialog({ open, planId, mealId, onClose }: Dele
     } catch (error) {
       console.log(error);
     } finally {
-      await mutate(endpoints.plans.id(planId));
+      await getPlan(planId);
       loading.onFalse();
       onClose();
     }
-  }, [planId, mealId, onClose, loading]);
+  }, [planId, mealId, onClose, loading, getPlan]);
 
   return (
     <Dialog open={open} onClose={onClose}>

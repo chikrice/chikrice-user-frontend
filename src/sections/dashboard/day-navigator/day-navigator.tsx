@@ -1,16 +1,13 @@
 import { mutate } from 'swr';
-import PropTypes from 'prop-types';
-import { parseISO } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, Skeleton, Typography } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
+import { api, endpoints } from 'src/utils/axios';
 import { fDate, isDateisToday } from 'src/utils/format-time';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomBottomDrawer from 'src/components/custom-drawer/custom-drawer';
-import { copyMeals, deletePlanDay, updateAllMeals, toogleSavePlanDay } from 'src/api/plan-day';
 
 import NavigationContent from './navigation-content';
 import CopySuccessMessage from './copy-success-message';
@@ -18,23 +15,33 @@ import MoreActionsPopover from './more-actions-popover';
 import { StyledWrapper, StyledNavigator } from './styles';
 import CopyMealsToCalendar from './copy-meals-to-calendar';
 
+import type { PlanReference, PlanType } from 'chikrice-types';
+
+// -------------------------------------
+interface DayNavigatorProps {
+  day: number;
+  plan: PlanType;
+  plans: PlanReference[];
+  planLoading: boolean;
+  totalDays: number;
+  isDisableMealsActions: boolean;
+  //
+  updateDay: (day: number) => Promise<void>;
+}
 export default function DayNavigator({
-  date,
-  onBack,
-  onNext,
-  activePlan,
-  totalDays,
-  isLoading,
-  planMonth,
+  day,
+  plan,
   plans,
-  currentDay,
-  onNavigateTo,
-  isDisableMealsActions,
-}) {
+  planLoading,
+  totalDays,
+  isDisableMealsActions = true,
+  //
+  updateDay,
+}: DayNavigatorProps) {
   const { t } = useTranslate();
   const { user, refreshUserInfo } = useStore();
 
-  const isToday = isDateisToday(date);
+  const isToday = isDateisToday(plan?.date);
 
   const [isDrawer, setIsDrawer] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -43,48 +50,26 @@ export default function DayNavigator({
   const [highlightedDate, setHighlightedDate] = useState(null);
 
   useEffect(() => {
-    setHighlightedDate(parseISO(activePlan?.date));
-  }, [activePlan, plans]);
+    setHighlightedDate(plan?.date);
+  }, [plan]);
 
-  const handleCopyMeal = useCallback(
-    async (newDate) => {
-      try {
-        const date = new Date(newDate);
-        date.setUTCHours(0, 0, 0, 0);
-        const planDay = plans.find((plan) => plan.date === date.toISOString());
-        setTargetDate(planDay);
-        await copyMeals(planDay.id, { sourcePlanId: activePlan.id });
-        setIsCopied(true);
-      } catch (error) {
-        console.error('Error copying meals:', error);
-      }
-    },
-    [activePlan, plans]
-  );
+  const handleCopyMeal = useCallback(async () => {
+    console.log('copy melas');
+  }, []);
 
-  const handleChangeAllMeals = useCallback(async () => {
-    try {
-      await updateAllMeals(activePlan.id);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      await mutate(endpoints.plan_day.root(activePlan.id));
-    }
-  }, [activePlan]);
-
-  const handleCheckCopy = useCallback(() => {
+  const handleCheckCopy = useCallback(async () => {
     setIsCopied(false);
     setIsDrawer(false);
-    onNavigateTo(targetDate.number);
+    await updateDay(targetDate?.number);
     setTargetDate({});
-  }, [targetDate, onNavigateTo]);
+  }, [targetDate, updateDay]);
 
   const handleNavigateTo = useCallback(
-    (dayNumber) => {
+    async (dayNumber: number) => {
       setIsDrawer(false);
-      onNavigateTo(dayNumber);
+      await updateDay(dayNumber);
     },
-    [onNavigateTo]
+    [updateDay]
   );
 
   const handleOpenDrawer = useCallback((action) => {
@@ -101,22 +86,21 @@ export default function DayNavigator({
 
   const handleDeletePlan = useCallback(async () => {
     try {
-      await deletePlanDay(activePlan.id);
+      await api.delete(endpoints.plans.id(plan?.id));
     } catch (error) {
-      console.log('error');
+      console.error(error);
     } finally {
-      await mutate(endpoints.plan_day.root(activePlan.id));
+      await mutate(endpoints.plans.id(plan.id));
     }
-  }, [activePlan]);
+  }, [plan?.id]);
 
   const handleToggleSavePlan = useCallback(async () => {
     try {
-      await toogleSavePlanDay(activePlan.id, { userId: user.id });
       await refreshUserInfo(user.id);
     } catch (error) {
       console.error(error);
     }
-  }, [activePlan, user, refreshUserInfo]);
+  }, [user, refreshUserInfo]);
 
   return (
     <StyledWrapper style={{ direction: 'ltr' }}>
@@ -124,12 +108,11 @@ export default function DayNavigator({
         <Box display={'flex'} gap={0.5}>
           {!isDisableMealsActions && (
             <MoreActionsPopover
-              open={true}
-              date={date}
-              planDayId={activePlan.id}
+              sx={{}}
+              date={plan?.date}
+              planDayId={plan.id}
               onCopyPlan={() => handleOpenDrawer('copy')}
               onSavePlan={handleToggleSavePlan}
-              onChangeAllMeals={handleChangeAllMeals}
               onDeletePlan={handleDeletePlan}
             />
           )}
@@ -137,9 +120,13 @@ export default function DayNavigator({
           <CustomIconButton icon={'solar:calendar-outline'} onClick={() => handleOpenDrawer('navigate')} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CustomIconButton icon={'eva:arrow-ios-back-fill'} disabled={currentDay === 1} onClick={onBack} />
+          <CustomIconButton
+            icon={'eva:arrow-ios-back-fill'}
+            disabled={day === 1}
+            onClick={() => updateDay(day - 1)}
+          />
 
-          {isLoading ? (
+          {planLoading ? (
             <Skeleton variant="text" width={90} />
           ) : (
             <Typography
@@ -149,16 +136,18 @@ export default function DayNavigator({
               textAlign={'center'}
               style={{ direction: 'ltr' }}
             >
-              {isToday ? t('today') : fDate(date, 'dd MMM')} {currentDay}/{totalDays}
+              {isToday ? t('today') : fDate(plan?.date, 'dd MMM')} {day}/{totalDays}
             </Typography>
           )}
+
           <CustomIconButton
             icon={'eva:arrow-ios-forward-fill'}
-            disabled={currentDay === totalDays}
-            onClick={onNext}
+            disabled={day === totalDays}
+            onClick={() => updateDay(day + 1)}
           />
         </Box>
       </StyledNavigator>
+
       <CustomBottomDrawer
         open={isDrawer}
         onOpen={() => setIsDrawer(true)}
@@ -176,23 +165,9 @@ export default function DayNavigator({
             />
           )
         ) : (
-          <NavigationContent currentDay={currentDay} planMonth={planMonth} onNavigateTo={handleNavigateTo} />
+          <NavigationContent plans={plans} onNavigateTo={handleNavigateTo} />
         )}
       </CustomBottomDrawer>
     </StyledWrapper>
   );
 }
-
-DayNavigator.propTypes = {
-  onBack: PropTypes.func,
-  onNext: PropTypes.func,
-  date: PropTypes.string,
-  isLoading: PropTypes.bool,
-  planMonth: PropTypes.array,
-  totalDays: PropTypes.number,
-  activePlan: PropTypes.object,
-  plans: PropTypes.array,
-  currentDay: PropTypes.number,
-  onNavigateTo: PropTypes.func,
-  isDisableMealsActions: PropTypes.bool,
-};

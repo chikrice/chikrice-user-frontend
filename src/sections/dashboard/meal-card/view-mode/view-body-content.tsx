@@ -2,12 +2,12 @@ import { Box, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
 
 import { useLocales } from 'src/locales';
 
-import type { Ingredient } from 'chikrice-types';
+import type { MealIngredient } from 'chikrice-types';
 
 // -------------------------------------
 
 interface ViewBodyContentProps {
-  ingredients: Ingredient[];
+  ingredients: MealIngredient[];
 }
 
 // -------------------------------------
@@ -18,7 +18,7 @@ export default function ViewBodyContent({ ingredients }: ViewBodyContentProps) {
   return (
     <Stack>
       {ingredients.map((item) => (
-        <ListItem key={item.id} sx={{ pl: 0 }}>
+        <ListItem key={item.ingredientId} sx={{ pl: 0 }}>
           <ListItemIcon>{item.icon}</ListItemIcon>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="subtitle2" color={'text.secondary'}>

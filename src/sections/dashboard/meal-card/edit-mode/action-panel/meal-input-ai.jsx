@@ -1,17 +1,14 @@
-import { mutate } from 'swr';
 import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useEffect, useState } from 'react';
 
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
 import Iconify from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { submitMealWithAi } from 'src/api/plan-day';
 import { Textarea } from 'src/components/hook-form/rhf-textarea';
 
-export default function MealInputAi({ planDayId, mealId }) {
+export default function MealInputAi({ planId, mealId }) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
   const [prompt, setPrompt] = useState('');
@@ -19,13 +16,13 @@ export default function MealInputAi({ planDayId, mealId }) {
   const handleEnterMeal = async () => {
     try {
       loading.onTrue();
-      await submitMealWithAi(planDayId, { prompt, mealId });
+      // await submitMealWithAi(planId, { prompt, mealId });
     } catch (error) {
       console.error(error);
       loading.onFalse();
     } finally {
       // get the plan day new data
-      mutate(endpoints.plan_day.root(planDayId));
+      // mutate(endpoints.plan_day.root(planId));
       setPrompt('');
       loading.onFalse();
     }
@@ -63,6 +60,6 @@ export default function MealInputAi({ planDayId, mealId }) {
 }
 
 MealInputAi.propTypes = {
-  planDayId: PropTypes.string,
+  planId: PropTypes.string,
   mealId: PropTypes.string,
 };

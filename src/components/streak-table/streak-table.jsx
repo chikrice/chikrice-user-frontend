@@ -5,17 +5,25 @@ import { Box, Card, Popover, Typography } from '@mui/material';
 import { useTranslate } from 'src/locales';
 import { fDate } from 'src/utils/format-time';
 
+import StreakBox from './streak-box';
+
 export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
   const { t } = useTranslate();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [streakDate, setStreakDate] = useState('');
+  const [streakInfo, setStreakInfo] = useState({ date: '', percentage: 0 });
 
-  const handlePopoverOpen = (event, date) => {
-    if (date) {
-      setStreakDate(fDate(date));
+  const handlePopoverOpen = (event, logEntry) => {
+    if (logEntry) {
+      setStreakInfo({
+        date: fDate(logEntry.date),
+        percentage: logEntry.completionPercentage || 0,
+      });
     } else {
-      setStreakDate(t('noData'));
+      setStreakInfo({
+        date: t('noData'),
+        percentage: 0,
+      });
     }
     setAnchorEl(event.currentTarget);
   };
@@ -52,10 +60,10 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
       <Box
         sx={{
           display: 'flex',
-          overflowX: 'auto', // Enable horizontal scrolling
+          overflowX: 'auto',
           width: '100%',
-          scrollSnapType: 'x mandatory', // Snap scrolling on the x-axis
-          '::-webkit-scrollbar': { display: 'none' }, // Hide scrollbar
+          scrollSnapType: 'x mandatory',
+          '::-webkit-scrollbar': { display: 'none' },
           pr: 3,
         }}
       >
@@ -67,25 +75,21 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
             gap: 0.5,
           }}
         >
-          {[...Array(totalDays)].map((_, index) => (
-            <Box
-              aria-owns={open ? 'mouse-over-popover' : undefined}
-              aria-haspopup="true"
-              onMouseEnter={(e) => handlePopoverOpen(e, activityLog[index]?.date)}
-              onMouseLeave={handlePopoverClose}
-              key={index}
-              sx={{
-                width: 16,
-                height: 16,
-                backgroundColor: (theme) =>
-                  activityLog[index]?.active
-                    ? theme.palette.success.main
-                    : theme.palette.background.neutral,
-                borderRadius: 0.3,
-              }}
-            />
-          ))}
+          {[...Array(totalDays)].map((_, index) => {
+            const logEntry = activityLog[index];
+            const completionPercentage = logEntry?.completionPercentage || 0;
+
+            return (
+              <StreakBox
+                key={index}
+                completionPercentage={completionPercentage}
+                onMouseEnter={(e) => handlePopoverOpen(e, logEntry)}
+                onMouseLeave={handlePopoverClose}
+              />
+            );
+          })}
         </Box>
+
         <Popover
           id="mouse-over-popover"
           sx={{
@@ -104,7 +108,21 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
           onClose={handlePopoverClose}
           disableRestoreFocus
         >
-          <Typography sx={{ p: 1 }}>{streakDate}</Typography>
+          <Box sx={{ p: 1 }}>
+            <Typography variant="body2">
+              {streakInfo.date}
+              {streakInfo.percentage > 0 && (
+                <Typography
+                  component="span"
+                  variant="body2"
+                  color="success.main"
+                  sx={{ ml: 1, fontWeight: 'bold' }}
+                >
+                  {streakInfo.percentage.toFixed(0)}%
+                </Typography>
+              )}
+            </Typography>
+          </Box>
         </Popover>
       </Box>
     </Card>

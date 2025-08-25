@@ -9,7 +9,6 @@ import { api, endpoints, fetcher } from 'src/utils/axios';
 // GET PLAN
 // =====================================
 export function useGetPlan(planId) {
-  console.log('planId: ', planId);
   const URL = planId ? endpoints.plans.id(planId) : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {

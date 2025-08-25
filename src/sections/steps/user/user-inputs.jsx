@@ -33,7 +33,7 @@ export const userInputsInitialState = {
 
 export default function UserInputs() {
   const router = useRouter();
-  const { user, authenticated, createRoadmap } = useStore();
+  const { user, authenticated, createRoadmap, updateUser } = useStore();
 
   const [step, setStep] = useState(1);
   const { state: userInputs, update } = useLocalStorage(STORAGE_KEY, userInputsInitialState);
@@ -64,6 +64,7 @@ export default function UserInputs() {
       try {
         setIsSubmitting(true);
         await createRoadmap({ userId: user.id, ...userInputs });
+        await updateUser(userInputs);
         router.push(paths.progress);
       } catch (error) {
         console.error(error);
@@ -98,13 +99,9 @@ export default function UserInputs() {
         {step === 1 && <Gender gender={userInputs.gender} onNext={onNext} />}
         {step === 2 && <BodyDetails userInputs={userInputs} onNext={onNext} />}
         {step === 3 && <ActivityLevel activityLevel={userInputs.activityLevel} onNext={onNext} />}
-        {step === 4 && (
-          <WeightLifting isWeightLifting={userInputs.isWeightLifting} onNext={onNext} />
-        )}
+        {step === 4 && <WeightLifting isWeightLifting={userInputs.isWeightLifting} onNext={onNext} />}
         {step === 5 && <BMIView userInputs={userInputs} onNext={onNext} />}
-        {step === 6 && (
-          <GoalAchievementSpeed speed={userInputs.goalAchievementSpeed} onNext={onNext} />
-        )}
+        {step === 6 && <GoalAchievementSpeed speed={userInputs.goalAchievementSpeed} onNext={onNext} />}
       </Stack>
 
       {isSubmitting && <LoadingScreen />}

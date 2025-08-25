@@ -1,4 +1,13 @@
-import type { MacrosRatio, PlanReference, RoadmapType, UserClient } from 'chikrice-types';
+import type {
+  IngredientType,
+  MacrosRatio,
+  Meal,
+  MealIngredient,
+  PlanReference,
+  PlanType,
+  RoadmapType,
+  UserClient,
+} from 'chikrice-types';
 
 // ============================================
 // AUTH TYPES
@@ -53,18 +62,17 @@ export interface AuthActions {
   logout: () => Promise<void>;
   register: (credentials: Credentials, userInputs: UserInputs) => Promise<void>;
   googleAuth: (googleCredentials: GoogleCredentials) => Promise<UserClient>;
-  refreshTokens: () => Promise<Tokens>;
   refreshUserInfo: (id: string) => Promise<void>;
+  updateUser: (userInputs: UserClient) => Promise<void>;
 }
 
 // ============================================
-// PLAN TYPES
+// ROADMAP TYPES
 // ============================================
 
-export interface PlanState {
+export interface RoadmapState {
   roadmap: RoadmapType | null;
   plans: PlanReference[];
-  todayPlan: PlanReference | null;
   totalDays: number;
   roadmapLoading: boolean;
   roadmapError: unknown | null;
@@ -88,20 +96,42 @@ export interface CreatePlansData {
   targetCalories: number;
 }
 
-export interface PlanActions {
+export interface RoadmapActions {
   createUserJourney: (userInputs: CreateRoadmapInputs) => Promise<void>;
   loadUserJourney: (roadmapId: string) => Promise<void>;
   createRoadmap: (createRoadmapInputs: CreateRoadmapInputs) => Promise<RoadmapType>;
   getRoadmap: (roadmapId: string) => Promise<RoadmapType>;
   createPlans: (roadmap: RoadmapType, month: number) => Promise<PlanReference[]>;
   getPlans: (params: GetPlansParams) => Promise<PlanReference[]>;
-  setTodayPlan: (plans: PlanReference[]) => void;
   transformRoadmapToPlanData: (roadmap: RoadmapType, month: number) => CreatePlansData;
+  updateActivtyLog: (plan: PlanType) => Promise<void>;
+}
+
+// ============================================
+// PLAN TYPES
+// ============================================
+export interface PlanState {
+  day: number;
+  plan: PlanType | null;
+  planLoading: boolean;
+  planError: unknown | null;
+}
+
+export interface PlanActions {
+  initializePlan: (plans: PlanReference[]) => Promise<void>;
+  updateDay: (day: number) => Promise<void>;
+  getPlan: (planId: string) => Promise<void>;
+  updatePlan: (planId: string) => Promise<void>;
+  toggleIngredient: (ingrediet: IngredientType, mealIndex: number) => void;
+  incrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
+  decrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
+  toggleMealMode: (mealIndex: number, mode: 'view' | 'edit') => void;
+  updateUserPreferences: (meal: Meal, isPortion: boolean, count: 1 | -1 | 0) => Promise<void>;
 }
 
 // ============================================
 // STORE TYPE
 // ============================================
-export interface StoreState extends AuthState, PlanState {}
-export interface StoreActions extends AuthActions, PlanActions {}
+export interface StoreState extends AuthState, RoadmapState, PlanState {}
+export interface StoreActions extends AuthActions, RoadmapActions, PlanActions {}
 export type Store = StoreState & StoreActions;
