@@ -30,7 +30,7 @@ export function useGetOrders(userId) {
 }
 
 export function useGetUser(userId) {
-  const URL = endpoints.user.get(userId);
+  const URL = endpoints.user.id(userId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     revalidateOnFocus: false,

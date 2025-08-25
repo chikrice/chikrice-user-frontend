@@ -32,21 +32,31 @@ export const createRoadmapStore: StateCreator<Store, [], [], RoadmapState & Road
   // INITIALIZE USER DATA
   // =====================================
   loadUserJourney: async (roadmapId: string) => {
+    console.log('🚗 [ROADMAP] Loading user journey for roadmap:', roadmapId);
     try {
       set({ roadmapLoading: true });
       const roadmap = await get().getRoadmap(roadmapId);
+      console.log('🚗 [ROADMAP] Roadmap loaded:', roadmap?.id);
+
       const { milestones, onGoingMonth } = roadmap;
       const milestone = milestones[onGoingMonth - 1];
       const { id: milestoneId, plans } = milestone;
+      console.log('🚗 [ROADMAP] Current milestone:', milestoneId, 'Has plans:', !!plans);
 
       if (!plans) {
+        console.log('🗺️ [ROADMAP] Creating plans for milestone');
         const plans = await get().createPlans(roadmap, onGoingMonth);
+        console.log('🗺️ [ROADMAP] Plans created:', plans?.length);
         await get().initializePlan(plans);
       } else {
+        console.log('🗺️ [ROADMAP] Fetching existing plans');
         const plans = await get().getPlans({ roadmapId, milestoneId });
+        console.log('🗺️ [ROADMAP] Plans fetched:', plans?.length);
         await get().initializePlan(plans);
       }
+      console.log('🗺️ [ROADMAP] User journey loaded successfully');
     } catch (error) {
+      console.error('🗺️ [ROADMAP] Load user journey error:', error);
       set({ roadmapError: error.message || 'Failed to load user journey' });
     } finally {
       set({ roadmapLoading: false });

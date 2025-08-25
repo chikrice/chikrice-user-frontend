@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { LoadingButton } from '@mui/lab';
 import { useCallback, useState } from 'react';
 import { Box, Button, Stack } from '@mui/material';
 
@@ -7,7 +6,6 @@ import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
@@ -38,12 +36,9 @@ export default function ActionPanel({
   canSave,
   selectedIngredients,
 }: ActionPanelProps) {
-  const loading = useBoolean();
-
   const { t } = useTranslate();
-  const { user, getPlan, toggleIngredient } = useStore((store) => store);
-  const userId = user.id;
-
+  const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
+  console.log(user);
   const isDeleteMeal = useBoolean();
   const isTellAi = useBoolean();
 
@@ -52,49 +47,25 @@ export default function ActionPanel({
   const debouncedQuery = useDebounce(searchQuery);
 
   const handleToggleIngredient = useCallback(
-    async (ingredient: IngredientType) => {
-      try {
-        toggleIngredient(ingredient, mealIndex);
-        // const URL = endpoints.plans.meals.toggleIngredient(planId);
-        // const data = {
-        //   mealId,
-        //   userId,
-        //   ingredientId,
-        // };
-        // await api.patch(URL, data);
-        setSearchQuery('');
-      } catch (error) {
-        console.log(error);
-      } finally {
-        // await getPlan(planId);
-      }
+    (ingredient: IngredientType) => {
+      toggleIngredient(ingredient, mealIndex);
+      setSearchQuery('');
     },
-    [mealId, planId, userId]
+    [mealIndex, toggleIngredient, setSearchQuery]
   );
 
   const handleSaveMeal = useCallback(async () => {
     try {
-      loading.onTrue();
-
-      if (canSave) {
-        const URL = endpoints.plans.meals.toggleMode(planId);
-        await api.patch(URL, {
-          mealId,
-          userId,
-          mode: 'view',
-        });
-      } else {
-        await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
-      }
+      toggleMealMode(mealIndex, 'view');
+      await updatePlan(planId);
     } catch (error) {
       console.error(error);
-    } finally {
-      await getPlan(planId);
-      loading.onFalse();
+      // toggle back to edit mode
+      // show snack bar there was an erorr try again
     }
-  }, [planId, mealId, canSave, userId, loading, getPlan]);
+  }, [planId, mealIndex, toggleMealMode, updatePlan]);
 
-  const { searchResults, resultType, searchLoading } = useSearchIngredients(userId, debouncedQuery);
+  const { searchResults, resultType, searchLoading } = useSearchIngredients(user?.id, debouncedQuery);
 
   return (
     <>
@@ -127,14 +98,13 @@ export default function ActionPanel({
             </Button>
           )}
 
-          <LoadingButton
+          <Button
             variant={canSave ? 'contained' : 'text'}
             sx={{ height: '30px', minWidth: '30px', p: 0, borderRadius: '50%' }}
-            loading={loading.value}
             onClick={handleSaveMeal}
           >
             <Iconify icon={`${!canSave ? 'mingcute:close-fill' : 'majesticons:arrow-up-line'}`} />
-          </LoadingButton>
+          </Button>
         </Box>
 
         <Scrollbar sx={{ height: 320, pt: 2 }}>

@@ -55,8 +55,8 @@ export default function MealCard({ meal, index, isPast, plan, ingredients }: Mea
             mode={meal.mode}
             isPast={isPast}
             mealId={meal.id}
+            mealIndex={index}
             planId={plan.id}
-            canSave={!!ingredients.length}
           />
         </Box>
 

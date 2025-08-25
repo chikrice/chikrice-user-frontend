@@ -25,9 +25,7 @@ export default function UserProfileView() {
   const { t } = useTranslate();
   // const { isFirstLogin } = useTourContext();
 
-  const { user: userContext } = useStore();
-
-  const { user, isLoading, error } = useGetUser(userContext.id);
+  const { user, isAuthLoading, authError } = useStore();
 
   const [isEdit, setIsEdit] = useState(false);
   const [fieldName, setFieldName] = useState('info');
@@ -40,8 +38,8 @@ export default function UserProfileView() {
     [setIsEdit, setFieldName]
   );
 
-  if (isLoading) return <LoadingScreen />;
-  if (error) return <div>error</div>;
+  if (isAuthLoading) return <LoadingScreen />;
+  if (authError) return <div>error</div>;
 
   const userFields = [
     {

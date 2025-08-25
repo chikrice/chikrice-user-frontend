@@ -1,6 +1,5 @@
-import { paths } from 'src/routes/paths';
-import { api, endpoints } from 'src/utils/axios';
-import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
+import { api } from 'src/utils/axios';
+import { removeStorage, setStorage } from 'src/hooks/use-local-storage';
 
 import type {
   IngredientType,
@@ -37,32 +36,6 @@ export const isTokenExpired = (expires) => {
   return expirationDate.getTime() < Date.now();
 };
 
-declare global {
-  interface Window {
-    expiredTimer?: NodeJS.Timeout;
-  }
-}
-
-/**
- * Set a timer to handle session expiration and refresh the token when necessary.
- * @param {string} expires - Expiration date of the token.
- */
-export const handleSessionLife = (expires) => {
-  const expirationDate = new Date(expires);
-  const timeLeft = expirationDate.getTime() - Date.now();
-
-  if (timeLeft <= 0) {
-    console.log('Token has already expired or the expiration date is invalid.');
-    return;
-  }
-
-  clearTimeout(window.expiredTimer);
-
-  window.expiredTimer = setTimeout(() => {
-    getNewAccessTokenWithRefreshToken();
-  }, timeLeft - 5000);
-};
-
 /**
  * Set access token in local storage and initialize session lifecycle.
  * @param {object|null} token - Access token object containing token string and expiration.
@@ -72,7 +45,6 @@ export const setAccessTokenSession = (token) => {
 
   if (token) {
     setStorage(ACCESS_TOKEN_KEY, token);
-    handleSessionLife(token.expires);
     api.defaults.headers.common.Authorization = `Bearer ${token.token}`;
   } else {
     removeStorage(ACCESS_TOKEN_KEY);
@@ -99,31 +71,6 @@ export const setRefreshTokenSession = (token) => {
 export const handleTokensSession = (tokens) => {
   setAccessTokenSession(tokens?.access || null);
   setRefreshTokenSession(tokens?.refresh || null);
-};
-
-/**
- * Request new access token using refresh token.
- * If successful, updates tokens in local storage. Otherwise, redirects to login.
- */
-export const getNewAccessTokenWithRefreshToken = async () => {
-  try {
-    const refreshToken = getStorage(REFRESH_TOKEN_KEY);
-
-    if (!refreshToken || isTokenExpired(refreshToken.expires)) {
-      throw new Error('Refresh token expired');
-    }
-
-    const response = await api.post(endpoints.auth.refreshTokens, {
-      refreshToken: refreshToken.token,
-    });
-
-    const tokens = response.data;
-    handleTokensSession(tokens);
-  } catch (error) {
-    console.log(error);
-    alert('Your session has expired. Please log in again.');
-    window.location.href = paths.auth.login;
-  }
 };
 
 // =====================================
@@ -169,9 +116,9 @@ export const getUserPortionPreference = (
   macroType: MacroType,
   user: UserClient
 ): number | null => {
-  const mealPreferences = user.mealPreferences;
+  const mealPreferences = user?.mealPreferences;
   const timeSlot = getCurrentTimeSlot();
-  return mealPreferences[timeSlot]?.[macroType]?.[ingredientId]?.portionSize ?? null;
+  return mealPreferences?.[timeSlot]?.[macroType]?.[ingredientId]?.portionSize ?? null;
 };
 
 export const calcDefaultPortionQty = (ingredient: IngredientType, recommendedMacros: Macros): number => {
@@ -288,4 +235,8 @@ export const updateIngredientInMeal = (
   updatedPlan.consumedMacros = calcPlanConsumedMacros(updatedPlan.meals);
 
   return updatedPlan;
+};
+
+export const isMealEmpty = (meal: Meal): boolean => {
+  return Object.values(meal.ingredients).every((ingredients) => ingredients.length === 0);
 };

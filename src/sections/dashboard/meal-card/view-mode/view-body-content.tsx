@@ -18,7 +18,7 @@ export default function ViewBodyContent({ ingredients }: ViewBodyContentProps) {
   return (
     <Stack>
       {ingredients.map((item) => (
-        <ListItem key={item.id} sx={{ pl: 0 }}>
+        <ListItem key={item.ingredientId} sx={{ pl: 0 }}>
           <ListItemIcon>{item.icon}</ListItemIcon>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="subtitle2" color={'text.secondary'}>

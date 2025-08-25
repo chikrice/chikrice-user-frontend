@@ -1,12 +1,10 @@
-import { mutate } from 'swr';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
-import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -21,9 +19,9 @@ interface HeaderActionsPopoverProps {
   sx?: SxProps<Theme>;
   mode: 'view' | 'edit';
   mealId: string;
+  mealIndex: number;
   planId: string;
   isPast: boolean;
-  canSave: boolean;
 }
 
 // -------------------------------------
@@ -32,52 +30,33 @@ export default function HeaderActionsPopover({
   sx,
   mode,
   mealId,
+  mealIndex,
   isPast,
   planId,
-  canSave,
 }: HeaderActionsPopoverProps) {
   const popover = usePopover();
 
   const isDeleteMeal = useBoolean();
 
   const { t } = useTranslate();
-  const { user, getPlan } = useStore((state) => state);
+  const { updatePlan, toggleMealMode } = useStore((state) => state);
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';
-  const userId = user.id;
 
-  const handleToggleMode = useCallback(
-    async (mode: 'view' | 'edit') => {
-      try {
-        await api.patch(endpoints.plans.meals.toggleMode(planId), {
-          mealId,
-          userId,
-          mode,
-        });
-        popover.onClose();
-      } catch (error) {
-        console.log(error);
-      } finally {
-        await getPlan(planId);
-      }
-    },
-    [planId, mealId, userId, popover, getPlan]
-  );
+  const handleOpenEditMode = useCallback(async () => {
+    toggleMealMode(mealIndex, 'edit');
+    popover.onClose();
+  }, [mealIndex, popover, toggleMealMode]);
 
   const handleCloseEditMode = useCallback(async () => {
     try {
-      if (canSave) {
-        await handleToggleMode('view');
-      } else {
-        await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
-      }
+      toggleMealMode(mealIndex, 'view');
+      await updatePlan(planId);
     } catch (error) {
       console.error(error);
-    } finally {
-      await getPlan(planId);
     }
-  }, [canSave, mealId, planId, handleToggleMode, getPlan]);
+  }, [planId, mealIndex, toggleMealMode, updatePlan]);
 
   return (
     <>
@@ -104,7 +83,7 @@ export default function HeaderActionsPopover({
           >
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => handleToggleMode('edit')}>
+                <ListItemButton onClick={handleOpenEditMode}>
                   <ListItemIcon>
                     <Iconify icon={'ic:edit'} />
                   </ListItemIcon>

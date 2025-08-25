@@ -1,6 +1,7 @@
 import type {
   IngredientType,
   MacrosRatio,
+  Meal,
   MealIngredient,
   PlanReference,
   PlanType,
@@ -61,7 +62,6 @@ export interface AuthActions {
   logout: () => Promise<void>;
   register: (credentials: Credentials, userInputs: UserInputs) => Promise<void>;
   googleAuth: (googleCredentials: GoogleCredentials) => Promise<UserClient>;
-  refreshTokens: () => Promise<Tokens>;
   refreshUserInfo: (id: string) => Promise<void>;
 }
 
@@ -117,10 +117,14 @@ export interface PlanState {
 
 export interface PlanActions {
   initializePlan: (plans: PlanReference[]) => Promise<void>;
+  updateDay: (day: number) => Promise<void>;
   getPlan: (planId: string) => Promise<void>;
+  updatePlan: (planId: string) => Promise<void>;
   toggleIngredient: (ingrediet: IngredientType, mealIndex: number) => void;
   incrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
   decrementIngredient: (mealIndex: number, ingredient: MealIngredient) => void;
+  toggleMealMode: (mealIndex: number, mode: 'view' | 'edit') => void;
+  updateUserPreferences: (meal: Meal, isPortion: boolean, count: 1 | -1 | 0) => Promise<void>;
 }
 
 // ============================================

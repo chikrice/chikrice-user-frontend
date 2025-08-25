@@ -36,8 +36,7 @@ const initialState = {
 export default function Address({ actionType = 'manage', onDeliverToAddress }) {
   const { t } = useTranslate();
 
-  const { user: userDetails } = useStore();
-  const { user } = useGetUser(userDetails.id);
+  const { user } = useStore((state) => state);
 
   const [heldAddress, setHeldAddress] = useState(initialState);
 
@@ -89,11 +88,7 @@ export default function Address({ actionType = 'manage', onDeliverToAddress }) {
   );
 
   const renderDeliverActions = (address) => (
-    <DeliverActions
-      address={address}
-      onDelete={handleDeleteAddress}
-      onDeliver={onDeliverToAddress}
-    />
+    <DeliverActions address={address} onDelete={handleDeleteAddress} onDeliver={onDeliverToAddress} />
   );
 
   const renderManageActions = (address) => (
@@ -113,9 +108,7 @@ export default function Address({ actionType = 'manage', onDeliverToAddress }) {
                 key={index}
                 address={address}
                 action={
-                  actionType === 'manage'
-                    ? renderManageActions(address)
-                    : renderDeliverActions(address)
+                  actionType === 'manage' ? renderManageActions(address) : renderDeliverActions(address)
                 }
                 sx={{
                   p: 3,

@@ -10,16 +10,44 @@ import DayNavigator from '../day-navigator';
 // -------------------------------------
 
 export default function DashboardView() {
-  const { day, plan, plans, totalDays, roadmapLoading, roadmapError, updateDay } = useStore((state) => state);
+  const { day, plan, plans, totalDays, roadmapLoading, roadmapError, isAuthLoading, planLoading, updateDay } =
+    useStore((state) => state);
 
-  if (roadmapLoading) <LoadingScreen />;
-  if (roadmapError) <ReloadPage />;
+  // Add comprehensive loading checks
+  const isLoading = isAuthLoading || roadmapLoading || planLoading;
+  const isDataReady = !isLoading && plans && plans.length > 0 && plan;
+
+  console.log('📊 [DASHBOARD] State:', {
+    isAuthLoading,
+    roadmapLoading,
+    planLoading,
+    plansCount: plans?.length,
+    hasPlan: !!plan,
+    isDataReady,
+  });
+
+  if (isLoading) {
+    console.log('📊 [DASHBOARD] Showing loading screen');
+    return <LoadingScreen />;
+  }
+
+  if (roadmapError) {
+    console.log('📊 [DASHBOARD] Showing error page');
+    return <ReloadPage />;
+  }
+
+  if (!isDataReady) {
+    console.log('📊 [DASHBOARD] Data not ready, showing loading');
+    return <LoadingScreen />;
+  }
+
+  console.log('📊 [DASHBOARD] Rendering dashboard with plan:', plan?.id);
 
   return (
     <>
-      <MacrosBar plan={plan} className="dash__tour__2" />
+      <MacrosBar plan={plan} className="dash__tour__2" isLoading={planLoading} />
 
-      <Meals plan={plan} planLoading={false} />
+      <Meals plan={plan} planLoading={planLoading} />
 
       <AddNewMeal plan={plan} />
 
@@ -28,7 +56,7 @@ export default function DashboardView() {
         plan={plan}
         plans={plans}
         totalDays={totalDays}
-        planLoading={false}
+        planLoading={planLoading}
         isDisableMealsActions={true}
         //
         updateDay={updateDay}

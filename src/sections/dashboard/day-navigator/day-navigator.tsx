@@ -5,7 +5,6 @@ import { Box, Skeleton, Typography } from '@mui/material';
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import { api, endpoints } from 'src/utils/axios';
-import { toogleSavePlanDay } from 'src/api/plan-day';
 import { fDate, isDateisToday } from 'src/utils/format-time';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomBottomDrawer from 'src/components/custom-drawer/custom-drawer';
@@ -61,7 +60,7 @@ export default function DayNavigator({
   const handleCheckCopy = useCallback(async () => {
     setIsCopied(false);
     setIsDrawer(false);
-    await updateDay(targetDate.number);
+    await updateDay(targetDate?.number);
     setTargetDate({});
   }, [targetDate, updateDay]);
 
@@ -97,12 +96,11 @@ export default function DayNavigator({
 
   const handleToggleSavePlan = useCallback(async () => {
     try {
-      await toogleSavePlanDay(plan.id, { userId: user.id });
       await refreshUserInfo(user.id);
     } catch (error) {
       console.error(error);
     }
-  }, [plan, user, refreshUserInfo]);
+  }, [user, refreshUserInfo]);
 
   return (
     <StyledWrapper style={{ direction: 'ltr' }}>
