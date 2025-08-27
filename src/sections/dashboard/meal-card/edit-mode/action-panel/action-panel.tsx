@@ -9,8 +9,8 @@ import Scrollbar from 'src/components/scrollbar';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
+import { IngredientFormDialog } from 'src/components/custom-dialog';
 
-import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
 import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
@@ -39,9 +39,9 @@ export default function ActionPanel({
   const { t } = useTranslate();
   const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
   console.log(user);
-  const isDeleteMeal = useBoolean();
-  const isTellAi = useBoolean();
 
+  const isDeleteMeal = useBoolean();
+  const isIngredientDialog = useBoolean();
   const [searchQuery, setSearchQuery] = useState('');
 
   const debouncedQuery = useDebounce(searchQuery);
@@ -81,22 +81,15 @@ export default function ActionPanel({
             borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
           }}
         >
-          {!isTellAi.value && (
-            <SearchIngredient
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              isLoading={searchLoading}
-            />
-          )}
-          {isTellAi.value ? (
-            <Button startIcon={<Iconify icon={'ph:plus-circle-bold'} />} onClick={isTellAi.onFalse}>
-              {t('enterManually')}
-            </Button>
-          ) : (
-            <Button startIcon={<Iconify icon={'mingcute:ai-fill'} />} onClick={isTellAi.onTrue}>
-              {t('tellAi')}
-            </Button>
-          )}
+          <SearchIngredient
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            isLoading={searchLoading}
+          />
+
+          <Button startIcon={<Iconify icon={'stash:plus-solid'} />} onClick={isIngredientDialog.onTrue}>
+            {t('new')}
+          </Button>
 
           <Button
             variant={canSave ? 'contained' : 'text'}
@@ -109,30 +102,24 @@ export default function ActionPanel({
 
         <Scrollbar sx={{ height: 320, pt: 2 }}>
           <Stack pb={24}>
-            {isTellAi.value ? (
-              <MealInputAi planId={planId} mealId={mealId} />
+            {resultType === 'query' ? (
+              <SearchResultsIngredients
+                results={searchResults}
+                isLoading={searchLoading}
+                onSelect={handleToggleIngredient}
+                selectedIngredients={selectedIngredients}
+              />
             ) : (
-              <>
-                {resultType === 'query' ? (
-                  <SearchResultsIngredients
-                    results={searchResults}
-                    isLoading={searchLoading}
-                    onSelect={handleToggleIngredient}
-                    selectedIngredients={selectedIngredients}
-                  />
-                ) : (
-                  searchResults?.map((group, index) => (
-                    <NutrientGroup
-                      key={index}
-                      title={t(group.title)}
-                      onSelect={handleToggleIngredient}
-                      isLoading={searchLoading}
-                      ingredients={group.ingredients}
-                      selectedIngredients={selectedIngredients}
-                    />
-                  ))
-                )}
-              </>
+              searchResults?.map((group, index) => (
+                <NutrientGroup
+                  key={index}
+                  title={t(group.title)}
+                  onSelect={handleToggleIngredient}
+                  isLoading={searchLoading}
+                  ingredients={group.ingredients}
+                  selectedIngredients={selectedIngredients}
+                />
+              ))
             )}
           </Stack>
         </Scrollbar>
@@ -143,6 +130,13 @@ export default function ActionPanel({
         onClose={isDeleteMeal.onFalse}
         planId={planId}
         mealId={mealId}
+      />
+
+      <IngredientFormDialog
+        open={isIngredientDialog.value}
+        onClose={isIngredientDialog.onFalse}
+        mealIndex={mealIndex}
+        title={t('addNewIngredient')}
       />
     </>
   );

@@ -667,5 +667,9 @@
     "part1": "Hey, this is ",
     "part2": "the founder of chikrice there is no frequently asked quetions yet. Be the first person to submit a question.\n"
   },
-  "khaled": "Khaled"
+  "khaled": "Khaled",
+  "addNewIngredient": "Add new ingredient",
+  "newIngredient": "New Ingredient",
+  "new": "New",
+  "add": "Add"
 }

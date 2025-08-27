@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { useTranslate } from 'src/locales';
@@ -20,6 +20,7 @@ export default function Header() {
     '/dashboard': t('dashboard'),
     '/progress': t('progress'),
     '/user': t('account'),
+    '/user/ingredients': t('ingredients'),
     '/user/settings/': t('settings'),
     '/coach': t('coaches'),
     '/user/profile': t('profile'),
@@ -32,7 +33,9 @@ export default function Header() {
   return (
     <BaseHeader>
       <Stack alignItems="center">
-        <LeftIcon onClick={() => router.back()} width={30} />
+        <IconButton>
+          <LeftIcon onClick={() => router.back()} />
+        </IconButton>
       </Stack>
 
       <Box sx={{ flexGrow: 1 }}>
@@ -47,9 +50,7 @@ export default function Header() {
             right: -16,
           },
         }}
-        badgeContent={
-          <Link href={'/'} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}></Link>
-        }
+        badgeContent={<Link href={'/'} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}></Link>}
       >
         <AccountPopover />
       </Badge>

@@ -93,9 +93,11 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
     const updatedPlan = structuredClone(currentPlan);
 
     const meal = updatedPlan.meals[mealIndex];
+    console.log('MEAL', meal);
     const macroType = ingredient.macroType;
+    console.log('INGREDIENT', ingredient);
     const macroArr = meal.ingredients[macroType];
-    const ingredientIdx = macroArr.findIndex((ing) => ing.ingredientId === ingredient.id);
+    const ingredientIdx = macroArr.findIndex((ing) => ing.ingredientId === ingredient?.id);
 
     if (ingredientIdx !== -1) {
       macroArr.splice(ingredientIdx, 1);

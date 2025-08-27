@@ -35,7 +35,7 @@ export default function UserAccountView() {
   const accountRoutesConfig = [
     {
       title: t('profile'),
-      icon: 'solar:user-line-duotone',
+      icon: 'fluent:person-28-regular',
       path: isCoach ? paths.user.coach : paths.user.profile,
     },
     // {
@@ -44,29 +44,29 @@ export default function UserAccountView() {
     //   path: paths.user.subscriptions,
     // },
     {
+      title: t('ingredients'),
+      icon: 'fluent:food-apple-20-regular',
+      path: paths.user.ingredients,
+    },
+    {
       title: t('settings'),
-      icon: 'ic:round-settings',
+      icon: 'fluent:settings-20-regular',
       path: paths.user.settings,
     },
-    // {
-    //   title: t('planCustomization'),
-    //   icon: 'mdi:slider',
-    //   path: paths.user.plan_customization,
-    // },
     {
       title: t('needHelp'),
-      icon: 'mdi:help',
+      icon: 'material-symbols:question-mark-rounded',
       path: paths.faqs,
     },
   ];
 
   return (
-    <Box sx={{ px: 0.5, pt: 5 }}>
+    <Box sx={{ pt: 5 }}>
       <List>
         {accountRoutesConfig.map((item, index) => (
           <Box key={index} onClick={() => router.push(item.path)}>
-            <ListItem>
-              <ListItemButton sx={{ py: 2, px: 0.5 }}>
+            <ListItem sx={{ p: 0 }}>
+              <ListItemButton sx={{ p: 2 }}>
                 <ListItemIcon>
                   <Iconify icon={item.icon} />
                 </ListItemIcon>

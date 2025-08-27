@@ -155,6 +155,7 @@ export const endpoints = {
     orders: (id) => `${API_VERSION}/users/orders/${id}`,
     initCollab: (id) => `${API_VERSION}/users/init-coach-collab/${id}`,
     preferences: (userId) => `${API_VERSION}/users/preferences/${userId}`,
+    ingredients: (userId) => `${API_VERSION}/users/custom-ingredients/${userId}`,
   },
   address: {
     create: `${API_VERSION}/users/address`,
