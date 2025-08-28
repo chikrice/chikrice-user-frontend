@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/chikrice/chikrice-user-frontend/compare/v1.2.0...v1.3.0) (2025-08-28)
+
+
+### Features
+
+* add ai ingredient processing feature ([789370a](https://github.com/chikrice/chikrice-user-frontend/commit/789370a9a31a5138e6efc81d43d4c928a858c992))
+* integrate real ingredient API data and update form structure ([4159000](https://github.com/chikrice/chikrice-user-frontend/commit/4159000a6ebdf644ec0adc07f95d1ec13a505486))
+
+
+### Bug Fixes
+
+* resolved the custom-ingredient macro calculation bug ([047b3ed](https://github.com/chikrice/chikrice-user-frontend/commit/047b3ed938aa61a41aaacd45106486147d690d9a))
+
 ## [1.2.0](https://github.com/chikrice/chikrice-user-frontend/compare/v1.1.0...v1.2.0) (2025-08-25)
 
 
