@@ -2,10 +2,9 @@ import { useCallback, useState } from 'react';
 import { Container, Stack } from '@mui/material';
 
 import useStore from 'src/store';
-import { useGetUser } from 'src/api/user';
 import { useTranslate } from 'src/locales';
 import ageSrc from 'src/assets/icons/age.png';
-import { Address } from 'src/sections/address';
+// import { Address } from 'src/sections/address';
 import { activityOptions } from 'src/data/user';
 import weightSrc from 'src/assets/icons/weight.png';
 import heightSrc from 'src/assets/icons/height.png';
@@ -109,7 +108,7 @@ export default function UserProfileView() {
           </Stack>
 
           <UserGoal user={user} />
-          <Address />
+          {/* <Address /> */}
         </Stack>
       </Container>
 

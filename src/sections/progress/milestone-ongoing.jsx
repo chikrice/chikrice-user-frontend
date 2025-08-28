@@ -36,11 +36,11 @@ export default function MilestoneOngoing({ milestone }) {
             <ListItemText primary={t('targetWeight')} />
             <Label>{milestone.targetWeight}kg</Label>
           </StyledListItem>
-          {/* <Divider />
+          <Divider />
           <StyledListItem>
             <ListItemText primary={t('baseCalories')} />
-            <Label>{milestone.baseCalories.toFixed()}cal</Label>
-          </StyledListItem> */}
+            <Label color="info">{milestone.baseCalories.toFixed()}cal</Label>
+          </StyledListItem>
           <Divider />
           <StyledListItem sx={{ gap: 1 }}>
             <ListItemText primary={t('targetCalories')} />
@@ -54,7 +54,7 @@ export default function MilestoneOngoing({ milestone }) {
               <Label color="success">{milestone.changePoint.targetCalories}cal</Label>
             )}
           </StyledListItem>
-          {/* <Divider />
+          <Divider />
           <StyledListItem>
             <ListItemText
               primary={
@@ -63,10 +63,10 @@ export default function MilestoneOngoing({ milestone }) {
                   : t('clorieSurplus__day')
               }
             />
-            <Label>{milestone.calorieAdjustment.day}cal</Label>
+            <Label color="warning">{milestone.calorieAdjustment.day}cal</Label>
           </StyledListItem>
-          <Divider />
-          <StyledListItem>
+          {/* <Divider /> */}
+          {/* <StyledListItem>
             <ListItemText
               primary={
                 milestone.calorieAdjustment.type === 'deficit'

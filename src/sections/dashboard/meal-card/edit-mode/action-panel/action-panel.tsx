@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { enqueueSnackbar } from 'notistack';
 import { useCallback, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { Box, Button, Stack } from '@mui/material';
 
 import useStore from 'src/store';
@@ -13,10 +14,13 @@ import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
 import { IngredientFormDialog } from 'src/components/custom-dialog';
 
+import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
 import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
+
+import type { Theme } from 'src/theme';
 
 import type { MealIngredient, IngredientType } from 'chikrice-types';
 
@@ -39,8 +43,10 @@ export default function ActionPanel({
   selectedIngredients,
 }: ActionPanelProps) {
   const { t } = useTranslate();
+  const theme = useTheme();
   const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
 
+  const isTellAi = useBoolean();
   const isDeleteMeal = useBoolean();
   const isIngredientDialog = useBoolean();
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,7 +89,7 @@ export default function ActionPanel({
 
   return (
     <>
-      <StyledWrapper>
+      <StyledWrapper theme={theme}>
         <Box
           sx={{
             display: 'flex',
@@ -95,15 +101,39 @@ export default function ActionPanel({
             borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
           }}
         >
-          <SearchIngredient
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isLoading={searchLoading}
-          />
-
-          <Button startIcon={<Iconify icon={'stash:plus-solid'} />} onClick={isIngredientDialog.onTrue}>
-            {t('new')}
-          </Button>
+          {!isTellAi.value && (
+            <SearchIngredient
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              isLoading={searchLoading}
+            />
+          )}
+          {isTellAi.value ? (
+            <Button
+              size="small"
+              startIcon={<Iconify icon={'ph:plus-circle-bold'} />}
+              onClick={isTellAi.onFalse}
+            >
+              {t('enterManually')}
+            </Button>
+          ) : (
+            <>
+              <Button
+                size="small"
+                startIcon={<Iconify icon={'mingcute:ai-fill'} />}
+                onClick={isTellAi.onTrue}
+              >
+                {t('tellAi')}
+              </Button>
+              <Button
+                size="small"
+                startIcon={<Iconify icon={'stash:plus-solid'} />}
+                onClick={isIngredientDialog.onTrue}
+              >
+                {t('new')}
+              </Button>
+            </>
+          )}
 
           <Button
             variant={canSave ? 'contained' : 'text'}
@@ -116,25 +146,31 @@ export default function ActionPanel({
 
         <Scrollbar sx={{ height: 320, pt: 2 }}>
           <Stack pb={24}>
-            {resultType === 'query' ? (
-              <SearchResultsIngredients
-                results={searchResults}
-                isLoading={searchLoading}
-                onSelect={handleToggleIngredient}
-                onAddNewIngredient={isIngredientDialog.onTrue}
-                selectedIngredients={selectedIngredients}
-              />
+            {isTellAi.value ? (
+              <MealInputAi mealIndex={mealIndex} />
             ) : (
-              searchResults?.map((group, index) => (
-                <NutrientGroup
-                  key={index}
-                  title={t(group.title)}
-                  onSelect={handleToggleIngredient}
-                  isLoading={searchLoading}
-                  ingredients={group.ingredients}
-                  selectedIngredients={selectedIngredients}
-                />
-              ))
+              <>
+                {resultType === 'query' ? (
+                  <SearchResultsIngredients
+                    results={searchResults}
+                    isLoading={searchLoading}
+                    onSelect={handleToggleIngredient}
+                    onAddNewIngredient={isIngredientDialog.onTrue}
+                    selectedIngredients={selectedIngredients}
+                  />
+                ) : (
+                  searchResults?.map((group, index) => (
+                    <NutrientGroup
+                      key={index}
+                      title={t(group.title)}
+                      onSelect={handleToggleIngredient}
+                      isLoading={searchLoading}
+                      ingredients={group.ingredients}
+                      selectedIngredients={selectedIngredients}
+                    />
+                  ))
+                )}
+              </>
             )}
           </Stack>
         </Scrollbar>
@@ -158,7 +194,7 @@ export default function ActionPanel({
   );
 }
 
-const StyledWrapper = styled(Box)(({ theme }) => ({
+const StyledWrapper = styled(Box)<{ theme: Theme }>(({ theme }) => ({
   left: 0,
   bottom: 0,
   width: '100%',

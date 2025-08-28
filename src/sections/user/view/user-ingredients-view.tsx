@@ -97,7 +97,7 @@ export default function UserIngredientsView() {
         });
       }
     },
-    [user.id, mutate, enqueueSnackbar]
+    [user.id, isFormDialogOpen, mutate, enqueueSnackbar]
   );
 
   const handleCloseFormDialog = useCallback(() => {

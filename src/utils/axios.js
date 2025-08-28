@@ -156,6 +156,7 @@ export const endpoints = {
     initCollab: (id) => `${API_VERSION}/users/init-coach-collab/${id}`,
     preferences: (userId) => `${API_VERSION}/users/preferences/${userId}`,
     ingredients: (userId) => `${API_VERSION}/users/custom-ingredients/${userId}`,
+    processIngredients: (userId) => `${API_VERSION}/users/process-ingredient-prompt/${userId}`,
   },
   address: {
     create: `${API_VERSION}/users/address`,

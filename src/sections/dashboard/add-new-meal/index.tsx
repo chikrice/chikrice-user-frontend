@@ -1,12 +1,18 @@
-import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
 import useStore from 'src/store';
 import { api, endpoints } from 'src/utils/axios';
 import CircleButton from 'src/components/circle-button';
 
-export default function AddNewMeal({ plan }) {
+import type { PlanType } from 'chikrice-types';
+
+interface AddNewMealProps {
+  plan: PlanType;
+}
+
+export default function AddNewMeal({ plan }: AddNewMealProps) {
   const { getPlan } = useStore((state) => state);
+
   const handleCreateMeal = useCallback(async () => {
     try {
       await api.post(endpoints.plans.meals.create(plan.id));
@@ -15,7 +21,8 @@ export default function AddNewMeal({ plan }) {
     } finally {
       await getPlan(plan.id);
     }
-  }, [plan?.id]);
+  }, [plan?.id, getPlan]);
+
   return (
     <CircleButton
       icon="ph:plus-bold"
@@ -26,7 +33,3 @@ export default function AddNewMeal({ plan }) {
     />
   );
 }
-
-AddNewMeal.propTypes = {
-  planId: PropTypes.string,
-};

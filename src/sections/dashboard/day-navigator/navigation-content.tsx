@@ -19,6 +19,15 @@ const LOCALE_MAP = {
   ar: arSA,
   fa: faIR,
 };
+
+// Helper function to safely parse date
+const parseDate = (date: string | Date) => {
+  if (typeof date === 'string') {
+    return parseISO(date);
+  }
+  return date;
+};
+
 // -------------------------------------
 
 const NavigationContent = ({ plans, onNavigateTo }: NavigationContentProps) => {
@@ -43,7 +52,7 @@ const NavigationContent = ({ plans, onNavigateTo }: NavigationContentProps) => {
                   borderRadius: 2,
                   background: (theme) => theme.palette.card.soft,
                   border: (theme) =>
-                    isToday(parseISO(plan.date)) ? `1px dashed ${theme.palette.primary.main}` : '',
+                    isToday(parseDate(plan.date)) ? `1px dashed ${theme.palette.primary.main}` : '',
                   color: 'text.secondary',
                   cursor: 'pointer',
                   '&:hover': {
@@ -52,7 +61,7 @@ const NavigationContent = ({ plans, onNavigateTo }: NavigationContentProps) => {
                 }}
               >
                 <Typography variant="body2" fontWeight={'500'} noWrap>
-                  {fDate(parseISO(plan.date), 'EEE', { locale: LOCALE_MAP[lang] })}
+                  {fDate(parseDate(plan.date), 'EEE', { locale: LOCALE_MAP[lang] })}
                 </Typography>
                 <small>{index + 1}</small>
               </Box>

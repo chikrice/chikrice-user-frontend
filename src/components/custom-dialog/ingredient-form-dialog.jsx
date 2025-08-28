@@ -69,7 +69,7 @@ export default function IngredientFormDialog({
       id: ingredient?.id || null,
       name: ingredient?.name || { en: '', ar: '', fa: '' },
       serving: {
-        weightInGrams: ingredient?.serving?.weightInGrams || 100,
+        weightInGrams: ingredient?.serving?.weightInGrams,
         nutrientFacts: {
           cal: ingredient?.serving.nutrientFacts?.cal,
           pro: ingredient?.serving.nutrientFacts?.pro,

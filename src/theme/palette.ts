@@ -210,6 +210,28 @@ export function palette(mode: ThemeMode): CustomPalette {
 
 // Extend the Material-UI Theme type
 declare module '@mui/material/styles' {
+  interface Palette {
+    card: {
+      default: string;
+      soft: string;
+    };
+    nav: {
+      default: string;
+      soft: string;
+    };
+  }
+
+  interface PaletteOptions {
+    card?: {
+      default: string;
+      soft: string;
+    };
+    nav?: {
+      default: string;
+      soft: string;
+    };
+  }
+
   interface Theme {
     customShadows: ReturnType<typeof import('./custom-shadows').customShadows>;
     card: {
