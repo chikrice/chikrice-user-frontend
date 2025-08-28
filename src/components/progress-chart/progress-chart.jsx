@@ -11,14 +11,14 @@ export default function ProgressChart({ weightProgression }) {
   const { t } = useTranslate();
 
   // Create categories with proper labeling
-  const categories = weightProgression?.map((_, index) =>
+  const categories = Array.from({ length: (weightProgression?.length || 0) + 1 }, (_, index) =>
     index === 0 ? t('beginning') : `${t('mo')} ${index}`
   );
 
   const series = [
     {
       name: 'KG',
-      data: weightProgression?.map((item) => item.targetWeight),
+      data: [weightProgression[0].startWeight, ...weightProgression.map((item) => item.targetWeight)],
     },
   ];
 

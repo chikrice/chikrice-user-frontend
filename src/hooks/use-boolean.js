@@ -17,11 +17,5 @@ export function useBoolean(defaultValue) {
     setValue((prev) => !prev);
   }, []);
 
-  return {
-    value,
-    onTrue,
-    onFalse,
-    onToggle,
-    setValue,
-  };
+  return { value, onTrue, onFalse, onToggle, setValue };
 }

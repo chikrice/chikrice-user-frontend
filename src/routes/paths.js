@@ -43,6 +43,7 @@ export const paths = {
   user: {
     root: `/user`,
     profile: '/user/profile',
+    ingredients: '/user/ingredients',
     coach: '/user/coach-profile',
     subscriptions: '/user/subscriptions',
     orders: '/user/orders/',

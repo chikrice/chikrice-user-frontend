@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
-import { Container } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Container, IconButton } from '@mui/material';
 
 import useStore from 'src/store';
 import { paths } from 'src/routes/paths';
@@ -84,7 +84,9 @@ export default function UserInputs() {
   return (
     <Container>
       <Stack width={'100%'} sx={{ display: 'flex', py: 2 }}>
-        <LeftIcon onClick={onBack} width={30} />
+        <IconButton onClick={onBack}>
+          <LeftIcon />
+        </IconButton>
       </Stack>
       <ProgressBar percent={step * 16.6} />
 

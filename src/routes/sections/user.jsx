@@ -10,6 +10,7 @@ import { SplashScreen } from 'src/components/loading-screen';
 const UserAccountPage = lazy(() => import('src/pages/user/account'));
 const UserProfilePage = lazy(() => import('src/pages/user/profile'));
 const UserSettingsPage = lazy(() => import('src/pages/user/settings'));
+const UserIngredientsPage = lazy(() => import('src/pages/user/ingredients'));
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ export const userRoutes = [
       { element: <UserAccountPage />, index: true },
       { path: 'profile', element: <UserProfilePage /> },
       { path: 'settings', element: <UserSettingsPage /> },
+      { path: 'ingredients', element: <UserIngredientsPage /> },
     ],
   },
 ];

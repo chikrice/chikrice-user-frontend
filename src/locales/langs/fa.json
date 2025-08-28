@@ -516,8 +516,7 @@
   "mealDeleteConfirm": "آیا مطمئن هستید که می‌خواهید این وعده غذایی را حذف کنید؟",
   "or": "یا",
   "aiPlaceholder1": "به من بگویید چه خورده‌اید (دقیق باشید)",
-  "aiPlaceholder2": "یا به من بگویید چه هوس کرده‌اید",
-  "aiPlaceholder3": "یا به من بگویید ماکروز هدف شما برای وعده غذایی چیست",
+  "aiPlaceholder2": "۱۰ تکه ناگت مرغ\n- کوکا کولا متوسط",
   "suggestions": "پیشنهادات برای وعده غذایی",
   "needHelp": "به کمک نیاز دارید",
   "chikriceCom": "chikrice.com",
@@ -568,5 +567,9 @@
     "part1": "سلام ،  من",
     "part2": "the founder of chikrice there is no frequently asked quetions yet. Be the first person to submit a question.\n"
   },
-  "khaled": "خالد"
+  "khaled": "خالد",
+  "addNewIngredient": "آيتم جدید اضافه کنید",
+  "newIngredient": "آيتم جدید",
+  "new": "جدید",
+  "add": "اضافه کردن"
 }

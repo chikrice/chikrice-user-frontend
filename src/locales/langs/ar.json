@@ -608,8 +608,7 @@
   "mealDeleteConfirm": "هل أنت متأكد أنك تريد مسح هذه الوجبة",
   "or": "أو",
   "aiPlaceholder1": "أخبرني ماذا أكلت (كن دقيقًا)",
-  "aiPlaceholder2": "أو أخبرني ماذا تشتهي أن تأكل",
-  "aiPlaceholder3": "أو أخبرني بوحدات الماكرو المستهدفة للوجبة",
+  "aiPlaceholder2": "10 قطع من ناجتس الدجاج\n- كوكا كولا متوسطة",
   "suggestions": "اقتراحات للوجبة",
   "needHelp": "تحتاج الى مساعدة",
   "chikriceCom": "chikrice.com",
@@ -659,5 +658,9 @@
     "part1": "اهلا ، انا",
     "part2": "the founder of chikrice there is no frequently asked quetions yet. Be the first person to submit a question.\n"
   },
-  "khaled": "خالد"
+  "khaled": "خالد",
+  "addNewIngredient": "إضافة عنصر جديد",
+  "newIngredient": "عنصر جديد",
+  "new": "جديد",
+  "add": "اضف"
 }

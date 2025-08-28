@@ -108,7 +108,7 @@ export default function UserGoal({ user }) {
               <Label>{user?.targetWeight}kg</Label>
             </ListItem>
           </List>
-          <Button
+          {/* <Button
             fullWidth
             variant="outlined"
             color="inherit"
@@ -116,7 +116,7 @@ export default function UserGoal({ user }) {
             onClick={() => setIsChangeGoal(true)}
           >
             {t('change')}
-          </Button>
+          </Button> */}
         </Card>
       </Stack>
 
@@ -169,12 +169,7 @@ export default function UserGoal({ user }) {
           <Button color="inherit" variant="outlined" onClick={() => setIsChangeGoal(false)}>
             {t('cancel')}
           </Button>
-          <LoadingButton
-            loading={isSubmitting}
-            onClick={onSubmit}
-            color="inherit"
-            variant="contained"
-          >
+          <LoadingButton loading={isSubmitting} onClick={onSubmit} color="inherit" variant="contained">
             {t('confirm')}
           </LoadingButton>
         </DialogActions>

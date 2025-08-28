@@ -1,20 +1,26 @@
 import styled from '@emotion/styled';
+import { enqueueSnackbar } from 'notistack';
 import { useCallback, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 import { Box, Button, Stack } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
+import { IngredientFormDialog } from 'src/components/custom-dialog';
 
 import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
 import SearchIngredient from './search-ingredient';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
+
+import type { Theme } from 'src/theme';
 
 import type { MealIngredient, IngredientType } from 'chikrice-types';
 
@@ -37,14 +43,16 @@ export default function ActionPanel({
   selectedIngredients,
 }: ActionPanelProps) {
   const { t } = useTranslate();
+  const theme = useTheme();
   const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
-  console.log(user);
-  const isDeleteMeal = useBoolean();
-  const isTellAi = useBoolean();
 
+  const isTellAi = useBoolean();
+  const isDeleteMeal = useBoolean();
+  const isIngredientDialog = useBoolean();
   const [searchQuery, setSearchQuery] = useState('');
 
   const debouncedQuery = useDebounce(searchQuery);
+  const { searchResults, resultType, searchLoading, mutate } = useSearchIngredients(user?.id, debouncedQuery);
 
   const handleToggleIngredient = useCallback(
     (ingredient: IngredientType) => {
@@ -60,16 +68,28 @@ export default function ActionPanel({
       await updatePlan(planId);
     } catch (error) {
       console.error(error);
-      // toggle back to edit mode
-      // show snack bar there was an erorr try again
+      toggleMealMode(mealIndex, 'edit');
+      enqueueSnackbar(error.message || 'Failed to save meal, please try again', { variant: 'error' });
     }
   }, [planId, mealIndex, toggleMealMode, updatePlan]);
 
-  const { searchResults, resultType, searchLoading } = useSearchIngredients(user?.id, debouncedQuery);
+  const handleAddingNewIngredient = useCallback(
+    async (data) => {
+      try {
+        const { data: ingredient } = await api.post(endpoints.user.ingredients(user.id), data);
+        toggleIngredient(ingredient, mealIndex);
+        isIngredientDialog.onFalse();
+        await mutate();
+      } catch (error) {
+        enqueueSnackbar(error.message || 'Failed to add ingredient, please try again', { variant: 'error' });
+      }
+    },
+    [mealIndex, isIngredientDialog, user.id, toggleIngredient, mutate]
+  );
 
   return (
     <>
-      <StyledWrapper>
+      <StyledWrapper theme={theme}>
         <Box
           sx={{
             display: 'flex',
@@ -89,13 +109,30 @@ export default function ActionPanel({
             />
           )}
           {isTellAi.value ? (
-            <Button startIcon={<Iconify icon={'ph:plus-circle-bold'} />} onClick={isTellAi.onFalse}>
+            <Button
+              size="small"
+              startIcon={<Iconify icon={'ph:plus-circle-bold'} />}
+              onClick={isTellAi.onFalse}
+            >
               {t('enterManually')}
             </Button>
           ) : (
-            <Button startIcon={<Iconify icon={'mingcute:ai-fill'} />} onClick={isTellAi.onTrue}>
-              {t('tellAi')}
-            </Button>
+            <>
+              <Button
+                size="small"
+                startIcon={<Iconify icon={'mingcute:ai-fill'} />}
+                onClick={isTellAi.onTrue}
+              >
+                {t('tellAi')}
+              </Button>
+              <Button
+                size="small"
+                startIcon={<Iconify icon={'stash:plus-solid'} />}
+                onClick={isIngredientDialog.onTrue}
+              >
+                {t('new')}
+              </Button>
+            </>
           )}
 
           <Button
@@ -110,7 +147,7 @@ export default function ActionPanel({
         <Scrollbar sx={{ height: 320, pt: 2 }}>
           <Stack pb={24}>
             {isTellAi.value ? (
-              <MealInputAi planId={planId} mealId={mealId} />
+              <MealInputAi mealIndex={mealIndex} />
             ) : (
               <>
                 {resultType === 'query' ? (
@@ -118,6 +155,7 @@ export default function ActionPanel({
                     results={searchResults}
                     isLoading={searchLoading}
                     onSelect={handleToggleIngredient}
+                    onAddNewIngredient={isIngredientDialog.onTrue}
                     selectedIngredients={selectedIngredients}
                   />
                 ) : (
@@ -144,11 +182,19 @@ export default function ActionPanel({
         planId={planId}
         mealId={mealId}
       />
+
+      <IngredientFormDialog
+        open={isIngredientDialog.value}
+        onClose={isIngredientDialog.onFalse}
+        onSubmit={handleAddingNewIngredient}
+        mealIndex={mealIndex}
+        title={t('addNewIngredient')}
+      />
     </>
   );
 }
 
-const StyledWrapper = styled(Box)(({ theme }) => ({
+const StyledWrapper = styled(Box)<{ theme: Theme }>(({ theme }) => ({
   left: 0,
   bottom: 0,
   width: '100%',

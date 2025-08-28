@@ -36,14 +36,27 @@ SearchIngredient.propTypes = {
 
 const inputStyles = {
   '& .MuiFilledInput-input': {
-    width: '35svw',
+    width: '20svw',
     pt: '10px',
     pb: '8px',
     pr: 0,
+    transition: 'width 0.3s ease',
   },
   '& .MuiFilledInput-root': {
     borderRadius: '20px',
     overflow: 'hidden',
+    transition: 'width 0.3s ease, box-shadow 0.2s ease',
+  },
+  '& .MuiFilledInput-root.Mui-focused': {
+    boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.6)',
+    '& .MuiFilledInput-input': {
+      width: '25svw',
+    },
+  },
+  '& .MuiFilledInput-root:hover': {
+    '& .MuiFilledInput-input': {
+      width: '25svw',
+    },
   },
 };
 

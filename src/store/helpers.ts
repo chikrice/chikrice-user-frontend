@@ -20,7 +20,7 @@ import type {
 //=====================================
 
 // -------------------------------------
-const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free'];
+const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free', 'custom'];
 
 const USER_INPUTS_KEY = 'user-inputs';
 const COACH_INPUTS_KEY = 'coach-inputs';
@@ -188,7 +188,6 @@ export const buildPortionedIngredient = (
 
   const nf = serving?.nutrientFacts || { cal: 0, carb: 0, pro: 0, fat: 0 };
   const label = qty >= 2 ? multipleLabel : singleLabel;
-  console.log(label);
 
   return {
     // Only include fields that belong to MealIngredient schema

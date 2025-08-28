@@ -45,7 +45,7 @@ export default function DayNavigator({
 
   const [isDrawer, setIsDrawer] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const [targetDate, setTargetDate] = useState({});
+  const [targetDate, setTargetDate] = useState<{ number?: number }>({});
   const [drawerContent, setDrawerContent] = useState('');
   const [highlightedDate, setHighlightedDate] = useState(null);
 

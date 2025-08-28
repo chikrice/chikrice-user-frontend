@@ -1,28 +1,32 @@
-import PropTypes from 'prop-types';
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useEffect, useState } from 'react';
 
+import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { Textarea } from 'src/components/hook-form/rhf-textarea';
 
-export default function MealInputAi({ planId, mealId }) {
+interface MealInputAiProps {
+  mealIndex: number;
+}
+export default function MealInputAi({ mealIndex }: MealInputAiProps) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
-  const [prompt, setPrompt] = useState('');
+  const { user, toggleIngredient } = useStore((state) => state);
+  const [prompt, setPrompt] = useState<string>('');
 
-  const handleEnterMeal = async () => {
+  const handleEnterMeal = async (): Promise<void> => {
     try {
       loading.onTrue();
-      // await submitMealWithAi(planId, { prompt, mealId });
+      const { data: ingredients } = await api.post(endpoints.user.processIngredients(user.id), { prompt });
+      ingredients.forEach((ing) => toggleIngredient(ing, mealIndex));
     } catch (error) {
       console.error(error);
       loading.onFalse();
     } finally {
-      // get the plan day new data
-      // mutate(endpoints.plan_day.root(planId));
       setPrompt('');
       loading.onFalse();
     }
@@ -31,7 +35,7 @@ export default function MealInputAi({ planId, mealId }) {
   useEffect(() => {
     // Get all textarea elements and replace \\n with \n in the placeholder
     const textAreas = document.getElementsByTagName('textarea');
-    Array.prototype.forEach.call(textAreas, function (elem) {
+    Array.prototype.forEach.call(textAreas, function (elem: HTMLTextAreaElement) {
       elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
     });
   }, []);
@@ -40,7 +44,7 @@ export default function MealInputAi({ planId, mealId }) {
     <Stack sx={{ px: 2, mt: 1, flexDirection: 'row' }} spacing={2}>
       <Textarea
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
         minRows={2}
         placeholder={`- ${t('aiPlaceholder1')}  \n- ${t('aiPlaceholder2')} `}
         style={{ width: '100%', maxHeight: '150px', borderRadius: 30 }}
@@ -58,8 +62,3 @@ export default function MealInputAi({ planId, mealId }) {
     </Stack>
   );
 }
-
-MealInputAi.propTypes = {
-  planId: PropTypes.string,
-  mealId: PropTypes.string,
-};

@@ -4,6 +4,7 @@ import { Box, Skeleton, Typography } from '@mui/material';
 import IngredientChip from './ingredint-chip';
 
 export default function NutrientGroup({ title, ingredients, onSelect, isLoading, selectedIngredients }) {
+  if (!ingredients?.length) return;
   return (
     <Box>
       <Typography pl={1.5} variant="subtitle2" textTransform={'capitalize'}>

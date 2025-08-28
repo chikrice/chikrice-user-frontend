@@ -6,7 +6,7 @@ import { endpoints, fetcher } from 'src/utils/axios';
 export function useSearchIngredients(userId, query) {
   const URL = userId ? [endpoints.ingredient.search, { params: { userId, query } }] : null;
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetcher, {
     keepPreviousData: true,
     revalidateOnFocus: false,
   });
@@ -18,8 +18,9 @@ export function useSearchIngredients(userId, query) {
       searchLoading: isLoading,
       error,
       isValidating,
+      mutate,
     }),
-    [data, isLoading, error, isValidating]
+    [data, isLoading, error, isValidating, mutate]
   );
 
   return memoizedValue;
@@ -38,6 +39,25 @@ export function useIngredientsByCategories() {
       isValidating,
     }),
     [data, isLoading, error, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useUserIngredients(userId) {
+  const URL = userId ? [endpoints.user.ingredients(userId)] : null;
+
+  const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetcher);
+
+  const memoizedValue = useMemo(
+    () => ({
+      ingredients: data || [],
+      isLoading,
+      error,
+      isValidating,
+      mutate,
+    }),
+    [data, isLoading, error, isValidating, mutate]
   );
 
   return memoizedValue;

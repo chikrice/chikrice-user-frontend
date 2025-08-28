@@ -155,6 +155,8 @@ export const endpoints = {
     orders: (id) => `${API_VERSION}/users/orders/${id}`,
     initCollab: (id) => `${API_VERSION}/users/init-coach-collab/${id}`,
     preferences: (userId) => `${API_VERSION}/users/preferences/${userId}`,
+    ingredients: (userId) => `${API_VERSION}/users/custom-ingredients/${userId}`,
+    processIngredients: (userId) => `${API_VERSION}/users/process-ingredient-prompt/${userId}`,
   },
   address: {
     create: `${API_VERSION}/users/address`,
@@ -173,7 +175,7 @@ export const endpoints = {
   plan_month: {
     get: (id) => `${API_VERSION}/plans-month/${id}`,
     create: `${API_VERSION}/plans-month/`,
-    suggestions: (id) => `${API_VERSION}/plans-month/suggestions/${id}`,
+    suggestions: (id) => `${API_VERSION}/\plans-month/suggestions/${id}`,
   },
   plans: {
     root: `${API_VERSION}/plans/`,
