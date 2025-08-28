@@ -63,7 +63,13 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         });
         applyTokens(tokens);
         const user = await fetchUserByAccess(tokens.access.token);
-        console.log('🔐 [AUTH] User fetched via refresh:', user?.id);
+        if (user?.roadmapId) {
+          console.log('🔐 [AUTH] Loading user journey for roadmap from refreshToken:', user.roadmapId);
+          await get().loadUserJourney(user.roadmapId);
+          console.log('🔐 [AUTH] User journey loaded successfully from refreshToken');
+        } else {
+          console.log('🔐 [AUTH] No roadmapId found for user from refreshToken');
+        }
         set({ user, tokens, authenticated: true });
         return;
       }

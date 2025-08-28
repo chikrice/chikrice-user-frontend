@@ -20,10 +20,10 @@ import {
 } from '@mui/material';
 
 import useStore from 'src/store';
-import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useLocales, useTranslate } from 'src/locales';
 import CircleButton from 'src/components/circle-button';
 import { useUserIngredients } from 'src/api/ingredient';
 import EmptyContent from 'src/components/empty-content';
@@ -32,6 +32,7 @@ import { ConfirmDialog, IngredientFormDialog } from 'src/components/custom-dialo
 
 export default function UserIngredientsView() {
   const { t } = useTranslate();
+  const { lang } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useStore((state) => state);
 
@@ -83,13 +84,20 @@ export default function UserIngredientsView() {
     }
   }, [user.id, selectedIngredient, isDeleteDialogOpen, mutate]);
 
-  const handleFormSubmit = useCallback(
+  const updateIngredient = useCallback(
     async (data) => {
-      // The form dialog will handle the API calls
-      // Just refresh the data after successful submission
-      await mutate();
+      try {
+        await api.patch(endpoints.user.ingredients(user.id), data);
+        isFormDialogOpen.onFalse();
+        await mutate();
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar(error.message || 'Failed to update ingredient, please try again', {
+          variant: 'error',
+        });
+      }
     },
-    [mutate]
+    [user.id, mutate, enqueueSnackbar]
   );
 
   const handleCloseFormDialog = useCallback(() => {
@@ -115,18 +123,6 @@ export default function UserIngredientsView() {
     setSelectedIngredient(null);
   }, [isInfoDialogOpen]);
 
-  // Helper function to get localized name
-  const getLocalizedName = (nameObj) => {
-    if (!nameObj) return '';
-    return nameObj[t('locale')] || nameObj.en || Object.values(nameObj)[0] || '';
-  };
-
-  // Helper function to get localized serving label
-  const getLocalizedServingLabel = (servingObj) => {
-    if (!servingObj) return '';
-    return servingObj[t('locale')] || servingObj.en || Object.values(servingObj)[0] || '';
-  };
-
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -151,7 +147,7 @@ export default function UserIngredientsView() {
         ) : (
           <Grid container spacing={3}>
             {ingredients?.map((ingredient) => (
-              <Grid item xs={12} sm={6} md={4} key={ingredient._id}>
+              <Grid item xs={12} sm={6} md={4} key={ingredient?.id}>
                 <Card
                   sx={{
                     p: 2,
@@ -169,7 +165,7 @@ export default function UserIngredientsView() {
                       </ListItemIcon>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Typography variant="subtitle2" color="text.secondary">
-                          {getLocalizedName(ingredient.name)}
+                          {ingredient.name[lang]}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           ~ {ingredient.serving.weightInGrams}g
@@ -209,6 +205,7 @@ export default function UserIngredientsView() {
       <IngredientFormDialog
         open={isFormDialogOpen.value}
         onClose={handleCloseFormDialog}
+        onSubmit={updateIngredient}
         ingredient={selectedIngredient}
         title={selectedIngredient ? t('editIngredient') : t('addIngredient')}
       />
@@ -279,10 +276,10 @@ export default function UserIngredientsView() {
                       <Typography variant="h4">{selectedIngredient.icon}</Typography>
                     </ListItemIcon>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="subtitle2">{getLocalizedName(selectedIngredient.name)}</Typography>
+                      <Typography variant="subtitle2">{selectedIngredient.name[lang]}</Typography>
                       <Typography variant="body2">
                         ~ {selectedIngredient.serving.weightInGrams}g{' '}
-                        {getLocalizedServingLabel(selectedIngredient.serving.singleLabel)}
+                        {selectedIngredient.serving.singleLabel[lang]}
                       </Typography>
                     </Box>
                   </ListItem>

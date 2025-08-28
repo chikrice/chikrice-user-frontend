@@ -84,8 +84,8 @@ export default function UserInputs() {
   return (
     <Container>
       <Stack width={'100%'} sx={{ display: 'flex', py: 2 }}>
-        <IconButton>
-          <LeftIcon onClick={onBack} />
+        <IconButton onClick={onBack}>
+          <LeftIcon />
         </IconButton>
       </Stack>
       <ProgressBar percent={step * 16.6} />

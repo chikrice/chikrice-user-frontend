@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { enqueueSnackbar } from 'notistack';
 import { useCallback, useState } from 'react';
 import { Box, Button, Stack } from '@mui/material';
 
@@ -6,6 +7,7 @@ import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { api, endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { useSearchIngredients } from 'src/api/ingredient';
@@ -38,13 +40,13 @@ export default function ActionPanel({
 }: ActionPanelProps) {
   const { t } = useTranslate();
   const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
-  console.log(user);
 
   const isDeleteMeal = useBoolean();
   const isIngredientDialog = useBoolean();
   const [searchQuery, setSearchQuery] = useState('');
 
   const debouncedQuery = useDebounce(searchQuery);
+  const { searchResults, resultType, searchLoading, mutate } = useSearchIngredients(user?.id, debouncedQuery);
 
   const handleToggleIngredient = useCallback(
     (ingredient: IngredientType) => {
@@ -60,12 +62,24 @@ export default function ActionPanel({
       await updatePlan(planId);
     } catch (error) {
       console.error(error);
-      // toggle back to edit mode
-      // show snack bar there was an erorr try again
+      toggleMealMode(mealIndex, 'edit');
+      enqueueSnackbar(error.message || 'Failed to save meal, please try again', { variant: 'error' });
     }
   }, [planId, mealIndex, toggleMealMode, updatePlan]);
 
-  const { searchResults, resultType, searchLoading } = useSearchIngredients(user?.id, debouncedQuery);
+  const handleAddingNewIngredient = useCallback(
+    async (data) => {
+      try {
+        const { data: ingredient } = await api.post(endpoints.user.ingredients(user.id), data);
+        toggleIngredient(ingredient, mealIndex);
+        isIngredientDialog.onFalse();
+        await mutate();
+      } catch (error) {
+        enqueueSnackbar(error.message || 'Failed to add ingredient, please try again', { variant: 'error' });
+      }
+    },
+    [mealIndex, isIngredientDialog, user.id, toggleIngredient, mutate]
+  );
 
   return (
     <>
@@ -107,6 +121,7 @@ export default function ActionPanel({
                 results={searchResults}
                 isLoading={searchLoading}
                 onSelect={handleToggleIngredient}
+                onAddNewIngredient={isIngredientDialog.onTrue}
                 selectedIngredients={selectedIngredients}
               />
             ) : (
@@ -135,6 +150,7 @@ export default function ActionPanel({
       <IngredientFormDialog
         open={isIngredientDialog.value}
         onClose={isIngredientDialog.onFalse}
+        onSubmit={handleAddingNewIngredient}
         mealIndex={mealIndex}
         title={t('addNewIngredient')}
       />

@@ -33,8 +33,8 @@ export default function Header() {
   return (
     <BaseHeader>
       <Stack alignItems="center">
-        <IconButton>
-          <LeftIcon onClick={() => router.back()} />
+        <IconButton onClick={() => router.back()}>
+          <LeftIcon />
         </IconButton>
       </Stack>
 

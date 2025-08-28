@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { mutate } from 'swr';
 import PropTypes from 'prop-types';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
@@ -16,25 +15,37 @@ import {
   Box,
 } from '@mui/material';
 
-import useStore from 'src/store';
-import { useTranslate } from 'src/locales';
-import { api, endpoints } from 'src/utils/axios';
+import { useLocales, useTranslate } from 'src/locales';
 import { RHFTextField } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 
 // ----------------------------------------------------------------------
 
 const IngredientSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
+  name: Yup.object().shape({
+    en: Yup.string().when('$lang', {
+      is: 'en',
+      then: (schema) => schema.required('Name is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    ar: Yup.string().when('$lang', {
+      is: 'ar',
+      then: (schema) => schema.required('Name is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    fa: Yup.string().when('$lang', {
+      is: 'fa',
+      then: (schema) => schema.required('Name is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+  }),
   serving: Yup.object().shape({
     id: Yup.string().nullable(),
     weightInGrams: Yup.number()
       .positive('Serving weight must be greater than 0')
       .required('Serving weight is required'),
     nutrientFacts: Yup.object().shape({
-      cal: Yup.number()
-        .min(0, 'Calories must be greater than or equal to 0')
-        .required('Calories is required'),
+      cal: Yup.number().positive('Calories must be greater than 0').required('Calories is required'),
       pro: Yup.number().min(0, 'Protein must be greater than or equal to 0').optional(),
       carb: Yup.number().min(0, 'Carbs must be greater than or equal to 0').optional(),
       fat: Yup.number().min(0, 'Fat must be greater than or equal to 0').optional(),
@@ -45,42 +56,43 @@ const IngredientSchema = Yup.object().shape({
 export default function IngredientFormDialog({
   open,
   onClose,
+  onSubmit,
   ingredient = null,
-  mealIndex,
   title = 'Add Ingredient',
   ...other
 }) {
   const { t } = useTranslate();
-  const { user, toggleIngredient } = useStore((state) => state);
+  const { lang } = useLocales();
+
   const defaultValues = useMemo(
     () => ({
       id: ingredient?.id || null,
-      name: ingredient?.name || '',
+      name: ingredient?.name || { en: '', ar: '', fa: '' },
       serving: {
-        weightInGrams: ingredient?.servingWeightInGrams || 100,
+        weightInGrams: ingredient?.serving?.weightInGrams || 100,
         nutrientFacts: {
-          cal: ingredient?.nutrientFacts?.cal || 0,
-          pro: ingredient?.nutrientFacts?.pro || 0,
-          carb: ingredient?.nutrientFacts?.carb || 0,
-          fat: ingredient?.nutrientFacts?.fat || 0,
+          cal: ingredient?.serving.nutrientFacts?.cal,
+          pro: ingredient?.serving.nutrientFacts?.pro,
+          carb: ingredient?.serving.nutrientFacts?.carb,
+          fat: ingredient?.serving.nutrientFacts?.fat,
         },
       },
     }),
-    [ingredient]
+    [ingredient, lang]
   );
 
   const methods = useForm({
     resolver: yupResolver(IngredientSchema),
     defaultValues,
+    context: { lang },
   });
 
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
-  console.log(errors);
   useEffect(() => {
     if (open) {
       reset(defaultValues);
@@ -88,19 +100,10 @@ export default function IngredientFormDialog({
   }, [defaultValues, open, ingredient, reset]);
 
   const handleFormSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
-      if (ingredient?.id) {
-        await api.patch(endpoints.user.ingredients(user.id), data);
-      } else {
-        const { data: ingredient } = await api.post(endpoints.user.ingredients(user.id), data);
-        toggleIngredient(ingredient, mealIndex);
-      }
-      onClose();
+      await onSubmit(data);
     } catch (error) {
       console.error('Error submitting ingredient:', error);
-    } finally {
-      await mutate(endpoints.user.ingredients(user.id));
     }
   });
 
@@ -112,7 +115,7 @@ export default function IngredientFormDialog({
         <DialogContent>
           <Stack spacing={2}>
             <RHFTextField
-              name="name"
+              name={`name.${lang}`}
               label={t('ingredientName')}
               placeholder={t('enterIngredientName')}
               sx={{ mt: 1 }}
@@ -185,7 +188,7 @@ export default function IngredientFormDialog({
 IngredientFormDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
   ingredient: PropTypes.object,
-  mealIndex: PropTypes.number,
   title: PropTypes.string,
 };

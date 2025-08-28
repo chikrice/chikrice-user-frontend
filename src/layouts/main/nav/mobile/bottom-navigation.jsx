@@ -28,8 +28,8 @@ export default function MobileBottomNavigation() {
       <BottomNavigation
         showLabels
         sx={{
-          py: 1,
           height: 65,
+          width: '100%',
           backgroundColor: theme.palette.background.default,
           borderTop: `solid 1px ${theme.palette.nav.soft}`,
         }}
@@ -42,7 +42,8 @@ export default function MobileBottomNavigation() {
             icon={item.icon}
             onClick={() => router.push(item.path)}
             sx={{
-              height: 50,
+              height: 65,
+              flex: 1,
               '& svg': {
                 width: 55,
                 height: 30,
@@ -50,7 +51,6 @@ export default function MobileBottomNavigation() {
                 py: '3px',
               },
               '&.Mui-selected svg': {
-                py: '2px',
                 backgroundColor: theme.palette.card.soft,
               },
               '&.Mui-selected': {

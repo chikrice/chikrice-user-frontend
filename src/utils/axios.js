@@ -174,7 +174,7 @@ export const endpoints = {
   plan_month: {
     get: (id) => `${API_VERSION}/plans-month/${id}`,
     create: `${API_VERSION}/plans-month/`,
-    suggestions: (id) => `${API_VERSION}/plans-month/suggestions/${id}`,
+    suggestions: (id) => `${API_VERSION}/\plans-month/suggestions/${id}`,
   },
   plans: {
     root: `${API_VERSION}/plans/`,
