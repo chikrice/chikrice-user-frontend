@@ -83,7 +83,7 @@ export default function UserInputs() {
 
   return (
     <Container>
-      <Stack width={'100%'} sx={{ display: 'flex', py: 2 }}>
+      <Stack width={'100%'} sx={{ display: 'flex', py: 2, alignItems: 'start' }}>
         <IconButton onClick={onBack}>
           <LeftIcon />
         </IconButton>
