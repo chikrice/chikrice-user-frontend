@@ -20,28 +20,19 @@ COPY . .
 RUN yarn build
 
 # --- Production image ---
-FROM node:20.11.0-alpine AS production
+FROM node:20.19.4-alpine AS production
 
 WORKDIR /app
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S khaled -u 1001
 
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
 
-# Install serve globally
+# If you need to serve static files, you can use a lightweight server like nginx or serve
+# For example, using 'serve' (install it globally)
 RUN yarn global add serve
 
-# Change ownership to non-root user
-RUN chown -R khaled:nodejs /app
+# Expose the port (change if your app uses a different port)
+EXPOSE 5000
 
-# Switch to non-root user
-USER khaled
-
-# Railway automatically sets PORT environment variable
-EXPOSE $PORT
-
-# Start the app (Railway will override PORT if needed)
-CMD ["sh", "-c", "serve -s dist -l $PORT"]
+# Start the app
+CMD ["serve", "-s", "dist", "-l", "5000"]
