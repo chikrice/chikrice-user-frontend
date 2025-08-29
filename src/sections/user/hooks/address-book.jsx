@@ -16,6 +16,7 @@ const useAddressBook = () => {
         await api.put(endpoints.user.update(user?._id), data);
         enqueueSnackbar(t('updateSuccess'));
       } catch (error) {
+        console.error(error);
         enqueueSnackbar(t('somethingWentWrong'), {
           variant: 'error',
         });

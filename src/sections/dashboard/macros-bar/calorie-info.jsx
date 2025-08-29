@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { Box, Skeleton } from '@mui/material';
+import { Box } from '@mui/material';
 
 import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
 
 import { calorieInfoStyles } from './styles';
 
-export default function CalorieInfo({ label, value, isLoading }) {
+export default function CalorieInfo({ label, value }) {
   const { t } = useTranslate();
 
   return (

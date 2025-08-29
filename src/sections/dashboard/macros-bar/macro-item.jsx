@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { Box, Skeleton } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
-export default function MacroItem({ icon, label, value, isLoading }) {
+export default function MacroItem({ icon, label, value }) {
   const { t } = useTranslate();
 
   return (

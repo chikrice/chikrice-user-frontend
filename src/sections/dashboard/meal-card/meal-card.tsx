@@ -19,13 +19,12 @@ interface MealCardProps {
   meal: Meal;
   index: number;
   plan: PlanType;
-  isPast: boolean;
   ingredients: MealIngredient[];
 }
 
 // -------------------------------------
 
-export default function MealCard({ meal, index, isPast, plan, ingredients }: MealCardProps) {
+export default function MealCard({ meal, index, plan, ingredients }: MealCardProps) {
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
@@ -51,13 +50,7 @@ export default function MealCard({ meal, index, isPast, plan, ingredients }: Mea
             </Typography>
           </Stack>
 
-          <HeaderActionsPopover
-            mode={meal.mode}
-            isPast={isPast}
-            mealId={meal.id}
-            mealIndex={index}
-            planId={plan.id}
-          />
+          <HeaderActionsPopover mode={meal.mode} mealId={meal.id} mealIndex={index} planId={plan.id} />
         </Box>
 
         <CardContent sx={contentStyle}>

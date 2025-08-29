@@ -11,6 +11,7 @@ next.config.js
 vite.config.js
 vite.config.ts
 
+archive/*
 src/reportWebVitals.js
 src/service-worker.js
 src/serviceWorkerRegistration.js

@@ -90,9 +90,12 @@ export default function AddressEditForm({ userId, address, onEditLocation, onCon
       try {
         const { _id, ...cleanData } = data;
         const body = { userId, ...cleanData };
-        console.log(_id);
 
-        _id ? await updateAddress(_id, body) : await createAddress(body);
+        if (_id) {
+          await updateAddress(_id, body);
+        } else {
+          await createAddress(body);
+        }
         await mutate(endpoints.user.get(userId));
         enqueueSnackbar(t('updateSuccess'));
         onConfirm();
@@ -153,11 +156,7 @@ export default function AddressEditForm({ userId, address, onEditLocation, onCon
 
                 <RHFTextField name="name" label={t('fullName')} />
 
-                <RHFTelInput
-                  name="phoneNumber"
-                  label={t('phoneNumber')}
-                  placeholder={'150 111 2222'}
-                />
+                <RHFTelInput name="phoneNumber" label={t('phoneNumber')} placeholder={'150 111 2222'} />
                 <RHFTextField
                   name="notes"
                   label={t('additionalAddressDetails')}
@@ -179,13 +178,7 @@ export default function AddressEditForm({ userId, address, onEditLocation, onCon
             </CardContent>
 
             <CardActions sx={{ p: 2 }}>
-              <LoadingButton
-                type="submit"
-                variant="contained"
-                loading={isSubmitting}
-                fullWidth
-                size="large"
-              >
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting} fullWidth size="large">
                 {t('saveAddress')}
               </LoadingButton>
             </CardActions>
