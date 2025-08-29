@@ -78,6 +78,7 @@ export default function IngredientFormDialog({
         },
       },
     }),
+    // eslint-disable-next-line
     [ingredient, lang]
   );
 

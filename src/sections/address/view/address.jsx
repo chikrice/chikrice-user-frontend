@@ -63,7 +63,11 @@ export default function Address({ actionType = 'manage', onDeliverToAddress }) {
   );
 
   const handleCancel = useCallback(() => {
-    isAddressMap ? setIsAddressMap(false) : setIsEditAddress(false);
+    if (isAddressMap) {
+      setIsAddressMap(false);
+    } else {
+      setIsEditAddress(false);
+    }
   }, [isAddressMap]);
 
   const handleLocationConfirm = useCallback(

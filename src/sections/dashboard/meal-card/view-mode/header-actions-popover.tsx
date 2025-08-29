@@ -21,7 +21,6 @@ interface HeaderActionsPopoverProps {
   mealId: string;
   mealIndex: number;
   planId: string;
-  isPast: boolean;
 }
 
 // -------------------------------------
@@ -31,7 +30,6 @@ export default function HeaderActionsPopover({
   mode,
   mealId,
   mealIndex,
-  isPast,
   planId,
 }: HeaderActionsPopoverProps) {
   const popover = usePopover();
@@ -62,18 +60,16 @@ export default function HeaderActionsPopover({
     <>
       {mode === 'view' ? (
         <>
-          {!isPast && (
-            <CustomIconButton
-              onClick={popover.onOpen}
-              sx={{
-                ...(popover.open && {
-                  bgcolor: 'action.selected',
-                }),
-                ...sx,
-              }}
-              icon={'mingcute:more-2-fill'}
-            />
-          )}
+          <CustomIconButton
+            onClick={popover.onOpen}
+            sx={{
+              ...(popover.open && {
+                bgcolor: 'action.selected',
+              }),
+              ...sx,
+            }}
+            icon={'mingcute:more-2-fill'}
+          />
 
           <CustomPopover
             open={popover.open}

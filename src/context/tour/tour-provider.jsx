@@ -39,7 +39,11 @@ export function TourProvider({ children, tourName = 'intro' }) {
 
   const onStartTour = useCallback(
     (isWeightChangeOverLimit) => {
-      isWeightChangeOverLimit ? isOverLimit.onTrue() : isOverLimit.onFalse();
+      if (isWeightChangeOverLimit) {
+        isOverLimit.onTrue();
+      } else {
+        isOverLimit.onFalse();
+      }
       update('isTourStarted', true);
     },
     [update, isOverLimit]
