@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { mutate } from 'swr';
 import PropTypes from 'prop-types';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
@@ -10,9 +9,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // import { useSnackbar } from 'notistack';
 import { useMemo, useEffect, useCallback } from 'react';
 
+import useStore from 'src/store';
 import { updateUser } from 'src/api/user';
 import { useTranslate } from 'src/locales';
-import { endpoints } from 'src/utils/axios';
 import { useBoolean } from 'src/hooks/use-boolean';
 import FormProvider from 'src/components/hook-form';
 import AgeInput from 'src/components/profile/form-components/form-age';
@@ -28,10 +27,10 @@ import useAddressBook from './hooks/address-book';
 import UpdatePasswordForm from '../auth/update-password-form';
 // ----------------------------------------------------------------------
 
-export default function UserEditForm({ user, isEdit, setIsEdit, fieldToBeEdited }) {
+export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
   const { t } = useTranslate();
   // const { enqueueSnackbar } = useSnackbar();
-
+  const { user, refreshUserInfo } = useStore((state) => state);
   const { handleUpdateUser } = useAddressBook();
 
   const editUserSchema = Yup.object().shape({
@@ -96,8 +95,7 @@ export default function UserEditForm({ user, isEdit, setIsEdit, fieldToBeEdited 
           variant: 'error',
         });
       } finally {
-        await mutate(endpoints.user.get(user.id));
-        await mutate(endpoints.roadmap.root(user.roadmapId));
+        await refreshUserInfo(user.id);
         setIsEdit(false);
       }
     },
@@ -122,27 +120,15 @@ export default function UserEditForm({ user, isEdit, setIsEdit, fieldToBeEdited 
           {fieldToBeEdited === 'age' && <AgeInput />}
           {fieldToBeEdited === 'currentWeight' && <WeightInput />}
           {fieldToBeEdited === 'height' && <HeightInput />}
-          {fieldToBeEdited === 'activityLevel' && (
-            <ActivityLevelInput activityLevel={values.activityLevel} />
-          )}
-          {fieldToBeEdited === 'allergy' && (
-            <AllergySelectionInput allergicFoods={values.allergicFoods} />
-          )}
-          {fieldToBeEdited === 'info' && (
-            <NameEmailGenderInputs gender={values.gender} setValue={setValue} />
-          )}
+          {fieldToBeEdited === 'activityLevel' && <ActivityLevelInput activityLevel={values.activityLevel} />}
+          {fieldToBeEdited === 'allergy' && <AllergySelectionInput allergicFoods={values.allergicFoods} />}
+          {fieldToBeEdited === 'info' && <NameEmailGenderInputs gender={values.gender} setValue={setValue} />}
           {fieldToBeEdited === 'goalAchievementSpeed' && (
             <GoalAchievementInput goalAchievementSpeed={values.goalAchievementSpeed} />
           )}
 
           <Stack>
-            <LoadingButton
-              type="submit"
-              loading={isSubmitting}
-              fullWidth
-              variant="contained"
-              size="large"
-            >
+            <LoadingButton type="submit" loading={isSubmitting} fullWidth variant="contained" size="large">
               {t('confirm')}
             </LoadingButton>
           </Stack>
@@ -159,7 +145,6 @@ export default function UserEditForm({ user, isEdit, setIsEdit, fieldToBeEdited 
 }
 
 UserEditForm.propTypes = {
-  user: PropTypes.object,
   isEdit: PropTypes.bool,
   setIsEdit: PropTypes.func,
   fieldToBeEdited: PropTypes.string,

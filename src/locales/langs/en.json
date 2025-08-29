@@ -670,5 +670,10 @@
   "addNewIngredient": "Add new ingredient",
   "newIngredient": "New Ingredient",
   "new": "New",
-  "add": "Add"
+  "add": "Add",
+  "ingredientName": "Ingredient Name",
+  "enterIngredientName": "Enter ingredient name",
+  "servingWeight": "Serving size weight",
+  "enterServingWeight": "Enter serving size weight",
+  "nutrientFacts": "Nutrient facts"
 }

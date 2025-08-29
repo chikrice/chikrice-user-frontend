@@ -571,5 +571,10 @@
   "addNewIngredient": "آيتم جدید اضافه کنید",
   "newIngredient": "آيتم جدید",
   "new": "جدید",
-  "add": "اضافه کردن"
+  "add": "اضافه کردن",
+  "ingredientName": "نام ماده",
+  "enterIngredientName": "نام ماده را وارد کنید",
+  "servingWeight": "وزن",
+  "enterServingWeight": "وزن اندازه را وارد کنید",
+  "nutrientFacts": "ارزش غذايي"
 }

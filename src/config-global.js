@@ -18,5 +18,5 @@ const config = {
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   mapboxApiKey: import.meta.env.VITE_MAPBOX_API,
 };
-console.log('Config object:', config);
+
 export default config;

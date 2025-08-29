@@ -22,7 +22,6 @@ import UserEditForm from '../user-edit-form';
 
 export default function UserProfileView() {
   const { t } = useTranslate();
-  // const { isFirstLogin } = useTourContext();
 
   const { user, isAuthLoading, authError } = useStore();
 
@@ -112,7 +111,7 @@ export default function UserProfileView() {
         </Stack>
       </Container>
 
-      <UserEditForm user={user} isEdit={isEdit} setIsEdit={setIsEdit} fieldToBeEdited={fieldName} />
+      <UserEditForm isEdit={isEdit} setIsEdit={setIsEdit} fieldToBeEdited={fieldName} />
     </>
   );
 }

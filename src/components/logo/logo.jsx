@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import { useTheme } from '@mui/material';
 
 import useStore from 'src/store';
 import { paths } from 'src/routes/paths';
@@ -11,7 +12,7 @@ import { RouterLink } from 'src/routes/components';
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const { user } = useStore();
-
+  const theme = useTheme();
   const goTo = user ? (user.role === 'coach' ? paths.clients : paths.dashboard) : '/';
 
   const logo = (
@@ -33,14 +34,14 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
         height="100%"
         viewBox="0 0 512 512"
       >
-        <g fill={'#E0906C'} stroke="none" strokeWidth="1">
+        <g fill={theme.palette.primary.dark} stroke="none" strokeWidth="1">
           <ellipse cx="256" cy="256" rx="110" ry="150" />
 
-          <rect x="230" y="400" width="50" height="65" fill={'#FFF2DF'} rx="15" />
+          <rect x="230" y="400" width="50" height="65" fill={theme.palette.primary.main} rx="15" />
 
-          <circle cx="256" cy="440" r="20" fill={'#FFF2DF'} />
-          <circle cx="236" cy="470" r="20" fill={'#FFF2DF'} />
-          <circle cx="276" cy="470" r="20" fill={'#FFF2DF'} />
+          <circle cx="256" cy="440" r="20" fill={theme.palette.primary.main} />
+          <circle cx="236" cy="470" r="20" fill={theme.palette.primary.main} />
+          <circle cx="276" cy="470" r="20" fill={theme.palette.primary.main} />
         </g>
       </svg>
     </Box>

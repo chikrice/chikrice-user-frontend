@@ -662,5 +662,10 @@
   "addNewIngredient": "إضافة عنصر جديد",
   "newIngredient": "عنصر جديد",
   "new": "جديد",
-  "add": "اضف"
+  "add": "اضف",
+  "ingredientName": "اسم المكون",
+  "enterIngredientName": "أدخل اسم المكون",
+  "servingWeight": "الحجم",
+  "enterServingWeight": "أدخل الحجم",
+  "nutrientFacts": "حقائق المغذيات"
 }

@@ -43,6 +43,9 @@ export default defineConfig({
       filename: 'stats.html',
     }),
   ],
+  esbuild: {
+    drop: ['console', 'debugger'],
+  },
   resolve: {
     alias: [
       {
