@@ -18,7 +18,7 @@ export default function ActionPanelDrawer({
   children,
   open,
   onClose,
-  height = '35svh',
+  height = '40svh',
   onExited,
 }: ActionPanelDrawerProps) {
   const theme = useTheme();
@@ -94,6 +94,6 @@ const StyledDrawerCloseBar = styled(Box)(({ theme }: { theme?: Theme }) => ({
   borderRadius: '8px',
   backgroundColor: theme.palette.grey[400],
   marginTop: 8,
-  marginBottom: 16,
+  marginBottom: 12,
   alignSelf: 'center',
 }));
