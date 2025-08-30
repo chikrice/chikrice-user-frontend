@@ -120,6 +120,7 @@ export interface PlanState {
 export interface PlanActions {
   initializePlan: (plans: PlanReference[]) => Promise<void>;
   updateDay: (day: number) => Promise<void>;
+  createMeal: (mealIndex: number) => void;
   getPlan: (planId: string) => Promise<void>;
   updatePlan: (planId: string) => Promise<void>;
   toggleIngredient: (ingrediet: IngredientType, mealIndex: number) => void;

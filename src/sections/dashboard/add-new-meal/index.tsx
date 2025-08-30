@@ -1,27 +1,18 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import useStore from 'src/store';
-import { api, endpoints } from 'src/utils/axios';
 import CircleButton from 'src/components/circle-button';
 
-import type { PlanType } from 'chikrice-types';
-
-interface AddNewMealProps {
-  plan: PlanType;
-}
-
-export default function AddNewMeal({ plan }: AddNewMealProps) {
-  const { getPlan } = useStore((state) => state);
-
+export default function AddNewMeal() {
+  const { plan, createMeal } = useStore((state) => state);
+  const mealIndex = useMemo(() => plan?.meals?.length ?? 0, [plan.meals]);
   const handleCreateMeal = useCallback(async () => {
     try {
-      await api.post(endpoints.plans.meals.create(plan.id));
+      createMeal(mealIndex);
     } catch (error) {
       console.log(error);
-    } finally {
-      await getPlan(plan.id);
     }
-  }, [plan?.id, getPlan]);
+  }, [mealIndex, createMeal]);
 
   return (
     <CircleButton

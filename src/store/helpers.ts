@@ -138,6 +138,30 @@ export function getCurrentTimeSlot() {
   return null;
 }
 
+// ============================================
+// GET MEAL RECOMMENDED MACROS
+// ============================================
+export const getMealRecommendedMacros = (plan: PlanType): Macros => {
+  const { snacksCount, mealsCount, targetMacros } = plan;
+  const { carb, pro, fat, cal } = targetMacros;
+
+  const totalMealsCount = snacksCount + mealsCount;
+
+  if (!totalMealsCount) return { cal: 0, carb: 0, pro: 0, fat: 0 };
+
+  const recommendedMacros = {
+    cal: Math.round(cal / totalMealsCount),
+    carb: Math.round(carb / totalMealsCount),
+    pro: Math.round(pro / totalMealsCount),
+    fat: Math.round(fat / totalMealsCount),
+  };
+
+  return recommendedMacros;
+};
+
+// ============================================
+// THE PORTION AMOUNT USED ON TOGGLING THE INGREDIENT
+// ============================================
 export const calculateOptimalPortionSize = (
   ingredient: IngredientType,
   meal: Meal,
@@ -149,6 +173,9 @@ export const calculateOptimalPortionSize = (
   );
 };
 
+// ============================================
+// GET THE PREFERED INGREDIENT PORTION SIZE FROM USER HISTORY
+// ============================================
 export const getUserPortionPreference = (
   ingredientId: string,
   macroType: MacroType,
@@ -159,6 +186,9 @@ export const getUserPortionPreference = (
   return mealPreferences?.[timeSlot]?.[macroType]?.[ingredientId]?.portionSize ?? null;
 };
 
+// ============================================
+// CALCULATE PORTION SIZE BASE ON HARD CODED RULES
+// ============================================
 export const calcDefaultPortionQty = (ingredient: IngredientType, recommendedMacros: Macros): number => {
   const { macroType, serving, category } = ingredient;
   if (!serving || !serving.nutrientFacts) return 1;
@@ -179,6 +209,9 @@ export const calcDefaultPortionQty = (ingredient: IngredientType, recommendedMac
   return 1;
 };
 
+// ============================================
+// BUILD INGREDIENT WITH PROPER PORTION SIZE
+// ============================================
 export const buildPortionedIngredient = (
   ingredient: IngredientType | MealIngredient,
   qty: number
@@ -217,6 +250,9 @@ export const buildPortionedIngredient = (
   };
 };
 
+// ============================================
+// CALCULATE THE MEAL MACROS WHEN WE UPDATE IT
+// ============================================
 export const calcMealMacros = (meal: Meal): Macros => {
   const total: Macros = { cal: 0, carb: 0, pro: 0, fat: 0 };
 
@@ -232,6 +268,9 @@ export const calcMealMacros = (meal: Meal): Macros => {
   return total;
 };
 
+// ============================================
+// CALCULATE THE PLAN MACROS WHEN WE UPDATE IT
+// ============================================
 export const calcPlanConsumedMacros = (meals: Meal[]): Macros => {
   const total: Macros = { cal: 0, carb: 0, pro: 0, fat: 0 };
 
@@ -245,6 +284,9 @@ export const calcPlanConsumedMacros = (meals: Meal[]): Macros => {
   return total;
 };
 
+// ============================================
+// UPDATE THE MEAL INGREDIENT PORTION SIZE
+// ============================================
 export const updateIngredientInMeal = (
   plan: PlanType,
   mealIndex: number,

@@ -24,7 +24,7 @@ export default function MealsList({ plan }: MealsListProps) {
           <Stack spacing={1.5}>
             {plan?.meals?.map((meal, index) => (
               <MealCard
-                key={meal?.id}
+                key={meal?.id ?? index}
                 index={index}
                 meal={meal}
                 plan={plan}

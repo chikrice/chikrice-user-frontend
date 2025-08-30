@@ -30,7 +30,7 @@ export default function DashboardView() {
 
       <Meals plan={plan} planLoading={planLoading} />
 
-      <AddNewMeal plan={plan} />
+      <AddNewMeal />
 
       <DayNavigator
         day={day}

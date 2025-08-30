@@ -10,6 +10,7 @@ import {
   calcPlanConsumedMacros,
   updateIngredientInMeal,
   isMealEmpty,
+  getMealRecommendedMacros,
 } from './helpers';
 
 import type { PlanActions, PlanState, Store } from 'src/types';
@@ -71,6 +72,24 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
     const planId = plans[day - 1].planId;
     await get().getPlan(planId);
     set({ day });
+  },
+  createMeal: (mealIndex: number): void => {
+    const plan = get().plan;
+    const updatedPlan = structuredClone(plan);
+
+    const number = mealIndex + 1;
+    const recommendedMacros = getMealRecommendedMacros(plan);
+    const newMeal = {
+      number,
+      recommendedMacros,
+      mode: 'edit' as const,
+      type: 'meal' as const,
+      macros: { cal: 0, carb: 0, pro: 0, fat: 0 },
+      ingredients: { carb: [], pro: [], fat: [], free: [], custom: [] },
+    };
+
+    updatedPlan.meals.push(newMeal);
+    set({ plan: updatedPlan });
   },
   toggleMealMode: (mealIndex: number, mode: 'view' | 'edit') => {
     const currentPlan = get().plan;
