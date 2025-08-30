@@ -43,7 +43,7 @@ export default function MealCard({ meal, index, plan, ingredients }: MealCardPro
         <Box sx={headerStyle}>
           <Stack>
             <Typography variant="subtitle2" textTransform={'capitalize'}>
-              {t('meal')} {meal.number}
+              {t('meal')} {index + 1}
             </Typography>
             <Typography variant="body2" color={'text.secondary'}>
               {meal.macros.cal.toFixed()} {t('calorie')}
