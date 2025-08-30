@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1](https://github.com/chikrice/chikrice-user-frontend/compare/v1.3.0...v1.3.1) (2025-08-30)
+
+
+### Bug Fixes
+
+* debugging env variable loading ([e0231b1](https://github.com/chikrice/chikrice-user-frontend/commit/e0231b137e67dd88265a920075b1c120f6621f8f))
+* fix: add environment variables to Docker build process ([998fa22](https://github.com/chikrice/chikrice-user-frontend/commit/998fa2251c73bfba565c03c067d7537a243cd8d0))
+* resolved all eslint errors ([e9c2a4a](https://github.com/chikrice/chikrice-user-frontend/commit/e9c2a4a596ddce7d18f78b57ca190b44600cfdc8))
+* resolved all eslint errors ([93fd901](https://github.com/chikrice/chikrice-user-frontend/commit/93fd901ed6d9318ecb231ca3a8a9aecb2743295b))
+
 ## [1.3.0](https://github.com/chikrice/chikrice-user-frontend/compare/v1.2.0...v1.3.0) (2025-08-28)
 
 
