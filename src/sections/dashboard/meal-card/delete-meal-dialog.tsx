@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { LoadingButton } from '@mui/lab';
+import { enqueueSnackbar } from 'notistack';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 import useStore from 'src/store';
@@ -27,7 +28,10 @@ export default function DeleteMealDialog({ open, planId, mealId, onClose }: Dele
       loading.onTrue();
       await api.delete(endpoints.plans.meals.id(planId), { params: { mealId } });
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      enqueueSnackbar(error.message || 'Failed to delete meal, please try again', {
+        variant: 'error',
+      });
     } finally {
       await getPlan(planId);
       loading.onFalse();

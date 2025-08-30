@@ -1,6 +1,7 @@
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useEffect, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
@@ -25,7 +26,9 @@ export default function MealInputAi({ mealIndex }: MealInputAiProps) {
       ingredients.forEach((ing) => toggleIngredient(ing, mealIndex));
     } catch (error) {
       console.error(error);
-      loading.onFalse();
+      enqueueSnackbar(error.message || 'Failed to process meal input, please try again', {
+        variant: 'error',
+      });
     } finally {
       setPrompt('');
       loading.onFalse();

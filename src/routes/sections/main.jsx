@@ -11,7 +11,6 @@ import { SplashScreen } from 'src/components/loading-screen';
 const StepsPage = lazy(() => import('src/pages/steps'));
 const ProgressPage = lazy(() => import('src/pages/progress'));
 const DashboardPage = lazy(() => import('src/pages/dashboard'));
-const CoachListPage = lazy(() => import('src/pages/coach/coach-list'));
 
 // ----------------------------------------------------------------------
 /* eslint react-refresh/only-export-components: off */
@@ -29,7 +28,6 @@ export const mainRoutes = [
     children: [
       { path: 'dashboard/:userId', element: <DashboardPage /> },
       { path: 'dashboard/', element: <DashboardPage /> },
-      { path: 'coach', element: <CoachListPage /> },
       { path: 'progress', element: <ProgressPage /> },
     ],
   },

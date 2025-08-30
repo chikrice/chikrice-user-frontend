@@ -1,5 +1,6 @@
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 import { Container, IconButton } from '@mui/material';
 
 import useStore from 'src/store';
@@ -68,6 +69,9 @@ export default function UserInputs() {
         router.push(paths.progress);
       } catch (error) {
         console.error(error);
+        enqueueSnackbar(error.message || 'Failed to create your roadmap, please try again', {
+          variant: 'error',
+        });
       } finally {
         setIsSubmitting(false);
       }

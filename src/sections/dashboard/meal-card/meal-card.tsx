@@ -70,15 +70,14 @@ export default function MealCard({ meal, index, plan, ingredients }: MealCardPro
         </CardActions>
       </Card>
 
-      {meal.mode === 'edit' && (
-        <EditActionPanel
-          mealId={meal.id}
-          mealIndex={index}
-          planId={plan.id}
-          canSave={!!ingredients.length}
-          selectedIngredients={ingredients}
-        />
-      )}
+      <EditActionPanel
+        mealId={meal.id}
+        mealIndex={index}
+        planId={plan.id}
+        isOpen={meal.mode === 'edit'}
+        canSave={!!ingredients.length}
+        selectedIngredients={ingredients}
+      />
 
       <InfoDialog
         open={isInfo.value}

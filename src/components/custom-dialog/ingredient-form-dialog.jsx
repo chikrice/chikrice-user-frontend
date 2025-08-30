@@ -21,38 +21,6 @@ import FormProvider from 'src/components/hook-form/form-provider';
 
 // ----------------------------------------------------------------------
 
-const IngredientSchema = Yup.object().shape({
-  name: Yup.object().shape({
-    en: Yup.string().when('$lang', {
-      is: 'en',
-      then: (schema) => schema.required('Name is required'),
-      otherwise: (schema) => schema.optional(),
-    }),
-    ar: Yup.string().when('$lang', {
-      is: 'ar',
-      then: (schema) => schema.required('Name is required'),
-      otherwise: (schema) => schema.optional(),
-    }),
-    fa: Yup.string().when('$lang', {
-      is: 'fa',
-      then: (schema) => schema.required('Name is required'),
-      otherwise: (schema) => schema.optional(),
-    }),
-  }),
-  serving: Yup.object().shape({
-    id: Yup.string().nullable(),
-    weightInGrams: Yup.number()
-      .positive('Serving weight must be greater than 0')
-      .required('Serving weight is required'),
-    nutrientFacts: Yup.object().shape({
-      cal: Yup.number().positive('Calories must be greater than 0').required('Calories is required'),
-      pro: Yup.number().min(0, 'Protein must be greater than or equal to 0').optional(),
-      carb: Yup.number().min(0, 'Carbs must be greater than or equal to 0').optional(),
-      fat: Yup.number().min(0, 'Fat must be greater than or equal to 0').optional(),
-    }),
-  }),
-});
-
 export default function IngredientFormDialog({
   open,
   onClose,
@@ -63,6 +31,36 @@ export default function IngredientFormDialog({
 }) {
   const { t } = useTranslate();
   const { lang } = useLocales();
+
+  const IngredientSchema = Yup.object().shape({
+    name: Yup.object().shape({
+      en: Yup.string().when('$lang', {
+        is: 'en',
+        then: (schema) => schema.required(t('nameRequired')),
+        otherwise: (schema) => schema.optional(),
+      }),
+      ar: Yup.string().when('$lang', {
+        is: 'ar',
+        then: (schema) => schema.required(t('nameRequired')),
+        otherwise: (schema) => schema.optional(),
+      }),
+      fa: Yup.string().when('$lang', {
+        is: 'fa',
+        then: (schema) => schema.required(t('nameRequired')),
+        otherwise: (schema) => schema.optional(),
+      }),
+    }),
+    serving: Yup.object().shape({
+      id: Yup.string().nullable(),
+      weightInGrams: Yup.number().positive(t('servingWeightPositive')).required(t('servingWeightRequired')),
+      nutrientFacts: Yup.object().shape({
+        cal: Yup.number().positive(t('caloriesPositive')).required(t('caloriesRequired')),
+        pro: Yup.number().min(0, t('proteinMin')).optional(),
+        carb: Yup.number().min(0, t('carbsMin')).optional(),
+        fat: Yup.number().min(0, t('fatMin')).optional(),
+      }),
+    }),
+  });
 
   const defaultValues = useMemo(
     () => ({

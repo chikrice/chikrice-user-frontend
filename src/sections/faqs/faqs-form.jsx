@@ -7,7 +7,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useTranslate } from 'src/locales';
-import { submitQuestion } from 'src/api/faqs';
+import { api, endpoints } from 'src/utils/axios';
 import { varFade, MotionViewport } from 'src/components/animate';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
@@ -38,7 +38,7 @@ export default function FaqsForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await submitQuestion(data);
+      await api.post(endpoints.faqs, data);
       enqueueSnackbar(t('faqSendSuccess'));
       reset();
     } catch (error) {

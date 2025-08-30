@@ -3,25 +3,23 @@ import Container from '@mui/material/Container';
 
 import useStore from 'src/store';
 import StreakTable from 'src/components/streak-table';
+import { ReloadPage } from 'src/components/error-screen';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useTourContext } from 'src/context/hooks/use-tour-hook';
 import StartTuorPoint from 'src/components/welcome-guide/start-tour-point';
 
 import RoadmapOverview from '../roadmap-overview';
 import MilestonesBreakdown from '../milestones-breakdown';
-// import { HomeSkeleton } from '../home-skeleton';
 // ----------------------------------------------------------------------
 
 export default function ProgressView() {
   const { isFirstLogin } = useTourContext();
 
-  const { roadmap, plans, todayPlan, roadmapLoading, error } = useStore((state) => state);
-  console.log('Roadmap', roadmap);
-  console.table('Plans', plans);
-  console.log('TodaPlan', todayPlan);
+  const { roadmap, roadmapLoading, roadmapError } = useStore((state) => state);
+
   if (roadmapLoading) return <LoadingScreen />;
 
-  if (error) return <div>{error}</div>;
+  if (roadmapError) return <ReloadPage />;
 
   return (
     <Container>

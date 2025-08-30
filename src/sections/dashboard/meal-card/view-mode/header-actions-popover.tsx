@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { enqueueSnackbar } from 'notistack';
 import { useTheme } from '@mui/material/styles';
 import { Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
@@ -53,6 +54,9 @@ export default function HeaderActionsPopover({
       await updatePlan(planId);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error.message || 'Failed to save meal changes, please try again', {
+        variant: 'error',
+      });
     }
   }, [planId, mealIndex, toggleMealMode, updatePlan]);
 

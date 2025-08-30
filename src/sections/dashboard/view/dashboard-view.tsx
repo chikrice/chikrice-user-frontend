@@ -10,8 +10,18 @@ import DayNavigator from '../day-navigator';
 // -------------------------------------
 
 export default function DashboardView() {
-  const { day, plan, plans, totalDays, roadmapLoading, roadmapError, isAuthLoading, planLoading, updateDay } =
-    useStore((state) => state);
+  const {
+    day,
+    plan,
+    plans,
+    totalDays,
+    roadmapLoading,
+    roadmapError,
+    planError,
+    isAuthLoading,
+    planLoading,
+    updateDay,
+  } = useStore((state) => state);
 
   // Add comprehensive loading checks
   const isLoading = isAuthLoading || roadmapLoading;
@@ -20,7 +30,7 @@ export default function DashboardView() {
     return <LoadingScreen />;
   }
 
-  if (roadmapError) {
+  if (roadmapError || planError) {
     return <ReloadPage />;
   }
 

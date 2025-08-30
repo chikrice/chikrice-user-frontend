@@ -1,5 +1,5 @@
-import { useSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
+import { enqueueSnackbar } from 'notistack';
 import { useState, useCallback } from 'react';
 import {
   Alert,
@@ -33,7 +33,6 @@ import { ConfirmDialog, IngredientFormDialog } from 'src/components/custom-dialo
 export default function UserIngredientsView() {
   const { t } = useTranslate();
   const { lang } = useLocales();
-  const { enqueueSnackbar } = useSnackbar();
   const { user } = useStore((state) => state);
 
   // Use real data from API
@@ -97,7 +96,7 @@ export default function UserIngredientsView() {
         });
       }
     },
-    [user.id, isFormDialogOpen, mutate, enqueueSnackbar]
+    [user.id, isFormDialogOpen, mutate]
   );
 
   const handleCloseFormDialog = useCallback(() => {
@@ -143,7 +142,7 @@ export default function UserIngredientsView() {
     <Container sx={{ pb: 20 }}>
       <Stack spacing={4} mt={3}>
         {ingredients.length === 0 ? (
-          <EmptyContent title="noEngredientsFound" sx={{ mt: 8 }} />
+          <EmptyContent title={t('noEngredientsFound')} sx={{ mt: 8 }} />
         ) : (
           <Grid container spacing={3}>
             {ingredients?.map((ingredient) => (

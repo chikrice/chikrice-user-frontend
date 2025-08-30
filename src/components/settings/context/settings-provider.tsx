@@ -12,6 +12,15 @@ import type { PresetName } from 'src/theme/options/presets';
 
 const STORAGE_KEY = 'settings';
 
+const DEFAULT_SETTINGS = {
+  themeMode: 'light',
+  themeDirection: 'ltr',
+  themeContrast: 'default',
+  themeLayout: 'vertical',
+  themeColorPresets: 'default',
+  themeStretch: false,
+} as const;
+
 export interface Settings {
   themeMode: 'light' | 'dark';
   themeDirection: 'ltr' | 'rtl';
@@ -22,30 +31,29 @@ export interface Settings {
 
 interface SettingsProviderProps {
   children: ReactNode;
-  defaultSettings: Settings;
+  defaultSettings?: Settings;
 }
 
-export function SettingsProvider({ children, defaultSettings }: SettingsProviderProps) {
+export function SettingsProvider({ children, defaultSettings = DEFAULT_SETTINGS }: SettingsProviderProps) {
   const { state, update, reset } = useLocalStorage(STORAGE_KEY, defaultSettings);
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const isArabic = localStorageGetItem('i18nextLng') === 'ar' || localStorageGetItem('i18nextLng') === 'fa';
 
-  useEffect(() => {
-    if (isArabic) {
-      onChangeDirectionByLang('ar');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isArabic]);
-
-  // Direction by lang
+  // Direction by lang - define before useEffect
   const onChangeDirectionByLang = useCallback(
     (lang: string) => {
       update('themeDirection', lang === 'ar' || lang === 'fa' ? 'rtl' : 'ltr');
     },
     [update]
   );
+
+  useEffect(() => {
+    if (isArabic) {
+      onChangeDirectionByLang('ar');
+    }
+  }, [isArabic, onChangeDirectionByLang]);
 
   // Drawer
   const onToggleDrawer = useCallback(() => {

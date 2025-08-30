@@ -2,7 +2,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
-import { Typography } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
@@ -70,18 +69,9 @@ export default function Header() {
                 right: -16,
               },
             }}
-            badgeContent={
-              <Link
-                href={'/'}
-                target="_blank"
-                rel="noopener"
-                underline="none"
-                sx={{ ml: 1 }}
-              ></Link>
-            }
+            badgeContent={<Link href={'/'} target="_blank" rel="noopener" underline="none"></Link>}
           >
             <Logo sx={{ mb: 0.2 }} />
-            <Typography variant="subtitle2">CHKRICE</Typography>
           </Badge>
 
           <Box sx={{ flexGrow: 1 }} />

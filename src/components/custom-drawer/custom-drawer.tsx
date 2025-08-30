@@ -10,10 +10,11 @@ import type { SxProps } from '@mui/material';
 interface CustomBottomDrawerProps {
   children: ReactNode;
   open: boolean;
-  onOpen: () => void;
+  onOpen?: () => void;
   onClose: () => void;
   height?: string;
   sx?: SxProps<Theme>;
+  disableBackdrop?: boolean;
 }
 
 export default function CustomBottomDrawer({
@@ -23,6 +24,7 @@ export default function CustomBottomDrawer({
   onClose,
   height = 'auto',
   sx,
+  disableBackdrop = false,
   ...other
 }: CustomBottomDrawerProps) {
   const theme = useTheme();
@@ -34,6 +36,7 @@ export default function CustomBottomDrawer({
       onClose={onClose}
       disableSwipeToOpen={true}
       anchor="bottom"
+      variant={disableBackdrop ? 'persistent' : 'temporary'}
       {...other}
       PaperProps={{
         sx: {
@@ -52,6 +55,15 @@ export default function CustomBottomDrawer({
           overflow: 'auto',
           ...sx,
         },
+      }}
+      sx={{
+        ...sx,
+        ...(disableBackdrop && {
+          '& .MuiBackdrop-root': {
+            backgroundColor: 'transparent !important',
+            pointerEvents: 'none !important',
+          },
+        }),
       }}
     >
       <StyledDrawerCloseBar />

@@ -10,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useEffect, useCallback } from 'react';
 
 import useStore from 'src/store';
-import { updateUser } from 'src/api/user';
 import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
 import FormProvider from 'src/components/hook-form';
@@ -30,17 +29,17 @@ import UpdatePasswordForm from '../auth/update-password-form';
 export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
   const { t } = useTranslate();
   // const { enqueueSnackbar } = useSnackbar();
-  const { user, refreshUserInfo } = useStore((state) => state);
+  const { user, refreshUserInfo, updateUser } = useStore((state) => state);
   const { handleUpdateUser } = useAddressBook();
 
   const editUserSchema = Yup.object().shape({
     gender: Yup.string(),
     allergicFood: Yup.array(),
-    currentWeight: Yup.number(),
+    currentWeight: Yup.number().min(30, t('minWeight')).max(300, t('maxWeight')),
     activityLevel: Yup.number(),
     goalAchievementSpeed: Yup.string(),
-    age: Yup.number().required(t('ageRequired')),
-    height: Yup.number().required(t('heightRequired')),
+    age: Yup.number().min(13, t('minAge')).max(120, t('maxAge')).required(t('ageRequired')),
+    height: Yup.number().min(80, t('minHeight')).max(250, t('maxHeight')).required(t('heightRequired')),
     name: Yup.string().required(t('fullNameRequired')),
     email: Yup.string().email(t('emailInvalid')).required(t('emailRequired')),
   });

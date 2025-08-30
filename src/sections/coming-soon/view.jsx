@@ -17,7 +17,7 @@ import { ComingSoonIllustration } from 'src/assets/illustrations';
 // ----------------------------------------------------------------------
 
 export default function ComingSoonView() {
-  const { days, hours, minutes, seconds } = useCountdownDate(new Date('07/07/2025 21:30'));
+  const { days, hours, minutes, seconds } = useCountdownDate(new Date('09/09/2025 21:30'));
 
   return (
     <>
@@ -25,9 +25,7 @@ export default function ComingSoonView() {
         Coming Soon!
       </Typography>
 
-      <Typography sx={{ color: 'text.secondary' }}>
-        We are currently working hard on this page!
-      </Typography>
+      <Typography sx={{ color: 'text.secondary' }}>We are currently working hard on this page!</Typography>
 
       <ComingSoonIllustration sx={{ my: 5, height: 240 }} />
 

@@ -1,4 +1,5 @@
 import { mutate } from 'swr';
+import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, Skeleton, Typography } from '@mui/material';
 
@@ -89,6 +90,9 @@ export default function DayNavigator({
       await api.delete(endpoints.plans.id(plan?.id));
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error.message || 'Failed to delete plan, please try again', {
+        variant: 'error',
+      });
     } finally {
       await mutate(endpoints.plans.id(plan.id));
     }
@@ -99,6 +103,9 @@ export default function DayNavigator({
       await refreshUserInfo(user.id);
     } catch (error) {
       console.error(error);
+      enqueueSnackbar(error.message || 'Failed to save plan, please try again', {
+        variant: 'error',
+      });
     }
   }, [user, refreshUserInfo]);
 

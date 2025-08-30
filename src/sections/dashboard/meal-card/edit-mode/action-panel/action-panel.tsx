@@ -1,8 +1,6 @@
-import styled from '@emotion/styled';
 import { enqueueSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import { Box, Button, Stack } from '@mui/material';
+import { useCallback, useState, useEffect } from 'react';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
@@ -17,15 +15,15 @@ import { IngredientFormDialog } from 'src/components/custom-dialog';
 import MealInputAi from './meal-input-ai';
 import NutrientGroup from './nutrient-group';
 import SearchIngredient from './search-ingredient';
+import ActionPanelDrawer from './action-panel-drawer';
 import DeleteMealDialog from '../../delete-meal-dialog';
 import SearchResultsIngredients from './search-results-ingredients';
-
-import type { Theme } from 'src/theme';
 
 import type { MealIngredient, IngredientType } from 'chikrice-types';
 
 // -------------------------------------
 interface ActionPanelProps {
+  isOpen: boolean;
   planId: string;
   mealId: string;
   mealIndex: number;
@@ -36,6 +34,7 @@ interface ActionPanelProps {
 // -------------------------------------
 
 export default function ActionPanel({
+  isOpen,
   planId,
   mealId,
   mealIndex,
@@ -43,7 +42,7 @@ export default function ActionPanel({
   selectedIngredients,
 }: ActionPanelProps) {
   const { t } = useTranslate();
-  const theme = useTheme();
+
   const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
 
   const isTellAi = useBoolean();
@@ -87,9 +86,20 @@ export default function ActionPanel({
     [mealIndex, isIngredientDialog, user.id, toggleIngredient, mutate]
   );
 
+  const [drawerOpen, setDrawerOpen] = useState(isOpen);
+
+  useEffect(() => {
+    if (isOpen) setDrawerOpen(true);
+  }, [isOpen]);
+
   return (
     <>
-      <StyledWrapper theme={theme}>
+      <ActionPanelDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onExited={handleSaveMeal}
+        height="35svh"
+      >
         <Box
           sx={{
             display: 'flex',
@@ -97,7 +107,6 @@ export default function ActionPanel({
             justifyContent: 'space-between',
             px: 1.5,
             pb: 1,
-            pt: 2,
             borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
           }}
         >
@@ -138,13 +147,13 @@ export default function ActionPanel({
           <Button
             variant={canSave ? 'contained' : 'text'}
             sx={{ height: '30px', minWidth: '30px', p: 0, borderRadius: '50%' }}
-            onClick={handleSaveMeal}
+            onClick={() => setDrawerOpen(false)}
           >
             <Iconify icon={`${!canSave ? 'mingcute:close-fill' : 'majesticons:arrow-up-line'}`} />
           </Button>
         </Box>
 
-        <Scrollbar sx={{ height: 320, pt: 2 }}>
+        <Scrollbar sx={{ height: 320, pt: 2, flex: 1 }}>
           <Stack pb={24}>
             {isTellAi.value ? (
               <MealInputAi mealIndex={mealIndex} />
@@ -174,7 +183,7 @@ export default function ActionPanel({
             )}
           </Stack>
         </Scrollbar>
-      </StyledWrapper>
+      </ActionPanelDrawer>
 
       <DeleteMealDialog
         open={isDeleteMeal.value}
@@ -193,17 +202,3 @@ export default function ActionPanel({
     </>
   );
 }
-
-const StyledWrapper = styled(Box)<{ theme: Theme }>(({ theme }) => ({
-  left: 0,
-  bottom: 0,
-  width: '100%',
-  minHeight: 300,
-  height: '30svh',
-  position: 'fixed',
-  zIndex: 1000,
-  boxShadow: theme.customShadows.bottomNav,
-  backgroundColor: theme.palette.background.default,
-  borderTopLeftRadius: 30,
-  borderTopRightRadius: 30,
-}));
