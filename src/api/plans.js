@@ -9,7 +9,7 @@ import { endpoints, fetcher } from 'src/utils/axios';
 // HOOK FOR GETTING SUGGESTED MEALS
 // =====================================
 export function useMealSuggestions(planId, params) {
-  const URL = [endpoints.plans.meals.suggestions(planId), { params }];
+  const URL = planId ? [endpoints.plans.meals.suggestions(planId), { params }] : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     revalidateOnFocus: false,

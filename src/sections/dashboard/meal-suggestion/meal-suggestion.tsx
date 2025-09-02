@@ -26,7 +26,7 @@ export default function MealSuggestion({ planId, mealNumber }: MealSuggestionPro
     mealNumber,
   });
 
-  if (suggestionsLoading || !suggestions.length) return;
+  if (suggestionsLoading || !suggestions?.length) return;
 
   return (
     <Box mt={3}>
@@ -46,7 +46,7 @@ export default function MealSuggestion({ planId, mealNumber }: MealSuggestionPro
           gap: 1.5,
         }}
       >
-        {suggestions.map((meal: Meal) => (
+        {suggestions?.map((meal: Meal) => (
           <SuggestionItem
             key={meal?._id}
             meal={meal}
