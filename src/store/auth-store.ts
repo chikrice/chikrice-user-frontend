@@ -104,7 +104,8 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         router.push(paths.steps.user);
       }
     } catch (error) {
-      enqueueSnackbar(error.message || 'login failed', { variant: 'error' });
+      console.log(error);
+      // enqueueSnackbar(error || 'login failed', { variant: 'error' });
     }
   },
   //

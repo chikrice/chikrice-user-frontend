@@ -67,4 +67,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['js-big-decimal'],
   },
+
+  test: {
+    globals: true, // Use Vitest's functions without import
+    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+  },
 });

@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
+import { enqueueSnackbar } from 'notistack';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,11 +10,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
-import { SentIcon } from 'src/assets/icons';
 import Iconify from 'src/components/iconify';
+import { api, endpoints } from 'src/utils/axios';
 import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
-import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
+import { useSearchParams } from 'src/routes/hooks';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -21,21 +23,16 @@ export default function ModernNewPasswordView() {
   const password = useBoolean();
 
   const NewPasswordSchema = Yup.object().shape({
-    code: Yup.string().min(6, 'Code must be at least 6 characters').required('Code is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     confirmPassword: Yup.string()
       .required('Confirm password is required')
       .oneOf([Yup.ref('password')], 'Passwords must match'),
   });
 
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
   const defaultValues = {
-    code: '',
-    email: '',
     password: '',
-    confirmPassword: '',
   };
 
   const methods = useForm({
@@ -51,24 +48,16 @@ export default function ModernNewPasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      await api.post(endpoints.auth.resetPassword(token), { password: data.password });
+      enqueueSnackbar('password reset successful');
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('something wenth wrong, please try agian!', { variant: 'error' });
     }
   });
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-      <RHFTextField
-        name="email"
-        label="Email"
-        placeholder="example@gmail.com"
-        InputLabelProps={{ shrink: true }}
-      />
-
-      <RHFCode name="code" />
-
       <RHFTextField
         name="password"
         label="Password"
@@ -99,27 +88,9 @@ export default function ModernNewPasswordView() {
         }}
       />
 
-      <LoadingButton
-        fullWidth
-        size="large"
-        type="submit"
-        variant="contained"
-        loading={isSubmitting}
-      >
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
         Update Password
       </LoadingButton>
-
-      <Typography variant="body2">
-        {`Don’t have a code? `}
-        <Link
-          variant="subtitle2"
-          sx={{
-            cursor: 'pointer',
-          }}
-        >
-          Resend code
-        </Link>
-      </Typography>
 
       <Link
         component={RouterLink}
@@ -139,16 +110,8 @@ export default function ModernNewPasswordView() {
 
   const renderHead = (
     <>
-      <SentIcon sx={{ height: 96 }} />
-
-      <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Request sent successfully!</Typography>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          We&apos;ve sent a 6-digit confirmation email to your email.
-          <br />
-          Please enter the code in below box to verify your email.
-        </Typography>
+      <Stack spacing={1} sx={{ my: 3 }}>
+        <Typography variant="h3">Reset your password!</Typography>
       </Stack>
     </>
   );

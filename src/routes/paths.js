@@ -54,13 +54,14 @@ export const paths = {
   auth: {
     login: `${ROOTS.AUTH}/login`,
     coach: `${ROOTS.AUTH}/coach-register`,
-    verify: `${ROOTS.AUTH}/verify`,
+    verifyEmail: (email, redirectTo) => `${ROOTS.AUTH}/verify-email?email=${email}&redirectTo=${redirectTo}`,
     register: {
       user: `${ROOTS.AUTH}/register?role=user`,
       coach: `${ROOTS.AUTH}/register?role=coach`,
     },
-    newPassword: `${ROOTS.AUTH}/new-password`,
+    newPassword: (token) => `${ROOTS.AUTH}/reset-password?token=${token}`,
     forgotPassword: `${ROOTS.AUTH}/forgot-password`,
+    resetPasswordSuccess: `${ROOTS.AUTH}/reset-password-success`,
   },
 
   // SUBSCRIPTIONS

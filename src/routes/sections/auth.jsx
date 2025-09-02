@@ -14,6 +14,7 @@ const VerifyPage = lazy(() => import('src/pages/auth/verify'));
 const RegisterPage = lazy(() => import('src/pages/auth/register'));
 const NewPasswordPage = lazy(() => import('src/pages/auth/new-password'));
 const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgot-password'));
+const ResetPasswordSuccessPage = lazy(() => import('src/pages/auth/reset-password-success'));
 
 // ----------------------------------------------------------------------
 
@@ -50,9 +51,10 @@ export const authRoutes = {
         </CompactLayout>
       ),
       children: [
-        { path: 'verify', element: <VerifyPage /> },
-        { path: 'new-password', element: <NewPasswordPage /> },
+        { path: 'verify-email', element: <VerifyPage /> },
+        { path: 'reset-password', element: <NewPasswordPage /> },
         { path: 'forgot-password', element: <ForgotPasswordPage /> },
+        { path: 'reset-password-success', element: <ResetPasswordSuccessPage /> },
       ],
     },
   ],

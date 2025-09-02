@@ -127,11 +127,15 @@ export const endpoints = {
   auth: {
     me: `${API_VERSION}/auth/me`,
     login: `${API_VERSION}/auth/login`,
-    coachRegister: `${API_VERSION}/auth/register-coach`,
     register: `${API_VERSION}/auth/register`,
     google: `${API_VERSION}/auth/google-login`,
     logout: `${API_VERSION}/auth/logout`,
     refreshTokens: `${API_VERSION}/auth/refresh-tokens`,
+    forgotPassword: `${API_VERSION}/auth/forgot-password`,
+    resetPassword: (token) => `${API_VERSION}/auth/reset-password?token=${token}`,
+    verifyEmailCode: `${API_VERSION}/auth/verify-email-code`,
+    sendVerificationCode: `${API_VERSION}/auth/send-verification-code`,
+    resendVerificationCode: `${API_VERSION}/auth/resend-verification-code`,
   },
   search: {
     root: `${API_VERSION}/search`,

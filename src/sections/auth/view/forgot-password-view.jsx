@@ -2,12 +2,16 @@ import * as Yup from 'yup';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
+import { enqueueSnackbar } from 'notistack';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
+import { router } from 'src/routes/navigation';
 import { PasswordIcon } from 'src/assets/icons';
+import { api, endpoints } from 'src/utils/axios';
 import { RouterLink } from 'src/routes/components';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { LeftIcon, RightIcon } from 'src/components/carousel/arrow-icons';
@@ -15,6 +19,8 @@ import { LeftIcon, RightIcon } from 'src/components/carousel/arrow-icons';
 // ----------------------------------------------------------------------
 
 export default function ModernForgotPasswordView() {
+  const { t } = useTranslate();
+
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
   });
@@ -35,12 +41,26 @@ export default function ModernForgotPasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
-    } catch (error) {
-      console.error(error);
+      await api.post(endpoints.auth.forgotPassword, data);
+      router.push(paths.auth.resetPasswordSuccess);
+    } catch ({ error }) {
+      await handleError(error?.code, data);
     }
   });
+
+  const handleError = async (code, data) => {
+    try {
+      if (code === 404) {
+        enqueueSnackbar(t('emailNotFound'), { variant: 'error' });
+      } else if (code === 403) {
+        await api.post(endpoints.auth.sendVerificationCode, data);
+        router.push(paths.auth.verifyEmail(data.email, 'reset-password'));
+      }
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar(t('somethingWentWrong'), { variant: 'error' });
+    }
+  };
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
@@ -82,18 +102,20 @@ export default function ModernForgotPasswordView() {
         <Typography variant="h3">Forgot your password?</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Please enter the email address associated with your account and We will email you a link
-          to reset your password.
+          Please enter the email address associated with your account and We will email you a link to reset
+          your password.
         </Typography>
       </Stack>
     </>
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      {renderHead}
+    <>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        {renderHead}
 
-      {renderForm}
-    </FormProvider>
+        {renderForm}
+      </FormProvider>
+    </>
   );
 }
