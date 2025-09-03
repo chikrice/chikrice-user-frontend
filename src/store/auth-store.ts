@@ -103,9 +103,8 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         console.log('🔐 [AUTH] User has no roadmapId, skipping journey load');
         router.push(paths.steps.user);
       }
-    } catch (error) {
-      console.log(error);
-      // enqueueSnackbar(error || 'login failed', { variant: 'error' });
+    } catch ({ error }) {
+      enqueueSnackbar(error?.message, { variant: 'error' });
     }
   },
   //

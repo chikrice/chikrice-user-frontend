@@ -42,6 +42,14 @@ axiosInstance.interceptors.response.use(
 
     // If the error is 401 and we haven't tried to refresh yet
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Check if this is an auth endpoint (login, register, etc.) - don't refresh for these
+      const isAuthEndpoint = originalRequest.url?.includes('/auth/');
+
+      if (isAuthEndpoint) {
+        // For auth endpoints, don't try to refresh - just return the original error
+        return Promise.reject((error.response && error.response.data) || 'Authentication failed');
+      }
+
       if (isRefreshing) {
         // If we're already refreshing, queue this request
         return new Promise((resolve, reject) => {
@@ -103,6 +111,7 @@ axiosInstance.interceptors.response.use(
       }
     }
 
+    // For non-401 errors or after refresh attempts, return the original error
     return Promise.reject((error.response && error.response.data) || 'Something went wrong');
   }
 );
