@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -6,7 +5,14 @@ import Typography from '@mui/material/Typography';
 import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
 
-export default function NormalBar({ minNormalWeight, maxNormalWeight }) {
+// -------------------------------------
+
+interface NormalBarProps {
+  minNormalWeight: string;
+  maxNormalWeight: string;
+}
+
+export default function NormalBar({ minNormalWeight, maxNormalWeight }: NormalBarProps) {
   const theme = useTheme();
   const { t } = useTranslate();
   return (
@@ -49,8 +55,3 @@ export default function NormalBar({ minNormalWeight, maxNormalWeight }) {
     </Box>
   );
 }
-
-NormalBar.propTypes = {
-  minNormalWeight: PropTypes.string,
-  maxNormalWeight: PropTypes.string,
-};

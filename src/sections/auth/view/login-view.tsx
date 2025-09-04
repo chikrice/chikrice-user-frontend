@@ -18,6 +18,8 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import GoogleAuth from '../google-auth';
 
+import type { Credentials } from 'src/types';
+
 // ----------------------------------------------------------------------
 
 export default function ModernLoginView() {
@@ -50,7 +52,7 @@ export default function ModernLoginView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => await login(data));
+  const onSubmit = handleSubmit(async (data: Credentials) => await login(data));
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 4 }}>
@@ -68,7 +70,7 @@ export default function ModernLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      <RHFTextField name="email" label={t('emailAddress')} />
+      <RHFTextField name="email" label={t('emailAddress')} type={'email'} />
 
       <RHFTextField
         name="password"

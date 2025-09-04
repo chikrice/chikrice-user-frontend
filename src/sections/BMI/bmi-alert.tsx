@@ -1,8 +1,20 @@
-import PropTypes from 'prop-types';
 import Alert from '@mui/material/Alert';
 
 import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
+
+import type { AlertColor } from '@mui/material/Alert';
+
+// -------------------------------------
+
+interface BMIAlertProps {
+  bmi: number;
+  alertDetails: { color: AlertColor; label: string };
+  userCurrentWeight: number;
+  userCurrentHeight: number;
+  minNormalWeight: string;
+  maxNormalWeight: string;
+}
 
 export default function BMIAlert({
   bmi,
@@ -11,7 +23,7 @@ export default function BMIAlert({
   userCurrentHeight,
   minNormalWeight,
   maxNormalWeight,
-}) {
+}: BMIAlertProps) {
   const { t } = useTranslate();
 
   return (
@@ -27,12 +39,3 @@ export default function BMIAlert({
     </Alert>
   );
 }
-
-BMIAlert.propTypes = {
-  bmi: PropTypes.number,
-  alertDetails: PropTypes.object,
-  minNormalWeight: PropTypes.string,
-  maxNormalWeight: PropTypes.string,
-  userCurrentWeight: PropTypes.number,
-  userCurrentHeight: PropTypes.number,
-};

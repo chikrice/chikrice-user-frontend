@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -22,17 +21,21 @@ import OverweightBar from './over-weight-bar';
 import UnderweightBar from './under-weight-bar';
 import BMIResultPoint from './bmi-result-point';
 
-export default function BMIResults({ userInputs, onNext }) {
+// -------------------------------------
+
+interface BMIResultsProps {
+  userInputs: { startWeight: number; height: number };
+  onNext: (data: { targetWeight: number }) => void;
+}
+
+export default function BMIResults({ userInputs, onNext }: BMIResultsProps) {
   const { startWeight, height } = userInputs;
   const { t } = useTranslate();
 
   const heightInMeters = height / 100;
 
   // Memoize the BMI calculation
-  const bmi = useMemo(
-    () => startWeight / (heightInMeters * heightInMeters),
-    [startWeight, heightInMeters]
-  );
+  const bmi = useMemo(() => startWeight / (heightInMeters * heightInMeters), [startWeight, heightInMeters]);
 
   const bmiCategories = {
     underweight: 18.5,
@@ -60,8 +63,7 @@ export default function BMIResults({ userInputs, onNext }) {
       // Compress the overweight range to fit between 66.66% and 100%
       const maxBMI = 40; // Define the upper limit of the overweight range
       const compressedOverweightRange = maxBMI - bmiCategories.overweight;
-      const normalizedOverweightPosition =
-        (bmi - bmiCategories.overweight) / compressedOverweightRange;
+      const normalizedOverweightPosition = (bmi - bmiCategories.overweight) / compressedOverweightRange;
       return 66.66 + normalizedOverweightPosition * 33.33; // 66.66% to 100%
     }
 
@@ -70,9 +72,9 @@ export default function BMIResults({ userInputs, onNext }) {
   }, [bmi]);
 
   const alertDetails = useMemo(() => {
-    if (bmi < bmiCategories.underweight) return { label: 'underWeight', color: 'warning' };
-    if (bmi > bmiCategories.overweight) return { label: 'overWeight', color: 'error' };
-    return { label: 'normal', color: 'success' };
+    if (bmi < bmiCategories.underweight) return { label: 'underWeight', color: 'warning' as const };
+    if (bmi > bmiCategories.overweight) return { label: 'overWeight', color: 'error' as const };
+    return { label: 'normal', color: 'success' as const };
     // eslint-disable-next-line
   }, [bmi]);
 
@@ -90,10 +92,7 @@ export default function BMIResults({ userInputs, onNext }) {
   };
 
   const targetWeightSchema = Yup.object().shape({
-    targetWeight: Yup.number()
-      .required(t('weightRequired'))
-      .min(30, t('minWeight'))
-      .max(200, t('maxWeight')),
+    targetWeight: Yup.number().required(t('weightRequired')).min(30, t('minWeight')).max(200, t('maxWeight')),
   });
 
   const methods = useForm({
@@ -106,7 +105,7 @@ export default function BMIResults({ userInputs, onNext }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: { targetWeight: number }) => {
     onNext(data);
   });
 
@@ -178,7 +177,3 @@ export default function BMIResults({ userInputs, onNext }) {
     </Stack>
   );
 }
-BMIResults.propTypes = {
-  onNext: PropTypes.func,
-  userInputs: PropTypes.object,
-};

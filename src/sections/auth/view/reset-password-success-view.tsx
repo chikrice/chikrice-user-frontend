@@ -3,7 +3,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
-// import { useTranslate } from 'src/locales';
 import { SentIcon } from 'src/assets/icons';
 import { RouterLink } from 'src/routes/components';
 import { LeftIcon } from 'src/components/carousel/arrow-icons';
@@ -11,8 +10,6 @@ import { LeftIcon } from 'src/components/carousel/arrow-icons';
 // ----------------------------------------------------------------------
 
 export default function ResetPasswordSuccessView() {
-  //   const { t } = useTranslate();
-
   const renderHead = (
     <>
       <SentIcon sx={{ height: 96 }} />
