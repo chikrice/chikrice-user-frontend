@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -6,7 +5,15 @@ import { useTranslate } from 'src/locales';
 
 import Chart, { useChart } from '../chart';
 
-export default function ProgressChart({ weightProgression }) {
+import type { Overview } from 'chikrice-types';
+
+// -------------------------------------
+
+interface ProgressChartProps {
+  weightProgression: Overview['weightProgression'];
+}
+
+export default function ProgressChart({ weightProgression }: ProgressChartProps) {
   const theme = useTheme();
   const { t } = useTranslate();
 
@@ -87,7 +94,3 @@ export default function ProgressChart({ weightProgression }) {
     </Box>
   );
 }
-
-ProgressChart.propTypes = {
-  weightProgression: PropTypes.array.isRequired,
-};

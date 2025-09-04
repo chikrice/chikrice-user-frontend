@@ -10,12 +10,12 @@ import StartTuorPoint from 'src/components/welcome-guide/start-tour-point';
 
 import RoadmapOverview from '../roadmap-overview';
 import MilestonesBreakdown from '../milestones-breakdown';
-// ----------------------------------------------------------------------
+
+// -------------------------------------
 
 export default function ProgressView() {
-  const { isFirstLogin } = useTourContext();
-
   const { roadmap, roadmapLoading, roadmapError } = useStore((state) => state);
+  const { isFirstLogin } = useTourContext() as { isFirstLogin: boolean };
 
   if (roadmapLoading) return <LoadingScreen />;
 
@@ -32,7 +32,6 @@ export default function ProgressView() {
 
         <StreakTable
           activityLog={roadmap.activityLog}
-          onGoingMonth={roadmap.onGoingMonth}
           onGoingDay={roadmap.onGoingDay}
           totalDays={roadmap.overview.totalDays}
         />
