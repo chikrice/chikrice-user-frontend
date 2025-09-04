@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
 import Divider from '@mui/material/Divider';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -13,7 +12,15 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { areUserInputsValid } from './helpers';
 
-export default function GoogleAuth({ userInputs }) {
+import type { UserInputs } from 'src/types';
+
+// -------------------------------------
+
+interface GoogleAuthProps {
+  userInputs: UserInputs;
+}
+
+export default function GoogleAuth({ userInputs }: GoogleAuthProps) {
   const { t } = useTranslate();
   const googleLoading = useBoolean();
   const store = useStore();
@@ -24,7 +31,7 @@ export default function GoogleAuth({ userInputs }) {
       googleLoading.onTrue();
 
       const data = {
-        role: 'user',
+        role: 'user' as const,
         Authorization: googleRes.code,
         userInputs,
       };
@@ -70,7 +77,3 @@ export default function GoogleAuth({ userInputs }) {
     </>
   );
 }
-
-GoogleAuth.propTypes = {
-  userInputs: PropTypes.object,
-};

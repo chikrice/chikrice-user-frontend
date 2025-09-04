@@ -31,7 +31,7 @@ export interface UserInputs {
 
 export interface GoogleCredentials {
   role: 'user';
-  authAuthorization: string;
+  Authorization: string;
   userInputs: UserInputs;
 }
 
@@ -63,7 +63,7 @@ export interface AuthActions {
   register: (credentials: Credentials, userInputs: UserInputs) => Promise<void>;
   googleAuth: (googleCredentials: GoogleCredentials) => Promise<UserClient>;
   refreshUserInfo: (id: string) => Promise<void>;
-  updateUser: (userInputs: UserClient) => Promise<void>;
+  updateUser: (userInputs: Partial<UserClient>) => Promise<void>;
 }
 
 // ============================================

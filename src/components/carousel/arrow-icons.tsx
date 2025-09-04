@@ -1,11 +1,16 @@
-import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 
 import Iconify from '../iconify';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
 
-export function LeftIcon({ icon = 'eva:arrow-ios-forward-fill', width, ...other }) {
+interface LeftIconProps {
+  icon?: string;
+  width?: number;
+  [key: string]: unknown;
+}
+
+export function LeftIcon({ icon = 'eva:arrow-ios-forward-fill', width, ...other }: LeftIconProps) {
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';
@@ -26,13 +31,13 @@ export function LeftIcon({ icon = 'eva:arrow-ios-forward-fill', width, ...other 
   );
 }
 
-LeftIcon.propTypes = {
-  icon: PropTypes.string,
-  isRTL: PropTypes.bool,
-  width: PropTypes.number,
-};
+interface RightIconProps {
+  icon?: string;
+  width?: number;
+  [key: string]: unknown;
+}
 
-export function RightIcon({ icon = 'eva:arrow-ios-forward-fill', width, ...other }) {
+export function RightIcon({ icon = 'eva:arrow-ios-forward-fill', width = 24, ...other }: RightIconProps) {
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';
@@ -50,9 +55,3 @@ export function RightIcon({ icon = 'eva:arrow-ios-forward-fill', width, ...other
     />
   );
 }
-
-RightIcon.propTypes = {
-  icon: PropTypes.string,
-  isRTL: PropTypes.bool,
-  width: PropTypes.number,
-};

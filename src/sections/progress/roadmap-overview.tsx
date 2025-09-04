@@ -22,7 +22,7 @@ export default function RoadmapOverview({ overview }: RoadmapOverviewProps) {
         boxShadow: (theme) => theme.customShadows.card,
       }}
     >
-      <ProgressChart weightProgression={overview?.weightProgression} className="progress__tour__1" />
+      <ProgressChart weightProgression={overview?.weightProgression} />
       <Stack sx={{ p: 3 }}>
         <List sx={{ color: 'text.secondary' }}>
           <Divider />
@@ -49,14 +49,6 @@ export default function RoadmapOverview({ overview }: RoadmapOverviewProps) {
             <ListItemText primary={t('monthsNumber')} />
             <Label>{overview?.totalMonths}</Label>
           </ListItem>
-          {/* <Divider />
-          <ListItem>
-            <ListItemIcon sx={{ width: '36px' }}>
-              <Iconify icon="tabler:square-rounded-number-1" sx={{ mx: 'auto' }} />
-            </ListItemIcon>
-            <ListItemText primary={t('daysNumber')} />
-            <Label>{overview?.totalDays}</Label>
-          </ListItem> */}
         </List>
       </Stack>
     </Card>

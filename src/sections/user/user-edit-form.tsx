@@ -1,17 +1,13 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { LoadingButton } from '@mui/lab';
 import { useForm } from 'react-hook-form';
-// import axios, { endpoints } from 'src/utils/axios';
 import { enqueueSnackbar } from 'notistack';
 import { Container, Stack } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import { useSnackbar } from 'notistack';
 import { useMemo, useEffect, useCallback } from 'react';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
-import { useBoolean } from 'src/hooks/use-boolean';
 import FormProvider from 'src/components/hook-form';
 import CustomBottomDrawer from 'src/components/custom-drawer';
 import AgeInput from 'src/components/profile/form-components/form-age';
@@ -22,19 +18,24 @@ import ActivityLevelInput from 'src/components/profile/form-components/form-acti
 import GoalAchievementInput from 'src/components/profile/form-components/goal-achievement-speed';
 import NameEmailGenderInputs from 'src/components/profile/form-components/form-name-email-gender';
 
-import useAddressBook from './hooks/address-book';
-import UpdatePasswordForm from '../auth/update-password-form';
-// ----------------------------------------------------------------------
+import type { UserClient } from 'chikrice-types';
 
-export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
+// -------------------------------------
+
+interface UserEditFormProps {
+  isEdit: boolean;
+  setIsEdit: (isEdit: boolean) => void;
+  fieldToBeEdited: string;
+}
+
+export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }: UserEditFormProps) {
   const { t } = useTranslate();
-  // const { enqueueSnackbar } = useSnackbar();
+
   const { user, refreshUserInfo, updateUser } = useStore((state) => state);
-  const { handleUpdateUser } = useAddressBook();
 
   const editUserSchema = Yup.object().shape({
     gender: Yup.string(),
-    allergicFood: Yup.array(),
+    allergicFoods: Yup.array(),
     currentWeight: Yup.number().min(30, t('minWeight')).max(300, t('maxWeight')),
     activityLevel: Yup.number(),
     goalAchievementSpeed: Yup.string(),
@@ -42,9 +43,8 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
     height: Yup.number().min(80, t('minHeight')).max(250, t('maxHeight')).required(t('heightRequired')),
     name: Yup.string().required(t('fullNameRequired')),
     email: Yup.string().email(t('emailInvalid')).required(t('emailRequired')),
+    targetWeight: Yup.number(),
   });
-
-  const updatePasswordForm = useBoolean();
 
   const defaultValues = useMemo(
     () => ({
@@ -84,9 +84,9 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
   const values = watch();
 
   const onSubmit = handleSubmit(
-    async (data) => {
+    async (data: Partial<UserClient>) => {
       try {
-        await updateUser(user.id, data);
+        await updateUser(data);
         enqueueSnackbar(t('updateSuccess'));
       } catch (error) {
         console.log(error);
@@ -125,26 +125,13 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }) {
           {fieldToBeEdited === 'goalAchievementSpeed' && (
             <GoalAchievementInput goalAchievementSpeed={values.goalAchievementSpeed} />
           )}
-
           <Stack>
             <LoadingButton type="submit" loading={isSubmitting} fullWidth variant="contained" size="large">
               {t('confirm')}
             </LoadingButton>
           </Stack>
         </FormProvider>
-
-        <UpdatePasswordForm
-          open={updatePasswordForm.value}
-          onClose={updatePasswordForm.onFalse}
-          onCreate={handleUpdateUser}
-        />
       </Container>
     </CustomBottomDrawer>
   );
 }
-
-UserEditForm.propTypes = {
-  isEdit: PropTypes.bool,
-  setIsEdit: PropTypes.func,
-  fieldToBeEdited: PropTypes.string,
-};

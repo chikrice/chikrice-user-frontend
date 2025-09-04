@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Paper, CardHeader } from '@mui/material';
 
 import maleSrc from 'src/assets/images/male.png';
@@ -7,7 +6,18 @@ import femaleSrc from 'src/assets/images/female.png';
 import Image from '../image';
 import { RightIcon } from '../carousel/arrow-icons';
 
-export default function ProfileHeader({ name, email, gender, onEdit }) {
+// -------------------------------------
+
+interface ProfileHeaderProps {
+  name: string;
+  email: string;
+  gender: string;
+  picture: string;
+  onEdit: () => void;
+}
+
+export default function ProfileHeader({ name, email, gender, picture, onEdit }: ProfileHeaderProps) {
+  console.log(picture);
   return (
     <Paper
       sx={{
@@ -22,21 +32,12 @@ export default function ProfileHeader({ name, email, gender, onEdit }) {
     >
       <CardHeader
         sx={{ p: 0 }}
-        avatar={
-          <Image height={50} src={gender === 'male' ? maleSrc : femaleSrc} alt={'user-avatar'} />
-        }
+        avatar={<Image height={50} src={gender === 'male' ? maleSrc : femaleSrc} alt={'user-avatar'} />}
         title={name}
         subheader={email}
       />
 
-      <RightIcon />
+      <RightIcon width={24} />
     </Paper>
   );
 }
-
-ProfileHeader.propTypes = {
-  name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  gender: PropTypes.string,
-  onEdit: PropTypes.func.isRequired,
-};

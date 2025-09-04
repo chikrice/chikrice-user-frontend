@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import Box from '@mui/material/Box';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -6,11 +5,36 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import { getRatio } from './utils';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
 
-const Image = forwardRef(
+interface ImageProps {
+  height?: number;
+  width?: number;
+  afterLoad?: () => void;
+  alt?: string;
+  beforeLoad?: () => void;
+  delayMethod?: string;
+  delayTime?: number;
+  disabledEffect?: boolean;
+  effect?: string;
+  overlay?: string;
+  ratio?: '4/3' | '3/4' | '6/4' | '4/6' | '16/9' | '9/16' | '21/9' | '9/21' | '1/1';
+  scrollPosition?: object;
+  src?: string;
+  sx?: object;
+  threshold?: number;
+  useIntersectionObserver?: boolean;
+  visibleByDefault?: boolean;
+  wrapperClassName?: string;
+  wrapperProps?: object;
+  placeholder?: React.ReactElement;
+}
+
+const Image = forwardRef<HTMLImageElement, ImageProps>(
   (
     {
+      height,
+      width,
       ratio,
       overlay,
       disabledEffect = false,
@@ -70,8 +94,8 @@ const Image = forwardRef(
         placeholderSrc={disabledEffect ? '/assets/transparent.png' : '/assets/placeholder.svg'}
         //
         sx={{
-          width: 1,
-          height: 1,
+          width: width || 1,
+          height: height || 1,
           objectFit: 'cover',
           verticalAlign: 'bottom',
           ...(!!ratio && {
@@ -115,26 +139,5 @@ const Image = forwardRef(
     );
   }
 );
-
-Image.propTypes = {
-  afterLoad: PropTypes.func,
-  alt: PropTypes.string,
-  beforeLoad: PropTypes.func,
-  delayMethod: PropTypes.string,
-  delayTime: PropTypes.number,
-  disabledEffect: PropTypes.bool,
-  effect: PropTypes.string,
-  overlay: PropTypes.string,
-  ratio: PropTypes.oneOf(['4/3', '3/4', '6/4', '4/6', '16/9', '9/16', '21/9', '9/21', '1/1']),
-  scrollPosition: PropTypes.object,
-  src: PropTypes.string,
-  sx: PropTypes.object,
-  threshold: PropTypes.number,
-  useIntersectionObserver: PropTypes.bool,
-  visibleByDefault: PropTypes.bool,
-  wrapperClassName: PropTypes.string,
-  wrapperProps: PropTypes.object,
-  placeholder: PropTypes.element,
-};
 
 export default Image;
