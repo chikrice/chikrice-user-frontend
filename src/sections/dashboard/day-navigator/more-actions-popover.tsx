@@ -52,8 +52,6 @@ export default function MoreActionsPopover({
   const { user } = useStore();
   const isDeletePlan = useBoolean();
 
-  // Memoize the result to avoid recalculating on every render unless the date changes
-  const isDisabled = useMemo(() => isPastDate(date), [date]);
   const isPlanSaved = useMemo(() => user?.savedPlans?.includes(planDayId), [planDayId, user]);
 
   // Generic handler to wrap the actions and close the popover
@@ -105,11 +103,7 @@ export default function MoreActionsPopover({
           <Divider />
 
           <ListItem disablePadding>
-            <ListItemButton
-              sx={{ color: 'error.main' }}
-              onClick={handleAction(isDeletePlan.onTrue)}
-              disabled={isDisabled}
-            >
+            <ListItemButton sx={{ color: 'error.main' }} onClick={handleAction(isDeletePlan.onTrue)}>
               <ListItemIcon>
                 <Iconify icon={'fluent:delete-12-filled'} />
               </ListItemIcon>
