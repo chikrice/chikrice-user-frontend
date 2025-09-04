@@ -1,21 +1,19 @@
-import PropTypes from 'prop-types';
-import {
-  Card,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Radio,
-  Stack,
-} from '@mui/material';
+import { Card, Divider, List, ListItem, ListItemIcon, ListItemText, Radio, Stack } from '@mui/material';
 
 import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import ProgressChart from 'src/components/progress-chart';
 
-export default function RoadmapOverview({ overview }) {
+import type { Overview } from 'chikrice-types';
+
+// -------------------------------------
+
+interface RoadmapOverviewProps {
+  overview: Overview;
+}
+
+export default function RoadmapOverview({ overview }: RoadmapOverviewProps) {
   const { t } = useTranslate();
   return (
     <Card
@@ -24,10 +22,7 @@ export default function RoadmapOverview({ overview }) {
         boxShadow: (theme) => theme.customShadows.card,
       }}
     >
-      <ProgressChart
-        weightProgression={overview?.weightProgression}
-        className="progress__tour__1"
-      />
+      <ProgressChart weightProgression={overview?.weightProgression} />
       <Stack sx={{ p: 3 }}>
         <List sx={{ color: 'text.secondary' }}>
           <Divider />
@@ -54,20 +49,8 @@ export default function RoadmapOverview({ overview }) {
             <ListItemText primary={t('monthsNumber')} />
             <Label>{overview?.totalMonths}</Label>
           </ListItem>
-          {/* <Divider />
-          <ListItem>
-            <ListItemIcon sx={{ width: '36px' }}>
-              <Iconify icon="tabler:square-rounded-number-1" sx={{ mx: 'auto' }} />
-            </ListItemIcon>
-            <ListItemText primary={t('daysNumber')} />
-            <Label>{overview?.totalDays}</Label>
-          </ListItem> */}
         </List>
       </Stack>
     </Card>
   );
 }
-
-RoadmapOverview.propTypes = {
-  overview: PropTypes.object,
-};

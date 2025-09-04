@@ -1,10 +1,18 @@
-import PropTypes from 'prop-types';
 import { Box, Stack } from '@mui/material';
 
 import MilestoneOngoing from './milestone-ongoing';
 import MilestoneAccomplished from './milestone-accomplished';
 
-export default function MilestonesBreakdown({ milestones, onGoingMonth }) {
+import type { Milestone } from 'chikrice-types';
+
+// -------------------------------------
+
+interface MilestonesBreakdownProps {
+  milestones: Milestone[];
+  onGoingMonth: number;
+}
+
+export default function MilestonesBreakdown({ milestones, onGoingMonth }: MilestonesBreakdownProps) {
   return (
     <Stack spacing={1}>
       {milestones?.map((milestone, index) => (
@@ -16,5 +24,3 @@ export default function MilestonesBreakdown({ milestones, onGoingMonth }) {
     </Stack>
   );
 }
-
-MilestonesBreakdown.propTypes = { milestones: PropTypes.array, onGoingMonth: PropTypes.number };

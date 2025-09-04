@@ -15,6 +15,8 @@ import Iconify from 'src/components/iconify';
 import { useRouter } from 'src/routes/hooks';
 import { RightIcon } from 'src/components/carousel/arrow-icons';
 
+// -------------------------------------
+
 export default function UserAccountView() {
   const { logout, user } = useStore();
   const isCoach = user?.role === 'coach';
@@ -38,11 +40,6 @@ export default function UserAccountView() {
       icon: 'fluent:person-28-regular',
       path: isCoach ? paths.user.coach : paths.user.profile,
     },
-    // {
-    //   title: t('subscription'),
-    //   icon: 'fluent-mdl2:activate-orders',
-    //   path: paths.user.subscriptions,
-    // },
     {
       title: t('ingredients'),
       icon: 'fluent:food-apple-20-regular',

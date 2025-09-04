@@ -19,6 +19,7 @@ import CopyMealsToCalendar from './copy-meals-to-calendar';
 import type { PlanReference, PlanType } from 'chikrice-types';
 
 // -------------------------------------
+
 interface DayNavigatorProps {
   day: number;
   plan: PlanType;
@@ -115,7 +116,6 @@ export default function DayNavigator({
         <Box display={'flex'} gap={0.5}>
           {!isDisableMealsActions && (
             <MoreActionsPopover
-              sx={{}}
               date={plan?.date}
               planDayId={plan.id}
               onCopyPlan={() => handleOpenDrawer('copy')}

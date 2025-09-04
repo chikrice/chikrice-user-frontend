@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Card, CardHeader, Divider, List, ListItem, ListItemText, Stack } from '@mui/material';
 
@@ -6,7 +5,15 @@ import Label from 'src/components/label';
 import { useTranslate } from 'src/locales';
 import { fDateRange } from 'src/utils/format-time';
 
-export default function MilestoneOngoing({ milestone }) {
+import type { Milestone } from 'chikrice-types';
+
+// -------------------------------------
+
+interface MilestoneOngoingProps {
+  milestone: Milestone;
+}
+
+export default function MilestoneOngoing({ milestone }: MilestoneOngoingProps) {
   const { t } = useTranslate();
 
   console.log(milestone);
@@ -50,9 +57,6 @@ export default function MilestoneOngoing({ milestone }) {
             >
               {milestone.targetCalories.toFixed()}cal
             </Label>
-            {milestone.changePoint && (
-              <Label color="success">{milestone.changePoint.targetCalories}cal</Label>
-            )}
           </StyledListItem>
           <Divider />
           <StyledListItem>
@@ -81,8 +85,6 @@ export default function MilestoneOngoing({ milestone }) {
     </Card>
   );
 }
-
-MilestoneOngoing.propTypes = { milestone: PropTypes.object };
 
 const StyledListItem = styled(ListItem)(() => ({
   paddingLeft: 8,

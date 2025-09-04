@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Box, Card, Popover, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
@@ -7,7 +6,17 @@ import { fDate } from 'src/utils/format-time';
 
 import StreakBox from './streak-box';
 
-export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
+import type { ActivityLog } from 'chikrice-types';
+
+// -------------------------------------
+
+interface StreakTableProps {
+  totalDays: number;
+  activityLog: ActivityLog[];
+  onGoingDay: number;
+}
+
+export default function StreakTable({ totalDays, activityLog, onGoingDay }: StreakTableProps) {
   const { t } = useTranslate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -128,10 +137,3 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }) {
     </Card>
   );
 }
-
-StreakTable.propTypes = {
-  totalDays: PropTypes.number,
-  activityLog: PropTypes.array,
-  onGoingDay: PropTypes.number,
-  // onGoingMonth: PropTypes.number,
-};

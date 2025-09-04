@@ -1,9 +1,13 @@
-import PropTypes from 'prop-types';
 import { IconButton, Stack } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
 
-export function MacrosBarCollapseBtn({ isIn, onClick }) {
+// -------------------------------------
+interface MacrosBarCollapseBtn {
+  isIn: boolean;
+  onClick: () => void;
+}
+export function MacrosBarCollapseBtn({ isIn, onClick }: MacrosBarCollapseBtn) {
   return (
     <Stack
       sx={{
@@ -19,8 +23,3 @@ export function MacrosBarCollapseBtn({ isIn, onClick }) {
     </Stack>
   );
 }
-
-MacrosBarCollapseBtn.propTypes = {
-  isIn: PropTypes.bool,
-  onClick: PropTypes.func,
-};

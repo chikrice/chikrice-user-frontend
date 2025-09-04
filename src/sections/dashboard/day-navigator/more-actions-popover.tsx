@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { LoadingButton } from '@mui/lab';
 import {
   Button,
@@ -13,6 +12,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SxProps,
 } from '@mui/material';
 
 import useStore from 'src/store';
@@ -22,10 +22,17 @@ import { isPastDate } from 'src/utils/format-time';
 import { useBoolean } from 'src/hooks/use-boolean';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-// import { useRouter } from 'src/routes/hooks';
-// import { paths } from 'src/routes/paths';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
+
+interface MoreActionsPopoverProps {
+  sx?: SxProps;
+  date: string | Date;
+  planDayId: string;
+  onCopyPlan: () => void;
+  onSavePlan: () => void;
+  onDeletePlan: () => void;
+}
 
 export default function MoreActionsPopover({
   sx,
@@ -36,7 +43,7 @@ export default function MoreActionsPopover({
   onDeletePlan,
 
   // onChangeAllMeals,
-}) {
+}: MoreActionsPopoverProps) {
   const { t } = useTranslate();
   // const router = useRouter();
   const loading = useBoolean(false);
@@ -76,12 +83,7 @@ export default function MoreActionsPopover({
         icon={'mingcute:more-2-fill'}
       />
 
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        hiddenArrow={true}
-        arrow="bottom-right"
-      >
+      <CustomPopover open={popover.open} onClose={popover.onClose} hiddenArrow={true} arrow="bottom-right">
         <List>
           <ListItem disablePadding>
             <ListItemButton onClick={onSavePlan}>
@@ -101,28 +103,6 @@ export default function MoreActionsPopover({
             </ListItemButton>
           </ListItem>
           <Divider />
-          {/* <ListItem disablePadding>
-            <ListItemButton onClick={handleAction(onChangeAllMeals)} disabled={isDisabled}>
-              <ListItemIcon>
-                <Iconify icon={'hugeicons:arrow-reload-horizontal'} />
-              </ListItemIcon>
-              <ListItemText primary={t('shuffle')} />
-            </ListItemButton>
-          </ListItem>
-          <Divider /> */}
-
-          {/* <ListItem disablePadding>
-            <ListItemButton
-              onClick={() => router.push(paths.user.plan_customization)}
-              disabled={isDisabled}
-            >
-              <ListItemIcon>
-                <Iconify icon={'ic:round-settings'} />
-              </ListItemIcon>
-              <ListItemText primary={t('customizePlan')} />
-            </ListItemButton>
-          </ListItem>
-          <Divider /> */}
 
           <ListItem disablePadding>
             <ListItemButton
@@ -159,14 +139,3 @@ export default function MoreActionsPopover({
     </>
   );
 }
-
-MoreActionsPopover.propTypes = {
-  sx: PropTypes.object,
-  date: PropTypes.string,
-  onCopyPlan: PropTypes.func,
-  onSavePlan: PropTypes.func,
-  planDayId: PropTypes.string,
-  onDeletePlan: PropTypes.func,
-  onCustomizePlan: PropTypes.func,
-  onChangeAllMeals: PropTypes.func,
-};

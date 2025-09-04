@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import {
   Box,
   Card,
@@ -13,11 +12,22 @@ import {
 
 import { useLocales, useTranslate } from 'src/locales';
 
-export default function InfoDialog({ open, onClose, macros, ingredients }) {
+import type { Macros, MealIngredient } from 'chikrice-types';
+
+// -------------------------------------
+
+interface InfoDialogProps {
+  open: boolean;
+  onClose: () => void;
+  macros: Macros;
+  ingredients: MealIngredient[];
+}
+
+export default function InfoDialog({ open, onClose, macros, ingredients }: InfoDialogProps) {
   const { lang } = useLocales();
   const { t } = useTranslate();
 
-  const renderMacrosItems = (macros) => (
+  const renderMacrosItems = (macros: Macros) => (
     <>
       <small>
         {t('carb')} {macros.carb.toFixed(1)}g
@@ -38,7 +48,7 @@ export default function InfoDialog({ open, onClose, macros, ingredients }) {
       PaperProps={{
         style: {
           width: '100%',
-          m: '16px',
+          margin: '16px',
         },
       }}
     >
@@ -71,8 +81,7 @@ export default function InfoDialog({ open, onClose, macros, ingredients }) {
                   <Typography variant="subtitle2">{item.name[lang]}</Typography>
 
                   <Typography variant="body2">
-                    ~ {item.portion.qty + ' ' + item.portion.label[lang]} (
-                    {item.portion.weightInGrams}g)
+                    ~ {item.portion.qty + ' ' + item.portion.label[lang]} ({item.portion.weightInGrams}g)
                   </Typography>
                 </Box>
               </ListItem>
@@ -86,10 +95,3 @@ export default function InfoDialog({ open, onClose, macros, ingredients }) {
     </Dialog>
   );
 }
-
-InfoDialog.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
-  macros: PropTypes.object,
-  ingredients: PropTypes.array,
-};

@@ -4,7 +4,6 @@ import { Container, Stack } from '@mui/material';
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import ageSrc from 'src/assets/icons/age.png';
-// import { Address } from 'src/sections/address';
 import { activityOptions } from 'src/data/user';
 import weightSrc from 'src/assets/icons/weight.png';
 import heightSrc from 'src/assets/icons/height.png';
@@ -18,7 +17,7 @@ import ProfileHeader from 'src/components/profile/profile-header';
 import UserGoal from '../user-goal';
 import UserEditForm from '../user-edit-form';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
 
 export default function UserProfileView() {
   const { t } = useTranslate();
@@ -29,7 +28,7 @@ export default function UserProfileView() {
   const [fieldName, setFieldName] = useState('info');
 
   const handleEdit = useCallback(
-    (value) => {
+    (value: string) => {
       setIsEdit(true);
       setFieldName(value);
     },
@@ -107,7 +106,6 @@ export default function UserProfileView() {
           </Stack>
 
           <UserGoal user={user} />
-          {/* <Address /> */}
         </Stack>
       </Container>
 

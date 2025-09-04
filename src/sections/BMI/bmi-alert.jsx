@@ -16,8 +16,8 @@ export default function BMIAlert({
 
   return (
     <Alert sx={{ mt: 1 }} severity={alertDetails.color} variant="outlined">
-      {t('theBMIFor')}({userCurrentWeight}kg) {t('and')} {t('yourHeight')} ({userCurrentHeight}cm),{' '}
-      {t('is')} {bmi.toFixed(1)} , {t('wihchIsInThe')}
+      {t('theBMIFor')}({userCurrentWeight}kg) {t('and')} {t('yourHeight')} ({userCurrentHeight}cm), {t('is')}{' '}
+      {bmi.toFixed(1)} , {t('wihchIsInThe')}
       <Label sx={{ mx: 1 }} color={alertDetails.color}>
         {t(alertDetails.label)}
       </Label>

@@ -1,10 +1,17 @@
-import PropTypes from 'prop-types';
 import { Alert, Stack, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import { fDate } from 'src/utils/format-time';
 
-export default function MilestoneAccomplished({ milestone }) {
+import type { Milestone } from 'chikrice-types';
+
+// -------------------------------------
+
+interface MilestoneAccomplishedProps {
+  milestone: Milestone;
+}
+
+export default function MilestoneAccomplished({ milestone }: MilestoneAccomplishedProps) {
   const { t } = useTranslate();
 
   return (
@@ -18,7 +25,3 @@ export default function MilestoneAccomplished({ milestone }) {
     </Alert>
   );
 }
-
-MilestoneAccomplished.propTypes = {
-  milestone: PropTypes.object,
-};
