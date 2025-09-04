@@ -1,11 +1,12 @@
 // macrosBarStyles.js
+import { Theme } from '@mui/material/styles';
 
 export const progressBarStyles = {
   width: '100%',
   height: 20,
   borderRadius: 10,
   overflow: 'hidden',
-  backgroundColor: (theme) => theme.palette.card.default,
+  backgroundColor: (theme: Theme) => theme.palette.card.default,
   mb: 0.5,
 };
 
@@ -15,14 +16,14 @@ export const allowedCalFillWrapper = {
   height: '100%',
 };
 
-export const allowedCalFillStyles = (targetCal, consumedCal) => ({
+export const allowedCalFillStyles = (targetCal: number, consumedCal: number) => ({
   width: !targetCal ? 0 : `${Math.min((consumedCal / targetCal) * 100, 100)}%`,
   transition: '.7s linear',
   height: '100%',
   backgroundColor: 'text.primary',
 });
 
-export const overConsumedCalFillStyles = (targetCal, consumedCal) => ({
+export const overConsumedCalFillStyles = (targetCal: number, consumedCal: number) => ({
   width: consumedCal > targetCal ? `${((consumedCal - targetCal) / targetCal) * 100}%` : 0,
   transition: '.7s linear',
   height: '100%',

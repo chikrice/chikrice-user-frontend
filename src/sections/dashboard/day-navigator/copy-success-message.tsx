@@ -1,9 +1,13 @@
-import PropTypes from 'prop-types';
 import { Alert, Button, Stack, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 
-const CopySuccessMessage = ({ onCheckCopy }) => {
+// -------------------------------------
+
+interface CopySuccessMessageProps {
+  onCheckCopy: () => void;
+}
+const CopySuccessMessage = ({ onCheckCopy }: CopySuccessMessageProps) => {
   const { t } = useTranslate();
 
   return (
@@ -19,7 +23,3 @@ const CopySuccessMessage = ({ onCheckCopy }) => {
 };
 
 export default CopySuccessMessage;
-
-CopySuccessMessage.propTypes = {
-  onCheckCopy: PropTypes.func,
-};

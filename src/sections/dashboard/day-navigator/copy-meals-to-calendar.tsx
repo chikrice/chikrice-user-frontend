@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { addDays } from 'date-fns';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { Box, Stack, Typography } from '@mui/material';
@@ -6,7 +5,14 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 
-const CopyMealsToCalendar = ({ highlightedDate, onCopyMeal, totalDays }) => {
+// -------------------------------------
+
+interface CopyMealsToCalendarProps {
+  highlightedDate: Date;
+  onCopyMeal: (date: Date) => void;
+  totalDays: number;
+}
+const CopyMealsToCalendar = ({ highlightedDate, onCopyMeal, totalDays }: CopyMealsToCalendarProps) => {
   const { t } = useTranslate();
 
   return (
@@ -26,9 +32,3 @@ const CopyMealsToCalendar = ({ highlightedDate, onCopyMeal, totalDays }) => {
 };
 
 export default CopyMealsToCalendar;
-
-CopyMealsToCalendar.propTypes = {
-  highlightedDate: PropTypes.instanceOf(Date),
-  onCopyMeal: PropTypes.func,
-  totalDays: PropTypes.number,
-};

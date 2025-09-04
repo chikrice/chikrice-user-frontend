@@ -36,7 +36,7 @@ export default function DashboardView() {
 
   return (
     <>
-      <MacrosBar plan={plan} className="dash__tour__2" isLoading={planLoading} />
+      <MacrosBar plan={plan} />
 
       <Meals plan={plan} planLoading={planLoading} />
 
