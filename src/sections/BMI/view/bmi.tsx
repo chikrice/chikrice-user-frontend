@@ -7,7 +7,6 @@ import BMIResults from '../bmi-results';
 export default function BMIView({ userInputs, onNext }) {
   return (
     <Box>
-      {/* <BMILoading /> */}
       <BMIResults userInputs={userInputs} onNext={onNext} />
     </Box>
   );

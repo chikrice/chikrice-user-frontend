@@ -1,9 +1,12 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
-export default function BMIResultPoint({ bmiPosition }) {
-  console.log(bmiPosition);
+// -------------------------------------
 
+interface BMIResultPointProps {
+  bmiPosition: number;
+}
+
+export default function BMIResultPoint({ bmiPosition }: BMIResultPointProps) {
   return (
     <div>
       <Box
@@ -39,7 +42,3 @@ export default function BMIResultPoint({ bmiPosition }) {
     </div>
   );
 }
-
-BMIResultPoint.propTypes = {
-  bmiPosition: PropTypes.number,
-};
