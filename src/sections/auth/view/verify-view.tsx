@@ -12,13 +12,13 @@ import { paths } from 'src/routes/paths';
 import { router } from 'src/routes/navigation';
 import { api, endpoints } from 'src/utils/axios';
 import { EmailInboxIcon } from 'src/assets/icons';
-import { RouterLink } from 'src/routes/components';
 import { useSearchParams } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { RouterLink } from 'src/routes/components';
 import { LeftIcon } from 'src/components/carousel/arrow-icons';
 import FormProvider, { RHFCode } from 'src/components/hook-form';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
 
 export default function ModernVerifyView() {
   const VerifySchema = Yup.object().shape({
@@ -52,7 +52,7 @@ export default function ModernVerifyView() {
 
   // Countdown timer effect
   useEffect(() => {
-    let timer;
+    let timer: NodeJS.Timeout;
     if (countdown > 0) {
       timer = setTimeout(() => {
         setCountdown(countdown - 1);
@@ -89,7 +89,7 @@ export default function ModernVerifyView() {
   };
 
   // Format countdown to MM:SS
-  const formatCountdown = (seconds) => {
+  const formatCountdown = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;

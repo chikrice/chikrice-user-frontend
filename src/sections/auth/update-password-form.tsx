@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -17,9 +16,15 @@ import Iconify from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-// ----------------------------------------------------------------------
+// -------------------------------------
 
-export default function UpdatePasswordForm({ open, onClose, onCreate }) {
+interface UpdatePasswordFormProps {
+  open: boolean;
+  onClose: () => void;
+  onCreate: (data: { password: string }) => void;
+}
+
+export default function UpdatePasswordForm({ open, onClose, onCreate }: UpdatePasswordFormProps) {
   const password = useBoolean();
   const { t } = useTranslate();
 
@@ -46,7 +51,7 @@ export default function UpdatePasswordForm({ open, onClose, onCreate }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: { password: string }) => {
     try {
       onCreate({
         password: data.password,
@@ -108,9 +113,3 @@ export default function UpdatePasswordForm({ open, onClose, onCreate }) {
     </Dialog>
   );
 }
-
-UpdatePasswordForm.propTypes = {
-  onClose: PropTypes.func,
-  onCreate: PropTypes.func,
-  open: PropTypes.bool,
-};

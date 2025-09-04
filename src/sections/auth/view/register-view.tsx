@@ -132,8 +132,8 @@ export default function ModernRegisterView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      <RHFTextField name="name" label={t('name')} />
-      <RHFTextField name="email" label={t('emailAddress')} />
+      <RHFTextField name="name" label={t('name')} helperText={''} type={'text'} />
+      <RHFTextField name="email" label={t('emailAddress')} type={'email'} />
       <RHFTextField
         name="password"
         label={t('password')}

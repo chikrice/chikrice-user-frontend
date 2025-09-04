@@ -1,4 +1,6 @@
-export const areUserInputsValid = (inputs) => {
+import type { UserInputs } from 'src/types';
+
+export const areUserInputsValid = (inputs: UserInputs): boolean => {
   if (!inputs) return false;
 
   const age = inputs.age;

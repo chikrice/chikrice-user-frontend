@@ -17,7 +17,7 @@ import type { UserInputs } from 'src/types';
 // -------------------------------------
 
 interface GoogleAuthProps {
-  userInputs: UserInputs;
+  userInputs?: UserInputs;
 }
 
 export default function GoogleAuth({ userInputs }: GoogleAuthProps) {

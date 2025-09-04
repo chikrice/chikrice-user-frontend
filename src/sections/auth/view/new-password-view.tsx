@@ -13,9 +13,9 @@ import { paths } from 'src/routes/paths';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { api, endpoints } from 'src/utils/axios';
-import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSearchParams } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -39,6 +39,7 @@ export default function ModernNewPasswordView() {
   const token = searchParams.get('token');
   const defaultValues = {
     password: '',
+    confirmPassword: '',
   };
 
   const methods = useForm({

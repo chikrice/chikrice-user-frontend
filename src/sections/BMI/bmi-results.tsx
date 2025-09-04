@@ -151,7 +151,6 @@ export default function BMIResults({ userInputs, onNext }: BMIResultsProps) {
             type="number"
             label={t('targetWeight')}
             placeholder={t('weightPlaceholder')}
-            helperText={''}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

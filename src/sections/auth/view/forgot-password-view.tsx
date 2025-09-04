@@ -39,7 +39,7 @@ export default function ModernForgotPasswordView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: { email: string }) => {
     try {
       await api.post(endpoints.auth.forgotPassword, data);
       router.push(paths.auth.resetPasswordSuccess);
@@ -48,7 +48,7 @@ export default function ModernForgotPasswordView() {
     }
   });
 
-  const handleError = async (code, data) => {
+  const handleError = async (code: number, data: { email: string }) => {
     try {
       if (code === 404) {
         enqueueSnackbar(t('emailNotFound'), { variant: 'error' });
@@ -64,7 +64,7 @@ export default function ModernForgotPasswordView() {
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label="Email address" type={'email'} />
 
       <LoadingButton
         fullWidth
