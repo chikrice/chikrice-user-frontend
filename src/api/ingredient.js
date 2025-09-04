@@ -26,24 +26,6 @@ export function useSearchIngredients(userId, query) {
   return memoizedValue;
 }
 
-export function useIngredientsByCategories() {
-  const URL = [endpoints.ingredient.categories];
-
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-
-  const memoizedValue = useMemo(
-    () => ({
-      ingredients: data || null,
-      isLoading,
-      error,
-      isValidating,
-    }),
-    [data, isLoading, error, isValidating]
-  );
-
-  return memoizedValue;
-}
-
 export function useUserIngredients(userId) {
   const URL = userId ? [endpoints.user.ingredients(userId)] : null;
 

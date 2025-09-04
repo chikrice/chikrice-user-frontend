@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 
 // import Footer from './footer';
 import Header from './header';
-import MobileBottomNavigation from './nav/mobile/bottom-navigation';
+import MobileBottomNavigation from './bottom-navigation';
 
 // ----------------------------------------------------------------------
 

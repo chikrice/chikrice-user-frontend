@@ -6,7 +6,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 import { usePathname, useRouter } from 'src/routes/hooks';
 
-import { useNavConfig } from '../../config-navigation';
+import { useNavConfig } from './config-navigation';
 
 export default function MobileBottomNavigation() {
   const router = useRouter();

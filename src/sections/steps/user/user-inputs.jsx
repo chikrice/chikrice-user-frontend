@@ -5,8 +5,8 @@ import { Container, IconButton } from '@mui/material';
 
 import useStore from 'src/store';
 import { paths } from 'src/routes/paths';
+import BMIView from 'src/sections/BMI/view';
 import { useRouter } from 'src/routes/hooks';
-import BMIView from 'src/sections/BMI/view/bmi';
 import { useLocalStorage } from 'src/hooks/use-local-storage';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { LeftIcon } from 'src/components/carousel/arrow-icons';

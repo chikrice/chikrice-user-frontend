@@ -11,7 +11,6 @@ export default function useTourData({ isOverLimit }) {
   const introTour = [
     {
       target: '.progress__tour__1',
-      // you can add the isOverLimit text later if necessary
       content: t('progress__tour__1'),
       disableBeacon: true,
       prevPath: null,
@@ -30,13 +29,6 @@ export default function useTourData({ isOverLimit }) {
       prevPath: null,
       nextPath: null,
     },
-    // {
-    //   target: '.profile__tour__1',
-    //   content: t('profile__tour__1'),
-    //   placement: 'bottom',
-    //   prevPath: paths.progress,
-    //   nextPath: paths.dashboard,
-    // },
   ];
 
   const dashboardTour = [
@@ -78,28 +70,6 @@ export default function useTourData({ isOverLimit }) {
       nextPath: null,
     },
   ];
-
-  // const susbcriptionsTour = [
-  // {
-  //   target: '.subs__tour__1',
-  //   content: t('subs__tour__1'),
-  //   prevPath: paths.user.profile,
-  //   nextPath: null,
-  // },
-  // {
-  //   target: '.subs__tour__2',
-  //   content: t('subs__tour__2'),
-  //   prevPath: null,
-  //   nextPath: null,
-  // },
-  // {
-  //   target: '.subs__tour__3',
-  //   content: t('subs__tour__3'),
-  //   prevPath: null,
-  //   nextPath: null,
-  //   placement: 'bottom',
-  // },
-  // ]
 
   const memoizedValue = useMemo(
     () => ({

@@ -1,13 +1,6 @@
 import numeral from 'numeral';
 
 // ----------------------------------------------------------------------
-
-export function fNumber(number) {
-  return numeral(number).format();
-}
-export function sum(a, b) {
-  return a + b;
-}
 export function fPercent(number) {
   const format = number ? numeral(Number(number) / 100).format('0.0%') : '';
 

@@ -2,8 +2,8 @@ import useStore from 'src/store';
 import { ReloadPage } from 'src/components/error-screen';
 import { LoadingScreen } from 'src/components/loading-screen';
 
+import Meals from '../meals-list';
 import MacrosBar from '../macros-bar';
-import Meals from '../meals-list/meals';
 import AddNewMeal from '../add-new-meal';
 import DayNavigator from '../day-navigator';
 

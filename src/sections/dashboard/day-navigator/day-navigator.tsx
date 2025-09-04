@@ -7,8 +7,8 @@ import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import { api, endpoints } from 'src/utils/axios';
 import { fDate, isDateisToday } from 'src/utils/format-time';
+import CustomBottomDrawer from 'src/components/custom-drawer';
 import CustomIconButton from 'src/components/custom-icon-button';
-import CustomBottomDrawer from 'src/components/custom-drawer/custom-drawer';
 
 import NavigationContent from './navigation-content';
 import CopySuccessMessage from './copy-success-message';
