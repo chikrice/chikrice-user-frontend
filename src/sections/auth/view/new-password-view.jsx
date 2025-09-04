@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
+import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
 import { api, endpoints } from 'src/utils/axios';
 import { RouterLink } from 'src/routes/components';
@@ -21,12 +22,17 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function ModernNewPasswordView() {
   const password = useBoolean();
-
+  const { t } = useTranslate();
   const NewPasswordSchema = Yup.object().shape({
-    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    password: Yup.string()
+      .trim()
+      .required(t('passwordRequired'))
+      .min(8, t('passwordError'))
+      .matches(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/, t('passwordMustContainNumberAndLetter')),
     confirmPassword: Yup.string()
-      .required('Confirm password is required')
-      .oneOf([Yup.ref('password')], 'Passwords must match'),
+      .trim()
+      .oneOf([Yup.ref('password'), null], t('passwordNotMatch'))
+      .required(t('confirmPasswordRequired')),
   });
 
   const searchParams = useSearchParams();

@@ -37,7 +37,7 @@ export default function ModernRegisterView() {
       .trim()
       .required(t('passwordRequired'))
       .min(8, t('passwordError'))
-      .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, t('passwordMustContainNumberAndLetter')),
+      .matches(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/, t('passwordMustContainNumberAndLetter')),
     confirmPassword: Yup.string()
       .trim()
       .oneOf([Yup.ref('password'), null], t('passwordNotMatch'))
