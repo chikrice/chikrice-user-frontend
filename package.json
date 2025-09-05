@@ -73,6 +73,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "knip": "^5.63.1",
     "prettier": "^3.6.2",
     "release-please": "^17.1.1",

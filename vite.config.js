@@ -45,7 +45,7 @@ export default defineConfig({
     }),
   ],
   esbuild: {
-    drop: ['console', 'debugger'],
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
   resolve: {
     alias: [
@@ -67,5 +67,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['js-big-decimal'],
+  },
+  test: {
+    globals: true,
+    include: ['tests/**/*{test,spec}.{js,jsx,ts,tsx}'],
+    environment: 'jsdom',
   },
 });
