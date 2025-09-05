@@ -12,6 +12,7 @@ const Page403 = lazy(() => import('src/pages/403'));
 const Page404 = lazy(() => import('src/pages/404'));
 const HomePage = lazy(() => import('src/pages/home'));
 const FaqsPage = lazy(() => import('src/pages/faqs'));
+
 // const AboutPage = lazy(() => import('src/pages/about'));
 // const ContactPage = lazy(() => import('src/pages/contact-us'));
 const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));

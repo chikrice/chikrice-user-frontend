@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import config from 'src/config-global';
-import { isTokenExpired } from 'src/store/helpers';
+import { isTokenExpired } from 'src/store/auth/helpers';
 import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
 // ----------------------------------------------------------------------
 

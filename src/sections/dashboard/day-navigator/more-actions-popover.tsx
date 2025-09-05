@@ -18,7 +18,6 @@ import {
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
-import { isPastDate } from 'src/utils/format-time';
 import { useBoolean } from 'src/hooks/use-boolean';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -27,7 +26,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 interface MoreActionsPopoverProps {
   sx?: SxProps;
-  date: string | Date;
   planDayId: string;
   onCopyPlan: () => void;
   onSavePlan: () => void;
@@ -36,7 +34,6 @@ interface MoreActionsPopoverProps {
 
 export default function MoreActionsPopover({
   sx,
-  date,
   planDayId,
   onCopyPlan,
   onSavePlan,

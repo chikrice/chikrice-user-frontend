@@ -5,6 +5,7 @@ import { UserClient } from 'chikrice-types';
 import { paths } from 'src/routes/paths';
 import { router } from 'src/routes/navigation';
 import { api, endpoints } from 'src/utils/axios';
+
 import {
   applyTokens,
   fetchUserByAccess,
@@ -13,11 +14,9 @@ import {
   isTokenExpired,
   resetUserInputs,
   setAuthHeader,
-} from 'src/store/helpers';
+} from './helpers';
 
 import type { Store, AuthState, UserInputs, AuthActions, Credentials, GoogleCredentials } from 'src/types';
-
-// -------------------------------------
 
 // -------------------------------------
 export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthActions> = (set, get) => ({
