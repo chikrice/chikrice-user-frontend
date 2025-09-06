@@ -18,7 +18,6 @@ const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free', 'custom'];
 export function getCurrentTimeSlot() {
   const now = new Date();
   const hours = now.getHours();
-
   // Define time slots
   const timeSlots = [
     { start: 0, end: 6, slot: '00:00-06:00' },
@@ -26,8 +25,8 @@ export function getCurrentTimeSlot() {
     { start: 9, end: 12, slot: '09:00-12:00' },
     { start: 12, end: 15, slot: '12:00-15:00' },
     { start: 15, end: 18, slot: '15:00-18:00' },
-    { start: 18, end: 20, slot: '18:00-21:00' },
-    { start: 21, end: 0, slot: '21:00-24:00' },
+    { start: 18, end: 21, slot: '18:00-21:00' },
+    { start: 21, end: 24, slot: '21:00-24:00' },
   ];
 
   for (const { start, end, slot } of timeSlots) {
@@ -42,7 +41,7 @@ export function getCurrentTimeSlot() {
 // ============================================
 // GET MEAL RECOMMENDED MACROS
 // ============================================
-export const getMealRecommendedMacros = (plan: PlanType): Macros => {
+export const getMealRecommendedMacros = (plan: Partial<PlanType>): Macros => {
   const { snacksCount, mealsCount, targetMacros } = plan;
   const { carb, pro, fat, cal } = targetMacros;
 
@@ -158,7 +157,7 @@ export const calcMealMacros = (meal: Meal): Macros => {
   const total: Macros = { cal: 0, carb: 0, pro: 0, fat: 0 };
 
   MACRO_KEYS.forEach((key) => {
-    meal.ingredients![key].forEach((ing) => {
+    meal?.ingredients?.[key].forEach((ing) => {
       total.cal += ing?.macros?.cal || 0;
       total.carb += ing?.macros?.carb || 0;
       total.pro += ing?.macros?.pro || 0;
