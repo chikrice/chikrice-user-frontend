@@ -10,7 +10,6 @@ import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-stora
 // -------------------------------------
 
 const USER_INPUTS_KEY = 'user-inputs';
-const COACH_INPUTS_KEY = 'coach-inputs';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
@@ -18,7 +17,6 @@ const REFRESH_TOKEN_KEY = 'refreshToken';
 
 export const resetUserInputs = () => {
   setStorage(USER_INPUTS_KEY, userInputsInitialState);
-  setStorage(COACH_INPUTS_KEY, { experience: null, speciality: [] });
 };
 
 export const applyTokens = (tokens: Tokens) => {
