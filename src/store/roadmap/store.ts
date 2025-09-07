@@ -3,6 +3,8 @@ import { PlanType, RoadmapType } from 'chikrice-types';
 
 import { api, endpoints } from 'src/utils/axios';
 
+import { resetUserInputs } from '../auth/helpers';
+
 import type { CreateRoadmapInputs, RoadmapActions, RoadmapState, Store } from 'src/types';
 
 export const createRoadmapStore: StateCreator<Store, [], [], RoadmapState & RoadmapActions> = (set, get) => ({
@@ -20,6 +22,7 @@ export const createRoadmapStore: StateCreator<Store, [], [], RoadmapState & Road
       set({ roadmapLoading: true });
       const roadmap = await get().createRoadmap(createRoadmapInputs);
       const plans = await get().createPlans(roadmap, 1);
+      resetUserInputs();
       await get().initializePlan(plans);
     } catch (error) {
       set({ roadmapError: error.message || 'Failed to create user journey' });

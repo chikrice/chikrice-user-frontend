@@ -9,7 +9,7 @@ import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-stora
 
 // -------------------------------------
 
-const USER_INPUTS_KEY = 'user-inputs';
+export const USER_INPUTS_KEY = 'user-inputs';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
@@ -23,7 +23,7 @@ export const applyTokens = (tokens: Tokens) => {
   if (tokens) {
     setStorage('accessToken', tokens.access);
     setStorage('refreshToken', tokens.refresh);
-    api.defaults.headers.common.Authorization = `Bearer ${tokens.access.token}`;
+    setAuthHeader(tokens?.access?.token);
   } else {
     removeStorage('accessToken');
     removeStorage('refreshToken');
