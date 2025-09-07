@@ -1,2 +1,1 @@
-export * from './api';
-export * from './node';
+export { server } from './node';

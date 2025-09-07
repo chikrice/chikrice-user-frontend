@@ -40,7 +40,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         if (user?.roadmapId) {
           await get().loadUserJourney(user.roadmapId);
         } else {
-          router.push(paths.steps);
+          router.push(paths.steps.user);
         }
         return;
       }
@@ -55,7 +55,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         if (user?.roadmapId) {
           await get().loadUserJourney(user.roadmapId);
         } else {
-          router.push(paths.steps);
+          router.push(paths.steps.user);
         }
         set({ user, tokens, authenticated: true });
         return;
