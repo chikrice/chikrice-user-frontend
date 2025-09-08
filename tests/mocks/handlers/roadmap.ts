@@ -29,9 +29,17 @@ export const roadmapHandlers = [
     return HttpResponse.json({ error: 'Roadmap not found' }, { status: 404 });
   }),
 
-  http.post(baseURL + endpoints.roadmap.create, async () => {
+  http.post(baseURL + endpoints.roadmap.create, async ({ request }) => {
+    const body: any = await request.json();
+    const token = request.headers.get('authorization');
+
+    if (token !== 'Bearer valid-access-token') {
+      return HttpResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
     return HttpResponse.json({
       id: 'new-roadmap-123',
+      userId: body.userId,
       milestones: [
         {
           id: 'milestone-1',

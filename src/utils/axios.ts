@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
         const refreshToken = getStorage('refreshToken');
 
         if (!refreshToken || isTokenExpired(refreshToken.expires)) {
-          throw new Error('Refresh token expired');
+          throw new Error('Invalid credentials');
         }
 
         // Call refresh token endpoint
