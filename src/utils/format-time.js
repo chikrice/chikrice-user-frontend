@@ -57,10 +57,8 @@ export function isPastDate(date) {
   const today = new Date();
   const dateObj = new Date(date);
 
-  // Reset hours, minutes, seconds, and milliseconds for an accurate comparison
   today.setHours(0, 0, 0, 0);
   dateObj.setHours(0, 0, 0, 0);
 
-  // Compare the full date (year, month, day)
   return dateObj < today;
 }

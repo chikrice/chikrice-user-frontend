@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': 'off',
     'react/display-name': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'perfectionist/sort-imports': [
       'error',
       {

@@ -1,8 +1,3 @@
-import { Tokens } from 'src/types';
-import { api, endpoints } from 'src/utils/axios';
-import { userInputsInitialState } from 'src/sections/steps/user/user-inputs';
-import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
-
 import type {
   IngredientType,
   MacroType,
@@ -13,103 +8,9 @@ import type {
   PlanType,
 } from 'chikrice-types';
 
-// -------------------------------------
-
-// =====================================
-// AUTH HELPERS
-//=====================================
-
-// -------------------------------------
 const MACRO_KEYS: MacroType[] = ['carb', 'pro', 'fat', 'free', 'custom'];
 
-const USER_INPUTS_KEY = 'user-inputs';
-const COACH_INPUTS_KEY = 'coach-inputs';
-const ACCESS_TOKEN_KEY = 'accessToken';
-const REFRESH_TOKEN_KEY = 'refreshToken';
-
 // -------------------------------------
-
-export const resetUserInputs = () => {
-  setStorage(USER_INPUTS_KEY, userInputsInitialState);
-  setStorage(COACH_INPUTS_KEY, { experience: null, speciality: [] });
-};
-
-export const applyTokens = (tokens: Tokens) => {
-  if (tokens) {
-    setStorage('accessToken', tokens.access);
-    setStorage('refreshToken', tokens.refresh);
-    api.defaults.headers.common.Authorization = `Bearer ${tokens.access.token}`;
-  } else {
-    removeStorage('accessToken');
-    removeStorage('refreshToken');
-    delete api.defaults.headers.common.Authorization;
-  }
-};
-
-export const getStoredAccess = () => getStorage(ACCESS_TOKEN_KEY);
-export const getStoredRefresh = () => getStorage(REFRESH_TOKEN_KEY);
-
-export const fetchUserByAccess = async (accessToken: string) => {
-  const {
-    data: { user },
-  } = await api.post(endpoints.auth.me, { accessToken });
-  return user;
-};
-
-export const setAuthHeader = (token: string) => {
-  if (token) {
-    api.defaults.headers.common.Authorization = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common.Authorization;
-  }
-};
-
-/**
- * Check if a token is expired based on its expiration time.
- * @param {string} expires - Expiration date in string format
- * @returns {boolean}
- */
-export const isTokenExpired = (expires) => {
-  const expirationDate = new Date(expires);
-  return expirationDate.getTime() < Date.now();
-};
-
-/**
- * Set access token in local storage and initialize session lifecycle.
- * @param {object|null} token - Access token object containing token string and expiration.
- */
-export const setAccessTokenSession = (token) => {
-  console.log(token);
-
-  if (token) {
-    setStorage(ACCESS_TOKEN_KEY, token);
-    api.defaults.headers.common.Authorization = `Bearer ${token.token}`;
-  } else {
-    removeStorage(ACCESS_TOKEN_KEY);
-    delete api.defaults.headers.common.Authorization;
-  }
-};
-
-/**
- * Set refresh token in local storage.
- * @param {object|null} token - Refresh token object containing token string and expiration.
- */
-export const setRefreshTokenSession = (token) => {
-  if (token) {
-    setStorage(REFRESH_TOKEN_KEY, token);
-  } else {
-    removeStorage(REFRESH_TOKEN_KEY);
-  }
-};
-
-/**
- * Handle storing both access and refresh tokens in local storage.
- * @param {object} tokens - Object containing both access and refresh tokens.
- */
-export const handleTokensSession = (tokens) => {
-  setAccessTokenSession(tokens?.access || null);
-  setRefreshTokenSession(tokens?.refresh || null);
-};
 
 // =====================================
 // PLAN HELPERS
@@ -117,7 +18,6 @@ export const handleTokensSession = (tokens) => {
 export function getCurrentTimeSlot() {
   const now = new Date();
   const hours = now.getHours();
-
   // Define time slots
   const timeSlots = [
     { start: 0, end: 6, slot: '00:00-06:00' },
@@ -125,8 +25,8 @@ export function getCurrentTimeSlot() {
     { start: 9, end: 12, slot: '09:00-12:00' },
     { start: 12, end: 15, slot: '12:00-15:00' },
     { start: 15, end: 18, slot: '15:00-18:00' },
-    { start: 18, end: 20, slot: '18:00-21:00' },
-    { start: 21, end: 0, slot: '21:00-24:00' },
+    { start: 18, end: 21, slot: '18:00-21:00' },
+    { start: 21, end: 24, slot: '21:00-24:00' },
   ];
 
   for (const { start, end, slot } of timeSlots) {
@@ -141,7 +41,7 @@ export function getCurrentTimeSlot() {
 // ============================================
 // GET MEAL RECOMMENDED MACROS
 // ============================================
-export const getMealRecommendedMacros = (plan: PlanType): Macros => {
+export const getMealRecommendedMacros = (plan: Partial<PlanType>): Macros => {
   const { snacksCount, mealsCount, targetMacros } = plan;
   const { carb, pro, fat, cal } = targetMacros;
 
@@ -257,7 +157,7 @@ export const calcMealMacros = (meal: Meal): Macros => {
   const total: Macros = { cal: 0, carb: 0, pro: 0, fat: 0 };
 
   MACRO_KEYS.forEach((key) => {
-    meal.ingredients![key].forEach((ing) => {
+    meal?.ingredients?.[key].forEach((ing) => {
       total.cal += ing?.macros?.cal || 0;
       total.carb += ing?.macros?.carb || 0;
       total.pro += ing?.macros?.pro || 0;

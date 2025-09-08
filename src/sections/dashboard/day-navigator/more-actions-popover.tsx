@@ -18,7 +18,6 @@ import {
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
-import { isPastDate } from 'src/utils/format-time';
 import { useBoolean } from 'src/hooks/use-boolean';
 import CustomIconButton from 'src/components/custom-icon-button';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
@@ -27,7 +26,6 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 interface MoreActionsPopoverProps {
   sx?: SxProps;
-  date: string | Date;
   planDayId: string;
   onCopyPlan: () => void;
   onSavePlan: () => void;
@@ -36,7 +34,6 @@ interface MoreActionsPopoverProps {
 
 export default function MoreActionsPopover({
   sx,
-  date,
   planDayId,
   onCopyPlan,
   onSavePlan,
@@ -52,8 +49,6 @@ export default function MoreActionsPopover({
   const { user } = useStore();
   const isDeletePlan = useBoolean();
 
-  // Memoize the result to avoid recalculating on every render unless the date changes
-  const isDisabled = useMemo(() => isPastDate(date), [date]);
   const isPlanSaved = useMemo(() => user?.savedPlans?.includes(planDayId), [planDayId, user]);
 
   // Generic handler to wrap the actions and close the popover
@@ -105,11 +100,7 @@ export default function MoreActionsPopover({
           <Divider />
 
           <ListItem disablePadding>
-            <ListItemButton
-              sx={{ color: 'error.main' }}
-              onClick={handleAction(isDeletePlan.onTrue)}
-              disabled={isDisabled}
-            >
+            <ListItemButton sx={{ color: 'error.main' }} onClick={handleAction(isDeletePlan.onTrue)}>
               <ListItemIcon>
                 <Iconify icon={'fluent:delete-12-filled'} />
               </ListItemIcon>

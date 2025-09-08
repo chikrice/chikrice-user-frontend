@@ -116,7 +116,6 @@ export default function DayNavigator({
         <Box display={'flex'} gap={0.5}>
           {!isDisableMealsActions && (
             <MoreActionsPopover
-              date={plan?.date}
               planDayId={plan.id}
               onCopyPlan={() => handleOpenDrawer('copy')}
               onSavePlan={handleToggleSavePlan}

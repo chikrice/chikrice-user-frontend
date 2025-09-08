@@ -12,6 +12,16 @@ import type {
 // ============================================
 // AUTH TYPES
 // ============================================
+export interface Token {
+  token: string;
+  expires: string;
+}
+
+export interface Tokens {
+  access: Token;
+  refresh: Token;
+}
+
 export interface Credentials {
   email: string;
   password: string;

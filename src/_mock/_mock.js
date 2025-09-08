@@ -27,7 +27,7 @@ import {
   _productNames,
   _descriptions,
   _phoneNumbers,
-} from './assets';
+} from './_assets';
 
 // ----------------------------------------------------------------------
 

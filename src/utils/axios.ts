@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import config from 'src/config-global';
-import { isTokenExpired } from 'src/store/helpers';
+import { isTokenExpired } from 'src/store/auth/helpers';
 import { getStorage, removeStorage, setStorage } from 'src/hooks/use-local-storage';
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ const axiosInstance = axios.create({ baseURL: config.apiUrl });
 let isRefreshing = false;
 let failedQueue = [];
 
-const processQueue = (error, token = null) => {
+const processQueue = (error: unknown, token = null) => {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) {
       reject(error);
@@ -120,7 +120,7 @@ export { axiosInstance as api };
 
 // ----------------------------------------------------------------------
 
-export const fetcher = async (args) => {
+export const fetcher = async (args: unknown) => {
   const [url, config] = Array.isArray(args) ? args : [args];
 
   const res = await axiosInstance.get(url, { ...config });
@@ -141,61 +141,38 @@ export const endpoints = {
     logout: `${API_VERSION}/auth/logout`,
     refreshTokens: `${API_VERSION}/auth/refresh-tokens`,
     forgotPassword: `${API_VERSION}/auth/forgot-password`,
-    resetPassword: (token) => `${API_VERSION}/auth/reset-password?token=${token}`,
     verifyEmailCode: `${API_VERSION}/auth/verify-email-code`,
     sendVerificationCode: `${API_VERSION}/auth/send-verification-code`,
     resendVerificationCode: `${API_VERSION}/auth/resend-verification-code`,
+    resetPassword: (token: string) => `${API_VERSION}/auth/reset-password?token=${token}`,
   },
-  search: {
-    root: `${API_VERSION}/search`,
-  },
-  review: {
-    add: `${API_VERSION}/review/add`,
-    delete: (id) => `${API_VERSION}/review/delete/${id}`,
-    update: (id) => `${API_VERSION}/review/update/${id}`,
-  },
-  coach: {
-    list: `${API_VERSION}/coaches/`,
-    root: (id) => `${API_VERSION}/coaches/coach/${id}`,
-    client: {
-      root: `${API_VERSION}/coaches/client`,
-      list: (id) => `${API_VERSION}/coaches/clients/${id}`,
-    },
-  },
+
   user: {
-    id: (userId) => `${API_VERSION}/users/${userId}`,
-    orders: (id) => `${API_VERSION}/users/orders/${id}`,
-    initCollab: (id) => `${API_VERSION}/users/init-coach-collab/${id}`,
-    preferences: (userId) => `${API_VERSION}/users/preferences/${userId}`,
-    ingredients: (userId) => `${API_VERSION}/users/custom-ingredients/${userId}`,
-    processIngredients: (userId) => `${API_VERSION}/users/process-ingredient-prompt/${userId}`,
+    id: (userId: string) => `${API_VERSION}/users/${userId}`,
+    preferences: (userId: string) => `${API_VERSION}/users/preferences/${userId}`,
+    ingredients: (userId: string) => `${API_VERSION}/users/custom-ingredients/${userId}`,
+    processIngredients: (userId: string) => `${API_VERSION}/users/process-ingredient-prompt/${userId}`,
   },
-  address: {
-    create: `${API_VERSION}/users/address`,
-    update: (id) => `${API_VERSION}/users/address/${id}`,
-    delete: (id) => `${API_VERSION}/users/address/${id}`,
-  },
+
   roadmap: {
-    root: (id) => `${API_VERSION}/roadmaps/${id}`,
+    root: (id: string) => `${API_VERSION}/roadmaps/${id}`,
     create: `${API_VERSION}/roadmaps/`,
-    updateActivityLog: (roadmapId) => `${API_VERSION}/roadmaps/activity-log/${roadmapId}`,
+    updateActivityLog: (roadmapId: string) => `${API_VERSION}/roadmaps/activity-log/${roadmapId}`,
   },
+
   ingredient: {
     search: `${API_VERSION}/ingredients/user/search/`,
-    categories: `${API_VERSION}/ingredients/categories/`,
   },
+
   plans: {
     root: `${API_VERSION}/plans/`,
-    id: (planId) => `${API_VERSION}/plans/${planId}`,
-
+    id: (planId: string) => `${API_VERSION}/plans/${planId}`,
     meals: {
-      id: (mealId) => `${API_VERSION}/plans/meal/${mealId}`,
-      create: (planId) => `${API_VERSION}/plans/meal/${planId}`,
-      toggleMode: (planId) => `${API_VERSION}/plans/meal/toggle-mode/${planId}`,
-      suggestions: (mealId) => `${API_VERSION}/plans/meal/suggestions/${mealId}`,
-      addSuggested: (mealId) => `${API_VERSION}/plans/meal/add-suggested/${mealId}`,
-      toggleIngredient: (planId) => `${API_VERSION}/plans/meal/toggle-ingredient/${planId}`,
+      id: (mealId: string) => `${API_VERSION}/plans/meal/${mealId}`,
+      suggestions: (mealId: string) => `${API_VERSION}/plans/meal/suggestions/${mealId}`,
+      addSuggested: (mealId: string) => `${API_VERSION}/plans/meal/add-suggested/${mealId}`,
     },
   },
+
   faqs: `${API_VERSION}/faqs`,
 };

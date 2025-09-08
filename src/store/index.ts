@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
-import { createAuthStore } from './auth-store';
-import { createPlanStore } from './plan-store';
-import { createRoadmapStore } from './roadmap-store';
+import { createAuthStore } from './auth';
+import { createPlanStore } from './plan';
+import { createRoadmapStore } from './roadmap';
 
 import type { Store } from 'src/types';
 

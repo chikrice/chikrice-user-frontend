@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { endpoints, fetcher } from 'src/utils/axios';
 
-export function useSearchIngredients(userId, query) {
+export function useSearchIngredients(userId: string, query: string) {
   const URL = userId ? [endpoints.ingredient.search, { params: { userId, query } }] : null;
 
   const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetcher, {
@@ -26,7 +26,7 @@ export function useSearchIngredients(userId, query) {
   return memoizedValue;
 }
 
-export function useUserIngredients(userId) {
+export function useUserIngredients(userId: string) {
   const URL = userId ? [endpoints.user.ingredients(userId)] : null;
 
   const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetcher);

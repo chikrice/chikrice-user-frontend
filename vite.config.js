@@ -68,4 +68,10 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['js-big-decimal'],
   },
+  test: {
+    globals: true,
+    include: ['tests/**/*{test,spec}.{js,jsx,ts,tsx}'],
+    environment: 'jsdom',
+    setupFiles: ['tests/config/vitest.setup.ts'],
+  },
 });
