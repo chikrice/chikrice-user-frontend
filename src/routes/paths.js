@@ -7,7 +7,7 @@ const ROOTS = {
 
 export const paths = {
   home: '/',
-  dashboard: `/dashboard/`,
+  dashboard: `/dashboard`,
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   about: '/about-us',

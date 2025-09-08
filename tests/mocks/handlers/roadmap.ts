@@ -7,10 +7,42 @@ const baseURL = config.apiUrl;
 
 export const roadmapHandlers = [
   http.get(baseURL + endpoints.roadmap.root(':id'), async ({ params }) => {
-    // ... roadmap handler
+    const { id } = params;
+
+    if (id === 'roadmap-123') {
+      return HttpResponse.json({
+        id: 'roadmap-123',
+        milestones: [
+          {
+            id: 'milestone-1',
+            startDate: '2024-01-01',
+            endDate: '2024-01-30',
+            macrosRatio: { protein: 30, carbs: 40, fat: 30 },
+            targetCalories: 2000,
+            plans: null,
+          },
+        ],
+        onGoingMonth: 1,
+      });
+    }
+
+    return HttpResponse.json({ error: 'Roadmap not found' }, { status: 404 });
   }),
 
-  http.post(baseURL + endpoints.roadmap.create, async ({ request }) => {
-    // ... roadmap create handler
+  http.post(baseURL + endpoints.roadmap.create, async () => {
+    return HttpResponse.json({
+      id: 'new-roadmap-123',
+      milestones: [
+        {
+          id: 'milestone-1',
+          startDate: '2024-01-01',
+          endDate: '2024-01-30',
+          macrosRatio: { protein: 30, carbs: 40, fat: 30 },
+          targetCalories: 2000,
+          plans: null,
+        },
+      ],
+      onGoingMonth: 1,
+    });
   }),
 ];

@@ -34,9 +34,6 @@ export const authHandlers = [
 
     return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }),
-  http.post(baseURL + endpoints.auth.login, async ({ request }) => {
-    // ... auth/login handler
-  }),
 
   http.post(baseURL + endpoints.auth.refreshTokens, async ({ request }) => {
     const body: any = await request.json();
@@ -67,5 +64,83 @@ export const authHandlers = [
     }
 
     return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }),
+
+  http.post(baseURL + endpoints.auth.login, async ({ request }) => {
+    const body: any = await request.json();
+
+    if (body.email === 'user@example.com' && body.password === 'password123') {
+      return HttpResponse.json({
+        user: {
+          id: 'user-123',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: body.email,
+          roadmapId: 'roadmap-123',
+        },
+        tokens: {
+          access: {
+            token: 'login-access-token',
+            expires: '2025-12-31T23:00:00',
+          },
+          refresh: {
+            token: 'login-refresh-token',
+            expires: '2026-12-31T23:00:00',
+          },
+        },
+      });
+    }
+
+    if (body.email === 'user-no-roadmap@example.com' && body.password === 'password123') {
+      return HttpResponse.json({
+        user: {
+          id: 'user-456',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: body.email,
+          roadmapId: null,
+        },
+        tokens: {
+          access: {
+            token: 'login-access-token-no-roadmap',
+            expires: '2025-12-31T23:00:00',
+          },
+          refresh: {
+            token: 'login-refresh-token-no-roadmap',
+            expires: '2026-12-31T23:00:00',
+          },
+        },
+      });
+    }
+
+    return HttpResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+  }),
+
+  http.post(baseURL + endpoints.auth.register, async ({ request }) => {
+    const body: any = await request.json();
+
+    if (body.email === 'error@test.com') {
+      return HttpResponse.json({ error: 'Email already exists' }, { status: 400 });
+    }
+
+    return HttpResponse.json({
+      user: {
+        id: 'new-user-123',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        email: body.email,
+        roadmapId: null,
+      },
+      tokens: {
+        access: {
+          token: 'new-access-token',
+          expires: '2025-12-31T23:00:00',
+        },
+        refresh: {
+          token: 'new-refresh-token',
+          expires: '2026-12-31T23:00:00',
+        },
+      },
+    });
   }),
 ];

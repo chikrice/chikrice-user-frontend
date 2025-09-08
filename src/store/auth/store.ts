@@ -83,7 +83,7 @@ export const createAuthStore: StateCreator<Store, [], [], AuthState & AuthAction
         await get().loadUserJourney(user.roadmapId);
         router.push(paths.dashboard);
       } else {
-        router.push(paths.steps);
+        router.push(paths.steps.user);
       }
     } catch ({ error }) {
       enqueueSnackbar(error?.message, { variant: 'error' });

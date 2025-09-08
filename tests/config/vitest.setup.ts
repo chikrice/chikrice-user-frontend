@@ -17,6 +17,10 @@ vi.mock('src/routes/navigation', () => ({
   },
 }));
 
+vi.mock('notistack', () => ({
+  enqueueSnackbar: vi.fn(),
+}));
+
 export const createTestStore = () => {
   return useStore;
 };
