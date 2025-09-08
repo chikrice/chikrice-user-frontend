@@ -133,7 +133,6 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
     const updatedPlan = updateIngredientInMeal(currentPlan, mealIndex, ingredient, breakpoint);
     set({ plan: updatedPlan });
   },
-
   decrementIngredient: (mealIndex: number, ingredient: MealIngredient) => {
     const currentPlan = get().plan;
     const breakpoint = ingredient.serving.breakpoint || 1;
