@@ -199,6 +199,11 @@ export const updateIngredientInMeal = (
   const macroArr = meal.ingredients[macroType];
 
   const ingredientIdx = macroArr.findIndex((ing) => ing.ingredientId === ingredient.ingredientId);
+
+  if (ingredientIdx === -1) {
+    return updatedPlan;
+  }
+
   const ingToUpdate = macroArr[ingredientIdx];
   const newQty = Math.max(0, ingToUpdate.portion.qty + quantityChange);
 

@@ -26,22 +26,18 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
   planError: null,
   //
   initializePlan: async (plans: PlanReference[]) => {
-    console.log('📋 [PLAN] Initializing plan with plans:', plans?.length);
     try {
       const todayPlan = plans.find((plan) => {
         const planDate = new Date(plan.date);
         return isToday(planDate);
       });
-      console.log('📋 [PLAN] Today plan found:', todayPlan?.planId);
 
       const { planId, number } = todayPlan;
+
       if (planId && number) {
-        console.log('📋 [PLAN] Getting plan details for:', planId);
         await get().getPlan(planId);
         set({ day: number });
-        console.log('📋 [PLAN] Plan initialized successfully');
       } else {
-        console.log('📋 [PLAN] No plan found for today');
         set({ plan: null, day: number, planError: 'No plan found for today' });
       }
     } catch (error) {
@@ -137,7 +133,6 @@ export const createPlanStore: StateCreator<Store, [], [], PlanState & PlanAction
     const updatedPlan = updateIngredientInMeal(currentPlan, mealIndex, ingredient, breakpoint);
     set({ plan: updatedPlan });
   },
-
   decrementIngredient: (mealIndex: number, ingredient: MealIngredient) => {
     const currentPlan = get().plan;
     const breakpoint = ingredient.serving.breakpoint || 1;
