@@ -53,16 +53,10 @@ export default function Gender({ gender, onNext }) {
               px: 2,
               py: 1,
               cursor: 'pointer',
-              border: (theme) =>
-                gender === option.value ? `solid 1px ${theme.palette.primary.main}` : '',
+              border: (theme) => (gender === option.value ? `solid 1px ${theme.palette.primary.main}` : ''),
             }}
           >
-            <CardMedia
-              component="img"
-              sx={{ width: 90 }}
-              image={option.imgSrc}
-              alt={option.title}
-            />
+            <CardMedia component="img" sx={{ width: 90 }} image={option.imgSrc} alt={option.title} />
             <CardContent>
               <Typography component="div" variant="h5">
                 {option.title}

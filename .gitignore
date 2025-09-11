@@ -31,3 +31,9 @@ z.md
 
 # HTML Stats
 stats.html
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
