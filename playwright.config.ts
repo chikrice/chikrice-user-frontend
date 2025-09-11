@@ -24,31 +24,37 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for mobile devices only */
   projects: [
+    // Chromium engine (Chrome, Edge, Opera, Brave, etc.)
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'Mobile Chromium',
+      use: { ...devices['Pixel 7'] },
     },
-
+    // WebKit engine (Safari, all iOS browsers)
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
+      name: 'Mobile Webkit',
       use: { ...devices['iPhone 12'] },
     },
+    // Gecko engine (Firefox, Tor, etc.)
+    {
+      name: 'Mobile Firefox',
+      use: {
+        browserName: 'firefox',
+        viewport: { width: 393, height: 851 },
+        userAgent: 'Mozilla/5.0 (Mobile; rv:68.0) Gecko/68.0 Firefox/68.0',
+      },
+    },
+    // Edge (Chromium-based) with Edge-specific user agent
+    {
+      name: 'Mobile Edge',
+      use: {
+        ...devices['Pixel 7'],
+        channel: 'msedge',
+      },
+    },
 
-    /* Test against branded browsers. */
+    /* Test against desktop branded browsers. */
     // {
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
