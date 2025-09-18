@@ -34,7 +34,10 @@ export const userInputsInitialState = {
 
 export default function UserInputs() {
   const router = useRouter();
-  const { user, authenticated, createRoadmap, updateUser } = useStore();
+  const user = useStore((state) => state.user);
+  const authenticated = useStore((state) => state.authenticated);
+  const createRoadmap = useStore((state) => state.createUserJourney);
+  const updateUser = useStore((state) => state.updateUser);
 
   const [step, setStep] = useState(1);
   const { state: userInputs, update } = useLocalStorage(STORAGE_KEY, userInputsInitialState);

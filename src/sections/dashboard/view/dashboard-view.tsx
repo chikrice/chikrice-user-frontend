@@ -10,18 +10,16 @@ import DayNavigator from '../day-navigator';
 // -------------------------------------
 
 export default function DashboardView() {
-  const {
-    day,
-    plan,
-    plans,
-    totalDays,
-    roadmapLoading,
-    roadmapError,
-    planError,
-    isAuthLoading,
-    planLoading,
-    updateDay,
-  } = useStore((state) => state);
+  const day = useStore((state) => state.day);
+  const plan = useStore((state) => state.plan);
+  const plans = useStore((state) => state.plans);
+  const totalDays = useStore((state) => state.totalDays);
+  const roadmapLoading = useStore((state) => state.roadmapLoading);
+  const roadmapError = useStore((state) => state.roadmapError);
+  const planError = useStore((state) => state.planError);
+  const isAuthLoading = useStore((state) => state.isAuthLoading);
+  const planLoading = useStore((state) => state.planLoading);
+  const updateDay = useStore((state) => state.updateDay);
 
   // Add comprehensive loading checks
   const isLoading = isAuthLoading || roadmapLoading;

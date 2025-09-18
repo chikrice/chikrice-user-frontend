@@ -5,7 +5,9 @@ import { useTranslate } from 'src/locales';
 
 export default function ReloadPage() {
   const { t } = useTranslate();
-  const { authError, roadmapError, planError } = useStore((state) => state);
+  const authError = useStore((state) => state.authError);
+  const roadmapError = useStore((state) => state.roadmapError);
+  const planError = useStore((state) => state.planError);
 
   // Determine which error to show and create appropriate message
   const getErrorMessage = () => {

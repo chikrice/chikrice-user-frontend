@@ -6,7 +6,7 @@ import { useTranslate } from 'src/locales';
 
 export default function useTourData({ isOverLimit }) {
   const { t } = useTranslate();
-  const { user } = useStore();
+  const user = useStore((state) => state.user);
 
   const introTour = [
     {

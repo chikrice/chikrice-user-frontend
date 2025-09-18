@@ -14,7 +14,9 @@ import MilestonesBreakdown from '../milestones-breakdown';
 // -------------------------------------
 
 export default function ProgressView() {
-  const { roadmap, roadmapLoading, roadmapError } = useStore((state) => state);
+  const roadmap = useStore((state) => state.roadmap);
+  const roadmapLoading = useStore((state) => state.roadmapLoading);
+  const roadmapError = useStore((state) => state.roadmapError);
   const { isFirstLogin } = useTourContext() as { isFirstLogin: boolean };
 
   if (roadmapLoading) return <LoadingScreen />;

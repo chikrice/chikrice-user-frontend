@@ -60,7 +60,7 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }: Stre
           mb: 1,
         }}
       >
-        <Typography variant="h3">{t('streks')}</Typography>
+        <Typography variant="h5">{t('streks')}</Typography>
         <Typography variant="subtitle2" color={'text.secondary'}>
           {onGoingDay}/{totalDays}🔥
         </Typography>

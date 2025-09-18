@@ -26,7 +26,7 @@ export default function ModernLoginView() {
   const { t } = useTranslate();
   const password = useBoolean();
 
-  const { login } = useStore();
+  const login = useStore((state) => state.login);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required(t('emailRequired')).email(t('emailInvalid')),

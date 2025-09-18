@@ -22,7 +22,9 @@ import UserEditForm from '../user-edit-form';
 export default function UserProfileView() {
   const { t } = useTranslate();
 
-  const { user, isAuthLoading, authError } = useStore();
+  const user = useStore((state) => state.user);
+  const isAuthLoading = useStore((state) => state.isAuthLoading);
+  const authError = useStore((state) => state.authError);
 
   const [isEdit, setIsEdit] = useState(false);
   const [fieldName, setFieldName] = useState('info');

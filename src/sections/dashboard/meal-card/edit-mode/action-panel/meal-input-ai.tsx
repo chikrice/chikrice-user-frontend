@@ -16,7 +16,8 @@ interface MealInputAiProps {
 export default function MealInputAi({ mealIndex }: MealInputAiProps) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
-  const { user, toggleIngredient } = useStore((state) => state);
+  const user = useStore((state) => state.user);
+  const toggleIngredient = useStore((state) => state.toggleIngredient);
   const [prompt, setPrompt] = useState<string>('');
 
   const handleEnterMeal = async (): Promise<void> => {

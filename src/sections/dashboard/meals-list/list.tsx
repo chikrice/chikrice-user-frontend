@@ -28,6 +28,7 @@ export default function MealsList({ plan }: MealsListProps) {
                 index={index}
                 meal={meal}
                 plan={plan}
+                isAction={true}
                 ingredients={Object.values(meal?.ingredients).flat()}
               />
             ))}

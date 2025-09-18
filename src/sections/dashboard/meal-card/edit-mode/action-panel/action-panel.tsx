@@ -43,7 +43,10 @@ export default function ActionPanel({
 }: ActionPanelProps) {
   const { t } = useTranslate();
 
-  const { user, updatePlan, toggleMealMode, toggleIngredient } = useStore((store) => store);
+  const user = useStore((state) => state.user);
+  const updatePlan = useStore((state) => state.updatePlan);
+  const toggleMealMode = useStore((state) => state.toggleMealMode);
+  const toggleIngredient = useStore((state) => state.toggleIngredient);
 
   const isTellAi = useBoolean();
   const isDeleteMeal = useBoolean();
@@ -83,7 +86,7 @@ export default function ActionPanel({
         enqueueSnackbar(error.message || 'Failed to add ingredient, please try again', { variant: 'error' });
       }
     },
-    [mealIndex, isIngredientDialog, user.id, toggleIngredient, mutate]
+    [mealIndex, isIngredientDialog, user?.id, toggleIngredient, mutate]
   );
 
   const [drawerOpen, setDrawerOpen] = useState(isOpen);

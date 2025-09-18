@@ -19,12 +19,13 @@ interface MealCardProps {
   meal: Meal;
   index: number;
   plan: PlanType;
+  isAction: boolean;
   ingredients: MealIngredient[];
 }
 
 // -------------------------------------
 
-export default function MealCard({ meal, index, plan, ingredients }: MealCardProps) {
+export default function MealCard({ meal, index, plan, ingredients, isAction = true }: MealCardProps) {
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
@@ -42,7 +43,7 @@ export default function MealCard({ meal, index, plan, ingredients }: MealCardPro
       <Card className={'dash__tour__3'} sx={cardStyle} ref={cardRef}>
         <Box sx={headerStyle}>
           <Stack>
-            <Typography variant="subtitle2" textTransform={'capitalize'}>
+            <Typography variant="subtitle2" textTransform={'capitalize'} textAlign={'start'}>
               {t('meal')} {index + 1}
             </Typography>
             <Typography variant="body2" color={'text.secondary'}>
@@ -50,7 +51,9 @@ export default function MealCard({ meal, index, plan, ingredients }: MealCardPro
             </Typography>
           </Stack>
 
-          <HeaderActionsPopover mode={meal.mode} mealId={meal.id} mealIndex={index} planId={plan.id} />
+          {isAction && (
+            <HeaderActionsPopover mode={meal.mode} mealId={meal.id} mealIndex={index} planId={plan.id} />
+          )}
         </Box>
 
         <CardContent sx={contentStyle}>

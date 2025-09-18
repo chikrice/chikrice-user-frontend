@@ -33,7 +33,7 @@ import { ConfirmDialog, IngredientFormDialog } from 'src/components/custom-dialo
 export default function UserIngredientsView() {
   const { t } = useTranslate();
   const { lang } = useLocales();
-  const { user } = useStore((state) => state);
+  const user = useStore((state) => state.user);
 
   // Use real data from API
   const { ingredients, isLoading, error, mutate } = useUserIngredients(user?.id);

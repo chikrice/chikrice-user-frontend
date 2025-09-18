@@ -79,10 +79,13 @@ export const macroBreakdownStyles = {
 export const stickyBarStyles = {
   position: 'sticky',
   p: 1,
+  pt: 2,
   px: '5%',
   top: '-2px',
   left: 0,
   zIndex: 100,
   borderBottomLeftRadius: 30,
   borderBottomRightRadius: 30,
+  borderTopLeftRadius: 8,
+  borderTopRightRadius: 8,
 };

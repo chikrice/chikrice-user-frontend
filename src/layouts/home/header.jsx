@@ -33,7 +33,7 @@ export default function Header() {
 
   const navConfigData = useNavConfig();
 
-  const { authenticated } = useStore();
+  const authenticated = useStore((state) => state.authenticated);
 
   return (
     <AppBar>

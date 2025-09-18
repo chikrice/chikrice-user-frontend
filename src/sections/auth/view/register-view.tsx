@@ -28,7 +28,7 @@ export default function ModernRegisterView() {
   const userInputs = useMemo(() => getStorage(USER_INPUTS_KEY) || {}, []);
 
   const [isLoginWithEmail, setIsLoginWithEmail] = useState(false);
-  const store = useStore();
+  const register = useStore((state) => state.register);
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string().trim().required(t('fullNameRequired')),
@@ -66,7 +66,7 @@ export default function ModernRegisterView() {
       };
 
       try {
-        await store.register(credentials, userInputs);
+        await register(credentials, userInputs);
       } catch (error) {
         console.log(error);
       }

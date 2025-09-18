@@ -4,7 +4,8 @@ import useStore from 'src/store';
 import CircleButton from 'src/components/circle-button';
 
 export default function AddNewMeal() {
-  const { plan, createMeal } = useStore((state) => state);
+  const plan = useStore((state) => state.plan);
+  const createMeal = useStore((state) => state.createMeal);
   const mealIndex = useMemo(() => plan?.meals?.length ?? 0, [plan?.meals]);
   const handleCreateMeal = useCallback(async () => {
     try {

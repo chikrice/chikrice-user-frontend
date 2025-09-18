@@ -41,7 +41,8 @@ export default function DayNavigator({
   updateDay,
 }: DayNavigatorProps) {
   const { t } = useTranslate();
-  const { user, refreshUserInfo } = useStore();
+  const user = useStore((state) => state.user);
+  const refreshUserInfo = useStore((state) => state.refreshUserInfo);
 
   const isToday = isDateisToday(plan?.date);
 

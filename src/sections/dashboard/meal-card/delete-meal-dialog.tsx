@@ -22,7 +22,7 @@ interface DeleteMealDialogProps {
 export default function DeleteMealDialog({ open, planId, mealId, onClose }: DeleteMealDialogProps) {
   const { t } = useTranslate();
   const loading = useBoolean(false);
-  const { getPlan } = useStore((state) => state);
+  const getPlan = useStore((state) => state.getPlan);
   const handleDeleteMeal = useCallback(async () => {
     try {
       loading.onTrue();

@@ -23,7 +23,11 @@ interface GoogleAuthProps {
 export default function GoogleAuth({ userInputs }: GoogleAuthProps) {
   const { t } = useTranslate();
   const googleLoading = useBoolean();
-  const store = useStore();
+
+  const googleAuth = useStore((state) => state.googleAuth);
+  const loadUserJourney = useStore((state) => state.loadUserJourney);
+  const createUserJourney = useStore((state) => state.createUserJourney);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const handleGoogleLogin = useGoogleLogin({
@@ -36,14 +40,14 @@ export default function GoogleAuth({ userInputs }: GoogleAuthProps) {
         userInputs,
       };
 
-      const user = await store.googleAuth(data);
+      const user = await googleAuth(data);
       const isValid = areUserInputsValid(userInputs);
 
       if (user?.roadmapId) {
         router.push(paths.dashboard);
-        await store.loadUserJourney(user.roadmapId);
+        await loadUserJourney(user.roadmapId);
       } else if (!user?.roadmapId && isValid) {
-        await store.createUserJourney({ ...userInputs, userId: user.id });
+        await createUserJourney({ ...userInputs, userId: user.id });
         router.push(paths.dashboard);
       } else {
         router.push(paths.steps.user);

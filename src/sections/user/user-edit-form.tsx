@@ -31,7 +31,9 @@ interface UserEditFormProps {
 export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }: UserEditFormProps) {
   const { t } = useTranslate();
 
-  const { user, refreshUserInfo, updateUser } = useStore((state) => state);
+  const user = useStore((state) => state.user);
+  const refreshUserInfo = useStore((state) => state.refreshUserInfo);
+  const updateUser = useStore((state) => state.updateUser);
 
   const editUserSchema = Yup.object().shape({
     gender: Yup.string(),
