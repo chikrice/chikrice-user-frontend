@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Container, Stack, Typography } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
 import StreakTable from 'src/components/streak-table';
@@ -20,7 +20,7 @@ export default function HowWeHelpYou({ onCallToAction }) {
   const { t } = useTranslate();
 
   return (
-    <Box mt={{ xs: 20, lg: 30 }} component={MotionViewport}>
+    <Container mt={10} component={MotionViewport}>
       <Stack component={m.div} variants={varFade().inUp}>
         <Typography variant="subtitle2" mb={3} color={'text.secondary'}>
           {t('whoWeAre')}
@@ -31,7 +31,7 @@ export default function HowWeHelpYou({ onCallToAction }) {
       </Stack>
 
       <Stack spacing={2} mt={3} flexDirection={{ md: 'row' }}>
-        <Card sx={{ width: '100%', borderRadius: 8 }} component={m.div} variants={varFade().inUp}>
+        <Card sx={{ width: '100%', borderRadius: 4 }} component={m.div} variants={varFade().inUp}>
           <CardHeader title={t('feature1Title')} subheader={t('feature1Subtitle')} />
           <CardContent>
             <MacrosBar plan={plan} />
@@ -45,13 +45,13 @@ export default function HowWeHelpYou({ onCallToAction }) {
             />
           </CardContent>
         </Card>
-        <Card sx={{ width: '100%', borderRadius: 8 }} component={m.div} variants={varFade().inUp}>
+        <Card sx={{ width: '100%', borderRadius: 4 }} component={m.div} variants={varFade().inUp}>
           <CardHeader title={t('feature3Title')} subheader={t('feature3Subtitle')} />
           <CardContent>
             <RoadmapOverview overview={roadmap.overview as unknown as Overview} />
           </CardContent>
         </Card>
-        <Card sx={{ width: '100%', borderRadius: 8 }} component={m.div} variants={varFade().inUp}>
+        <Card sx={{ width: '100%', borderRadius: 4 }} component={m.div} variants={varFade().inUp}>
           <CardHeader title={t('feature4Title')} subheader={t('feature4Subtitle')} />
           <CardContent>
             <Typography variant="subtitle2" textAlign={'start'} marginInlineStart={1}>
@@ -96,7 +96,7 @@ export default function HowWeHelpYou({ onCallToAction }) {
       >
         {t('startNow')}
       </Button>
-    </Box>
+    </Container>
   );
 }
 

@@ -567,8 +567,6 @@
   "customizationTitle": "Our suggestion",
   "overweight": "Overweight",
   "howItWorks": "How the app works",
-  "heroTitle": "The body you've always dreamed of",
-  "heroSubtitle": "Provide you with all you need to build your dream body",
   "startForFree": "Start for free",
   "noCardRequired": "No credit card required",
   "problemTitle": "Rewrite your story",
@@ -696,5 +694,7 @@
   "caloriesPositive": "Calories must be greater than 0",
   "proteinMin": "Protein must be greater than or equal to 0",
   "carbsMin": "Carbs must be greater than or equal to 0",
-  "fatMin": "Fat must be greater than or equal to 0"
+  "fatMin": "Fat must be greater than or equal to 0",
+  "heroTitle": "You Eat, We Count",
+  "heroSubtitle": "ChikRice count your macros with the speed of light"
 }
