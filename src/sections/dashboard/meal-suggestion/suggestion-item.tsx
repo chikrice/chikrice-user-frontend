@@ -20,7 +20,7 @@ interface SuggestionItemProps {
 
 export default function SuggestionItem({ ingredients, meal, planId }: SuggestionItemProps) {
   const { lang } = useLocales();
-  const { getPlan } = useStore((state) => state);
+  const getPlan = useStore((state) => state.getPlan);
   const handleClick = useCallback(async () => {
     try {
       await api.patch(endpoints.plans.meals.addSuggested(planId), { meal });

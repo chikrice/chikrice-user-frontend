@@ -16,7 +16,8 @@ export default function EditBodyContent({ ingredients, mealIndex }: EditBodyCont
   const { lang } = useLocales();
   const { t } = useTranslate();
 
-  const { incrementIngredient, decrementIngredient } = useStore((state) => state);
+  const incrementIngredient = useStore((state) => state.incrementIngredient);
+  const decrementIngredient = useStore((state) => state.decrementIngredient);
 
   return (
     <Stack sx={{ width: '100%' }}>

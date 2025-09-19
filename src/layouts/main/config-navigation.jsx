@@ -9,7 +9,7 @@ import Iconify from 'src/components/iconify';
 
 export function useNavConfig() {
   const { t } = useTranslate();
-  const { user } = useStore();
+  const user = useStore((state) => state.user);
   const isCoach = user?.role === 'coach' || false;
 
   const memoizedValue = useMemo(() => {

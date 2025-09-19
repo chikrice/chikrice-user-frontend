@@ -2,7 +2,7 @@ import { beforeAll, afterEach, afterAll } from 'vitest';
 
 import useStore from 'src/store';
 
-import { server } from '../mocks';
+import { server } from '../_mocks';
 
 // -------------------------------------
 

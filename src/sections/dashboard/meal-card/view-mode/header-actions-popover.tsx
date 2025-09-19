@@ -38,7 +38,8 @@ export default function HeaderActionsPopover({
   const isDeleteMeal = useBoolean();
 
   const { t } = useTranslate();
-  const { updatePlan, toggleMealMode } = useStore((state) => state);
+  const updatePlan = useStore((state) => state.updatePlan);
+  const toggleMealMode = useStore((state) => state.toggleMealMode);
   const theme = useTheme();
 
   const isRTL = theme.direction === 'rtl';

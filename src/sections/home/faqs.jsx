@@ -1,7 +1,6 @@
 import { m } from 'framer-motion';
-import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
 import Button from '@mui/material/Button';
+import { Container, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
@@ -25,7 +24,7 @@ export default function Faqs() {
   ];
 
   return (
-    <Box mt={{ xs: 20, lg: 30 }} component={MotionViewport}>
+    <Container mt={20} component={MotionViewport}>
       <Stack component={m.div} variants={varFade().inUp}>
         <Typography variant="subtitle2" mb={3} color={'text.secondary'}>
           {t('faqs')}
@@ -67,6 +66,6 @@ export default function Faqs() {
           {t('contact')}
         </Button>
       </Stack>
-    </Box>
+    </Container>
   );
 }

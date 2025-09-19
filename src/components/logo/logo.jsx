@@ -11,7 +11,7 @@ import { RouterLink } from 'src/routes/components';
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
-  const { user } = useStore();
+  const user = useStore((state) => state.user);
   const theme = useTheme();
   const goTo = user ? (user.role === 'coach' ? paths.clients : paths.dashboard) : '/';
 

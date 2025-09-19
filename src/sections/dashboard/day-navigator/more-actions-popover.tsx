@@ -46,7 +46,7 @@ export default function MoreActionsPopover({
   const loading = useBoolean(false);
 
   const popover = usePopover();
-  const { user } = useStore();
+  const user = useStore((state) => state.user);
   const isDeletePlan = useBoolean();
 
   const isPlanSaved = useMemo(() => user?.savedPlans?.includes(planDayId), [planDayId, user]);

@@ -18,7 +18,8 @@ import { RightIcon } from 'src/components/carousel/arrow-icons';
 // -------------------------------------
 
 export default function UserAccountView() {
-  const { logout, user } = useStore();
+  const logout = useStore((state) => state.logout);
+  const user = useStore((state) => state.user);
   const isCoach = user?.role === 'coach';
 
   const { t } = useTranslate();

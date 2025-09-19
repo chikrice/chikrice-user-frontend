@@ -19,7 +19,7 @@ interface MealSuggestionProps {
 
 export default function MealSuggestion({ planId, mealNumber }: MealSuggestionProps) {
   const { t } = useTranslate();
-  const { roadmap } = useStore((state) => state);
+  const roadmap = useStore((state) => state.roadmap);
 
   const { suggestions, suggestionsLoading } = useMealSuggestions(planId, {
     roadmapId: roadmap?.id,

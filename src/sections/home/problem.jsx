@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Box, Button, CardHeader, Stack, Typography } from '@mui/material';
+import { Box, Button, CardHeader, Container, Stack, Typography } from '@mui/material';
 
 import Image from 'src/components/image';
 import { useTranslate } from 'src/locales';
@@ -15,7 +15,7 @@ export default function Problem({ onCallToAction }) {
   const mdDown = useResponsive('down', 'md');
 
   return (
-    <Box mt={10} component={MotionViewport}>
+    <Container mt={10} component={MotionViewport}>
       <Box component={m.div} variants={varFade().inUp}>
         <Typography variant="subtitle2" mb={3} color={'text.secondary'}>
           {t('startNewChapter')}
@@ -27,12 +27,7 @@ export default function Problem({ onCallToAction }) {
         </Stack>
       </Box>
 
-      <Stack
-        justifyContent={'space-around'}
-        flexDirection={{ md: 'row' }}
-        alignItems={'center'}
-        mt={6}
-      >
+      <Stack justifyContent={'space-around'} flexDirection={{ md: 'row' }} alignItems={'center'} mt={6}>
         <Stack spacing={3} textAlign={'left'} component={m.div} variants={varFade().inUp}>
           <CardHeader
             sx={{ alignItems: 'start', p: 0 }}
@@ -53,12 +48,7 @@ export default function Problem({ onCallToAction }) {
             avatar={<Iconify width={30} icon="arcticons:habit-tracker" />}
           />
 
-          <Button
-            variant="contained"
-            sx={{ mt: 2, maxWidth: 350 }}
-            size="large"
-            onClick={onCallToAction}
-          >
+          <Button variant="contained" sx={{ mt: 2, maxWidth: 350 }} size="large" onClick={onCallToAction}>
             {t('startNow')}
           </Button>
         </Stack>
@@ -71,7 +61,7 @@ export default function Problem({ onCallToAction }) {
         </Box>
         {/* iamge here */}
       </Stack>
-    </Box>
+    </Container>
   );
 }
 

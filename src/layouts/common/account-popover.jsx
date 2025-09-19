@@ -9,7 +9,7 @@ import { useRouter } from 'src/routes/hooks';
 export default function AccountPopover() {
   const router = useRouter();
 
-  const { user } = useStore();
+  const user = useStore((state) => state.user);
 
   // const handleLogout = async () => {
   //   try {

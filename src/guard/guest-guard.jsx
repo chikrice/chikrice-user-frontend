@@ -8,17 +8,10 @@ import { useRouter, useSearchParams, usePathname } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 
 export default function GuestGuard({ children }) {
-  const { loading, authenticated } = useStore();
+  const loading = useStore((state) => state.isAuthLoading);
+  const authenticated = useStore((state) => state.authenticated);
 
-  return (
-    <>
-      {loading ? (
-        <SplashScreen />
-      ) : (
-        <Container authenticated={authenticated}> {children}</Container>
-      )}
-    </>
-  );
+  return <>{loading ? <SplashScreen /> : <Container authenticated={authenticated}> {children}</Container>}</>;
 }
 
 GuestGuard.propTypes = {

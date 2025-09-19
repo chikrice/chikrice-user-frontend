@@ -48,7 +48,7 @@ export const typography: TypographyVariantsOptions = {
     fontWeight: 800,
     lineHeight: 1.5,
     fontSize: pxToRem(30),
-    ...responsiveFontSizes({ sm: 32, md: 48, lg: 52 }),
+    ...responsiveFontSizes({ sm: 32, md: 48, lg: 72 }),
   },
   h2: {
     fontWeight: 800,

@@ -9,7 +9,8 @@ import { SplashScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 export default function AuthGuard({ children }) {
-  const { isAuthLoading, authenticated } = useStore((state) => state);
+  const isAuthLoading = useStore((state) => state.isAuthLoading);
+  const authenticated = useStore((state) => state.authenticated);
 
   return (
     <>{isAuthLoading ? <SplashScreen /> : <Container authenticated={authenticated}> {children}</Container>}</>

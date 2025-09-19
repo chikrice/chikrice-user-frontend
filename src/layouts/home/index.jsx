@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Container, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import Footer from './footer';
 import Header from './header';
@@ -12,7 +12,7 @@ export default function HomeLayout({ children }) {
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
       <Header />
 
-      <Container component="main">
+      <main>
         <Stack
           sx={{
             m: 'auto',
@@ -24,7 +24,7 @@ export default function HomeLayout({ children }) {
         >
           {children}
         </Stack>
-      </Container>
+      </main>
 
       <Footer />
     </Box>
