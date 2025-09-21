@@ -2,8 +2,11 @@ import { useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import { Box, ButtonBase } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import Drawer, { drawerClasses } from '@mui/material/Drawer';
 
+import { paper } from 'src/theme/css';
 import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from '../../iconify';
@@ -17,7 +20,9 @@ import { getButtonStyles } from './base-button-styles';
 
 export default function SettingsDrawer() {
   const { t } = useTranslate();
+
   const settings = useSettingsContext();
+  const theme = useTheme();
 
   const { onChangeLang } = useTranslate();
 
@@ -52,7 +57,7 @@ export default function SettingsDrawer() {
             onClick={() => handleChangeLang(option.value)}
           >
             <Iconify icon={option.icon} sx={{ borderRadius: 0.65, width: 28 }} />
-            <label style={{ margin: '0 8px' }}>{option.label}</label>
+            {/* <label style={{ margin: '0 8px' }}>{option.label}</label> */}
           </ButtonBase>
         ))}
       </Box>
@@ -103,7 +108,20 @@ export default function SettingsDrawer() {
   );
 
   return (
-    <Box>
+    <Drawer
+      anchor="right"
+      open={settings.open}
+      onClose={settings.onClose}
+      slotProps={{
+        backdrop: { invisible: true },
+      }}
+      sx={{
+        [`& .${drawerClasses.paper}`]: {
+          ...paper({ theme, bgcolor: theme.palette.background.default }),
+          width: 300,
+        },
+      }}
+    >
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Stack spacing={3} sx={{ p: 3 }}>
@@ -117,6 +135,6 @@ export default function SettingsDrawer() {
       </Stack>
 
       <FullScreenOption />
-    </Box>
+    </Drawer>
   );
 }

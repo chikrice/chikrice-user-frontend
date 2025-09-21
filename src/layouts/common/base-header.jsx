@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
+import { Box } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
-import Container from '@mui/material/Container';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 
@@ -32,7 +32,7 @@ export default function BaseHeader({ children }) {
           backgroundColor: theme.palette.background.default,
         }}
       >
-        <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>{children}</Container>
+        <Box sx={{ height: 1, display: 'flex', alignItems: 'center', width: '100%', p: 2 }}>{children}</Box>
       </Toolbar>
 
       {offsetTop && <HeaderShadow />}

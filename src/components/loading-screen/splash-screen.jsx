@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { useState, useEffect } from 'react';
 
-import Logo from '../logo';
-
 // ----------------------------------------------------------------------
 
 export default function SplashScreen({ sx, ...other }) {
@@ -47,9 +45,7 @@ export default function SplashScreen({ sx, ...other }) {
             repeatDelay: 1,
             repeat: Infinity,
           }}
-        >
-          <Logo disabledLink sx={{ width: 64, height: 64 }} />
-        </m.div>
+        ></m.div>
 
         <Box
           component={m.div}
