@@ -40,7 +40,7 @@ export function customShadows(mode: ThemeMode): CustomShadows {
     z20: `0 20px 40px -4px ${transparent}`,
     z24: `0 24px 48px 0 ${transparent}`,
     //
-    card: `1px 5px 15px 5px ${alpha(color, 0.15)}, 0 6px 24px -24px ${alpha(color, 0.12)}`,
+    card: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08);`,
     dropdown: `0 0 2px 0 ${alpha(color, 0.24)}, -20px 20px 40px -4px ${alpha(color, 0.24)}`,
     dialog: `-40px 40px 80px -8px ${alpha(common.black, 0.24)}`,
     bottomNav: `0px -9px 10px 4px ${alpha(color, 0.1)}`,
@@ -52,5 +52,6 @@ export function customShadows(mode: ThemeMode): CustomShadows {
     success: `0 8px 16px 0 ${alpha(success.main, 0.24)}`,
     warning: `0 8px 16px 0 ${alpha(warning.main, 0.24)}`,
     error: `0 8px 16px 0 ${alpha(error.main, 0.24)}`,
+    //
   };
 }

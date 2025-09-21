@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Container, Stack } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
@@ -9,6 +9,7 @@ import weightSrc from 'src/assets/icons/weight.png';
 import heightSrc from 'src/assets/icons/height.png';
 import allergySrc from 'src/assets/icons/allergy.png';
 import activitySrc from 'src/assets/icons/activity.png';
+import { useResponsive } from 'src/hooks/use-responsive';
 import recommendedSrc from 'src/assets/icons/recommended.png';
 import { LoadingScreen } from 'src/components/loading-screen';
 import ProfileBody from 'src/components/profile/profile-body';
@@ -21,6 +22,7 @@ import UserEditForm from '../user-edit-form';
 
 export default function UserProfileView() {
   const { t } = useTranslate();
+  const isMdUp = useResponsive('up', 'md');
 
   const user = useStore((state) => state.user);
   const isAuthLoading = useStore((state) => state.isAuthLoading);
@@ -92,8 +94,13 @@ export default function UserProfileView() {
   ];
 
   return (
-    <>
-      <Container sx={{ mb: 10 }}>
+    <Container maxWidth="md">
+      <Stack sx={{ mb: 10, px: 0 }}>
+        {isMdUp && (
+          <Typography variant="h3" mb={2} textTransform={'capitalize'}>
+            {t('profile')}
+          </Typography>
+        )}
         <Stack spacing={2}>
           <Stack spacing={1}>
             <ProfileHeader
@@ -109,9 +116,9 @@ export default function UserProfileView() {
 
           <UserGoal user={user} />
         </Stack>
-      </Container>
+      </Stack>
 
       <UserEditForm isEdit={isEdit} setIsEdit={setIsEdit} fieldToBeEdited={fieldName} />
-    </>
+    </Container>
   );
 }

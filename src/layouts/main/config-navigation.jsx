@@ -27,14 +27,14 @@ export function useNavConfig() {
       ? []
       : [
           {
-            title: t('progress'),
-            icon: <Iconify width={24} icon="hugeicons:analytics-up" />,
-            path: paths.progress,
-          },
-          {
             title: t('dashboard'),
             icon: <Iconify width={24} icon="hugeicons:dashboard-square-03" />,
             path: paths.dashboard,
+          },
+          {
+            title: t('progress'),
+            icon: <Iconify width={24} icon="hugeicons:analytics-up" />,
+            path: paths.progress,
           },
         ];
 

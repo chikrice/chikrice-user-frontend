@@ -1,20 +1,16 @@
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import { IconButton } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
-import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import useStore from 'src/store';
 import { bgBlur } from 'src/theme/css';
-import Image from 'src/components/image';
-import logoDark from 'src/assets/images/logo-dark.png';
+import Logo from 'src/components/logo';
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
-import logoLight from 'src/assets/images/logo-light.png';
 import { useSettingsContext } from 'src/components/settings';
 
 import NavMobile from './nav/mobile';
@@ -68,25 +64,7 @@ export default function Header() {
         }}
       >
         <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
-          <Badge
-            style={{ direction: 'ltr' }}
-            sx={{
-              display: 'flex',
-              alignItems: 'end',
-              [`& .${badgeClasses.badge}`]: {
-                top: 8,
-                right: -16,
-              },
-            }}
-            badgeContent={<Link href={'/'} target="_blank" rel="noopener" underline="none"></Link>}
-          >
-            <Image
-              src={settings.themeMode === 'light' ? logoLight : logoDark}
-              alt="logo"
-              width={100}
-              sx={{ scale: 1.5 }}
-            />
-          </Badge>
+          <Logo />
 
           <Box sx={{ flexGrow: 1 }} />
 

@@ -14,7 +14,7 @@ interface MilestonesBreakdownProps {
 
 export default function MilestonesBreakdown({ milestones, onGoingMonth }: MilestonesBreakdownProps) {
   return (
-    <Stack spacing={1}>
+    <Stack>
       {milestones?.map((milestone, index) => (
         <Box key={index}>
           {milestone.month < onGoingMonth && <MilestoneAccomplished milestone={milestone} />}

@@ -11,14 +11,15 @@ const StyledFieldItem = styled(Paper)(({ theme }) => ({
   boxShadow: theme.customShadows.card,
   backgroundColor: theme.palette.background.paper,
   padding: '16px',
+  cursor: 'pointer',
 }));
 
 export default function ProfileBody({ fields, onEdit }) {
   const { t } = useTranslate();
   return (
-    <Grid container gap={1} wrap="wrap">
+    <Grid container spacing={1}>
       {fields.map((field) => (
-        <Grid item xs={5.8} key={field.id} sx={{ flexGrow: 1 }} onClick={() => onEdit(field.name)}>
+        <Grid item xs={6} key={field.id} sx={{ flexGrow: 1 }} onClick={() => onEdit(field.name)}>
           <StyledFieldItem>
             <CardHeader
               sx={{

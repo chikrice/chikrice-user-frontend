@@ -16,13 +16,10 @@ interface MilestoneOngoingProps {
 export default function MilestoneOngoing({ milestone }: MilestoneOngoingProps) {
   const { t } = useTranslate();
 
-  console.log(milestone);
-
   return (
     <Card
       className="progress__tour__2"
       sx={{
-        p: 1,
         backgroundColor: (theme) => theme.palette.background.paper,
         boxShadow: (theme) => theme.customShadows.card,
       }}

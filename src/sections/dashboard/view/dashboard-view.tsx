@@ -1,3 +1,5 @@
+import { Container } from '@mui/material';
+
 import useStore from 'src/store';
 import { ReloadPage } from 'src/components/error-screen';
 import { LoadingScreen } from 'src/components/loading-screen';
@@ -33,7 +35,7 @@ export default function DashboardView() {
   }
 
   return (
-    <>
+    <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
       <MacrosBar plan={plan} />
 
       <Meals plan={plan} planLoading={planLoading} />
@@ -50,6 +52,6 @@ export default function DashboardView() {
         //
         updateDay={updateDay}
       />
-    </>
+    </Container>
   );
 }

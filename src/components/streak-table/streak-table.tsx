@@ -47,7 +47,7 @@ export default function StreakTable({ totalDays, activityLog, onGoingDay }: Stre
     <Card
       className="progress__tour__3"
       sx={{
-        p: 2.5,
+        p: 2,
         backgroundColor: (theme) => theme.palette.background.paper,
         boxShadow: (theme) => theme.customShadows.card,
       }}

@@ -15,7 +15,7 @@ export default function MilestoneAccomplished({ milestone }: MilestoneAccomplish
   const { t } = useTranslate();
 
   return (
-    <Alert>
+    <Alert sx={{ mb: 3 }}>
       <Stack>
         <Typography variant="subtitle1">{t('month') + milestone.month}</Typography>
         <Typography variant="body2" color={'text.secondary'}>{`${fDate(

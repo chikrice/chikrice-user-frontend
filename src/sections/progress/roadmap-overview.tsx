@@ -23,7 +23,7 @@ export default function RoadmapOverview({ overview }: RoadmapOverviewProps) {
       }}
     >
       <ProgressChart weightProgression={overview?.weightProgression} />
-      <Stack sx={{ px: 2 }}>
+      <Stack sx={{ px: 2, pb: 1 }}>
         <List sx={{ color: 'text.secondary' }}>
           <Divider />
           <ListItem>

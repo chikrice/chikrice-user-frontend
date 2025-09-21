@@ -25,6 +25,7 @@ export default function ProfileHeader({ name, email, gender, picture, onEdit }: 
         alignItems: 'center',
         justifyContent: 'space-between',
         borderRadius: 2,
+        cursor: 'pointer',
         p: 2,
         boxShadow: (theme) => theme.customShadows.card,
       }}
