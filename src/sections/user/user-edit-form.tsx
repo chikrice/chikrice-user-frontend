@@ -9,7 +9,7 @@ import { useMemo, useEffect, useCallback } from 'react';
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import FormProvider from 'src/components/hook-form';
-import CustomBottomDrawer from 'src/components/custom-drawer';
+import { ResponsiveDialog } from 'src/components/custom-dialog';
 import AgeInput from 'src/components/profile/form-components/form-age';
 import WeightInput from 'src/components/profile/form-components/form-weight';
 import HeightInput from 'src/components/profile/form-components/form-height';
@@ -115,7 +115,7 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }: Use
   }, [setIsEdit, handleResetValues]);
 
   return (
-    <CustomBottomDrawer open={isEdit} onOpen={() => setIsEdit(true)} onClose={handleCloseDrawer}>
+    <ResponsiveDialog open={isEdit} onOpen={() => setIsEdit(true)} onClose={handleCloseDrawer}>
       <Container>
         <FormProvider methods={methods} onSubmit={onSubmit}>
           {fieldToBeEdited === 'age' && <AgeInput />}
@@ -127,6 +127,7 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }: Use
           {fieldToBeEdited === 'goalAchievementSpeed' && (
             <GoalAchievementInput goalAchievementSpeed={values.goalAchievementSpeed} />
           )}
+
           <Stack>
             <LoadingButton type="submit" loading={isSubmitting} fullWidth variant="contained" size="large">
               {t('confirm')}
@@ -134,6 +135,6 @@ export default function UserEditForm({ isEdit, setIsEdit, fieldToBeEdited }: Use
           </Stack>
         </FormProvider>
       </Container>
-    </CustomBottomDrawer>
+    </ResponsiveDialog>
   );
 }
