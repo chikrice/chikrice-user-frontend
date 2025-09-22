@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Dialog, DialogContent, DialogActions } from '@mui/material';
+import { Dialog, DialogContent } from '@mui/material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 import CustomBottomDrawer from 'src/components/custom-drawer';
@@ -11,8 +11,6 @@ interface ResponsiveDialogProps {
   open: boolean;
   onOpen?: () => void;
   onClose: () => void;
-  title?: string;
-  actions?: ReactNode;
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
   fullWidth?: boolean;
   sx?: SxProps;
@@ -24,7 +22,6 @@ export default function ResponsiveDialog({
   open,
   onOpen,
   onClose,
-  actions,
   maxWidth = 'sm',
   fullWidth = true,
   sx,
@@ -36,8 +33,7 @@ export default function ResponsiveDialog({
   if (isDesktop) {
     return (
       <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open} onClose={onClose} sx={sx} {...other}>
-        <DialogContent sx={{ pt: 2 }}>{children}</DialogContent>
-        {actions && <DialogActions>{actions}</DialogActions>}
+        <DialogContent sx={{ pt: 2, pb: 3 }}>{children}</DialogContent>
       </Dialog>
     );
   }

@@ -1,11 +1,12 @@
 import { mutate } from 'swr';
 import { enqueueSnackbar } from 'notistack';
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Skeleton, Typography } from '@mui/material';
+import { Box, Skeleton, Typography, Dialog, DialogContent } from '@mui/material';
 
 import useStore from 'src/store';
 import { useTranslate } from 'src/locales';
 import { api, endpoints } from 'src/utils/axios';
+import { useResponsive } from 'src/hooks/use-responsive';
 import { fDate, isDateisToday } from 'src/utils/format-time';
 import CustomBottomDrawer from 'src/components/custom-drawer';
 import CustomIconButton from 'src/components/custom-icon-button';
@@ -41,6 +42,7 @@ export default function DayNavigator({
   updateDay,
 }: DayNavigatorProps) {
   const { t } = useTranslate();
+  const mdUp = useResponsive('up', 'md');
   const user = useStore((state) => state.user);
   const refreshUserInfo = useStore((state) => state.refreshUserInfo);
 
@@ -155,26 +157,50 @@ export default function DayNavigator({
         </Box>
       </StyledNavigator>
 
-      <CustomBottomDrawer
-        open={isDrawer}
-        onOpen={() => setIsDrawer(true)}
-        onClose={handleCloseDrawer}
-        height="auto"
-      >
-        {drawerContent === 'copy' ? (
-          isCopied ? (
-            <CopySuccessMessage onCheckCopy={handleCheckCopy} />
+      {/* Mobile: Bottom Drawer */}
+      {!mdUp && (
+        <CustomBottomDrawer
+          open={isDrawer}
+          onOpen={() => setIsDrawer(true)}
+          onClose={handleCloseDrawer}
+          height="auto"
+        >
+          {drawerContent === 'copy' ? (
+            isCopied ? (
+              <CopySuccessMessage onCheckCopy={handleCheckCopy} />
+            ) : (
+              <CopyMealsToCalendar
+                highlightedDate={highlightedDate}
+                onCopyMeal={handleCopyMeal}
+                totalDays={totalDays}
+              />
+            )
           ) : (
-            <CopyMealsToCalendar
-              highlightedDate={highlightedDate}
-              onCopyMeal={handleCopyMeal}
-              totalDays={totalDays}
-            />
-          )
-        ) : (
-          <NavigationContent plans={plans} onNavigateTo={handleNavigateTo} />
-        )}
-      </CustomBottomDrawer>
+            <NavigationContent plans={plans} onNavigateTo={handleNavigateTo} />
+          )}
+        </CustomBottomDrawer>
+      )}
+
+      {/* Desktop: Dialog */}
+      {mdUp && (
+        <Dialog open={isDrawer} onClose={handleCloseDrawer} maxWidth="sm" fullWidth>
+          <DialogContent sx={{ p: 0 }}>
+            {drawerContent === 'copy' ? (
+              isCopied ? (
+                <CopySuccessMessage onCheckCopy={handleCheckCopy} />
+              ) : (
+                <CopyMealsToCalendar
+                  highlightedDate={highlightedDate}
+                  onCopyMeal={handleCopyMeal}
+                  totalDays={totalDays}
+                />
+              )
+            ) : (
+              <NavigationContent plans={plans} onNavigateTo={handleNavigateTo} />
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </StyledWrapper>
   );
 }

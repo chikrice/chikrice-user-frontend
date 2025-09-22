@@ -696,5 +696,6 @@
   "carbsMin": "Carbs must be greater than or equal to 0",
   "fatMin": "Fat must be greater than or equal to 0",
   "heroTitle": "You Eat, We Count",
-  "heroSubtitle": "ChikRice count your macros with the speed of light"
+  "heroSubtitle": "ChikRice count your macros with the speed of light",
+  "addNewMeal": "Add new meal"
 }

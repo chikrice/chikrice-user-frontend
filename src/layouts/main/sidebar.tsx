@@ -44,7 +44,6 @@ export default function Sidebar() {
         {/* Logo Section */}
         <Box
           sx={{
-            mb: 3,
             mx: 2.5,
             py: 2,
             px: 2.5,

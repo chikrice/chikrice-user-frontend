@@ -3,6 +3,8 @@ import { PlanType } from 'chikrice-types';
 import { Box, Collapse } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import MacroItem from './macro-item';
 import CalorieInfo from './calorie-info';
 import { MacrosBarCollapseBtn } from './collapse-button';
@@ -25,6 +27,8 @@ interface MacrosBarProps {
 
 export default function MacrosBar({ plan, ...other }: MacrosBarProps) {
   const theme = useTheme();
+  const mdUp = useResponsive('up', 'md');
+
   const [isShowMacros, setIsShowMacros] = useState(true);
 
   const renderMacroBar = () => (
@@ -84,12 +88,12 @@ export default function MacrosBar({ plan, ...other }: MacrosBarProps) {
       {...other}
       sx={{
         ...stickyBarStyles,
-        boxShadow: theme.customShadows.macrosBar,
+        boxShadow: { xs: theme.customShadows.macrosBar, md: theme.customShadows.card },
         backgroundColor: theme.palette.background.default,
       }}
     >
       {renderMacroBar()}
-      <MacrosBarCollapseBtn isIn={isShowMacros} onClick={() => setIsShowMacros(!isShowMacros)} />
+      {!mdUp && <MacrosBarCollapseBtn isIn={isShowMacros} onClick={() => setIsShowMacros(!isShowMacros)} />}
     </Box>
   );
 }

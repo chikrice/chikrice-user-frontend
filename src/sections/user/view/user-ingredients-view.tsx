@@ -27,12 +27,14 @@ import { useLocales, useTranslate } from 'src/locales';
 import CircleButton from 'src/components/circle-button';
 import { useUserIngredients } from 'src/api/ingredient';
 import EmptyContent from 'src/components/empty-content';
+import { useResponsive } from 'src/hooks/use-responsive';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { ConfirmDialog, IngredientFormDialog } from 'src/components/custom-dialog';
 
 export default function UserIngredientsView() {
   const { t } = useTranslate();
   const { lang } = useLocales();
+  const isMdUp = useResponsive('up', 'md');
   const user = useStore((state) => state.user);
 
   // Use real data from API
@@ -83,20 +85,26 @@ export default function UserIngredientsView() {
     }
   }, [user.id, selectedIngredient, isDeleteDialogOpen, mutate]);
 
-  const updateIngredient = useCallback(
+  const handleIngredientSubmit = useCallback(
     async (data) => {
       try {
-        await api.patch(endpoints.user.ingredients(user.id), data);
+        if (selectedIngredient) {
+          // Edit existing ingredient
+          await api.patch(endpoints.user.ingredients(user.id), data);
+        } else {
+          // Add new ingredient
+          await api.post(endpoints.user.ingredients(user.id), data);
+        }
         isFormDialogOpen.onFalse();
         await mutate();
       } catch (error) {
         console.error(error);
-        enqueueSnackbar(error.message || 'Failed to update ingredient, please try again', {
+        enqueueSnackbar(error.message || 'Failed to save ingredient, please try again', {
           variant: 'error',
         });
       }
     },
-    [user.id, isFormDialogOpen, mutate]
+    [user.id, selectedIngredient, isFormDialogOpen, mutate]
   );
 
   const handleCloseFormDialog = useCallback(() => {
@@ -139,31 +147,44 @@ export default function UserIngredientsView() {
   }
 
   return (
-    <Container sx={{ pb: 20 }}>
-      <Stack spacing={4} mt={3}>
+    <Container maxWidth={'md'} sx={{ pb: 20 }}>
+      <Stack>
+        {isMdUp && (
+          <Typography variant="h3" mb={2} textTransform={'capitalize'}>
+            {t('ingredients')}
+          </Typography>
+        )}
         {ingredients.length === 0 ? (
           <EmptyContent title={t('noEngredientsFound')} sx={{ mt: 8 }} />
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {ingredients?.map((ingredient) => (
               <Grid item xs={12} sm={6} md={4} key={ingredient?.id}>
                 <Card
                   sx={{
-                    p: 2,
-                    pb: 1,
+                    px: 1,
                     position: 'relative',
                     backgroundColor: (theme) => theme.palette.background.paper,
                     boxShadow: (theme) => theme.customShadows.card,
                   }}
                 >
                   {/* Content */}
-                  <CardContent sx={{ py: 2, px: 2, display: 'flex', alignItems: 'center' }}>
+                  <CardContent sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                     <ListItem sx={{ pl: 0 }}>
                       <ListItemIcon>
                         <Typography variant="h4">{ingredient.icon}</Typography>
                       </ListItemIcon>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="subtitle2" color="text.secondary">
+                        <Typography
+                          variant="subtitle2"
+                          color="text.secondary"
+                          sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '100%',
+                          }}
+                        >
                           {ingredient.name[lang]}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
@@ -204,7 +225,7 @@ export default function UserIngredientsView() {
       <IngredientFormDialog
         open={isFormDialogOpen.value}
         onClose={handleCloseFormDialog}
-        onSubmit={updateIngredient}
+        onSubmit={handleIngredientSubmit}
         ingredient={selectedIngredient}
         title={selectedIngredient ? t('editIngredient') : t('addIngredient')}
       />

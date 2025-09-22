@@ -50,8 +50,14 @@ export default function MealInputAi({ mealIndex }: MealInputAiProps) {
         value={prompt}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}
         minRows={2}
+        maxRows={10}
         placeholder={`- ${t('aiPlaceholder1')}  \n- ${t('aiPlaceholder2')} `}
-        style={{ width: '100%', maxHeight: '150px', borderRadius: 30 }}
+        style={{
+          width: '100%',
+          borderRadius: 30,
+          scrollbarWidth: 'none', // Firefox
+          msOverflowStyle: 'none', // IE and Edge
+        }}
       />
 
       <LoadingButton
