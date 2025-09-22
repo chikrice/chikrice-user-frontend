@@ -1,7 +1,5 @@
 import { m } from 'framer-motion';
-import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
-import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { useTranslate } from 'src/locales';
 import Iconify from 'src/components/iconify';
@@ -10,40 +8,23 @@ import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
-export default function SettingsButton({ sx }) {
+export default function SettingsButton() {
   const settings = useSettingsContext();
   const { t } = useTranslate();
   return (
-    <Badge
-      color="error"
-      variant="dot"
-      invisible={!settings.canReset}
+    <IconButton
+      component={m.button}
+      whileTap="tap"
+      whileHover="hover"
+      variants={varHover(1.05)}
+      aria-label={t('settings')}
+      onClick={settings.onToggle}
       sx={{
-        [`& .${badgeClasses.badge}`]: {
-          top: 13,
-          right: 10,
-        },
-        ...sx,
+        width: 40,
+        height: 40,
       }}
     >
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        aria-label={t('settings')}
-        onClick={settings.onToggle}
-        sx={{
-          width: 40,
-          height: 40,
-        }}
-      >
-        <Iconify icon="solar:settings-bold-duotone" width={30} sx={{ mt: 0.5 }} />
-      </IconButton>
-    </Badge>
+      <Iconify icon="solar:settings-bold-duotone" width={30} />
+    </IconButton>
   );
 }
-
-SettingsButton.propTypes = {
-  sx: PropTypes.object,
-};

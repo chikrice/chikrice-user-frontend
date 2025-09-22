@@ -17,6 +17,8 @@ import {
   Divider,
   ListItem,
   ListItemIcon,
+  alpha,
+  useTheme,
 } from '@mui/material';
 
 import useStore from 'src/store';
@@ -34,6 +36,7 @@ import { ConfirmDialog, IngredientFormDialog } from 'src/components/custom-dialo
 export default function UserIngredientsView() {
   const { t } = useTranslate();
   const { lang } = useLocales();
+  const theme = useTheme();
   const isMdUp = useResponsive('up', 'md');
   const user = useStore((state) => state.user);
 
@@ -147,76 +150,217 @@ export default function UserIngredientsView() {
   }
 
   return (
-    <Container maxWidth={'md'} sx={{ pb: 20 }}>
+    <Container maxWidth={'lg'} sx={{ pb: 20, px: { md: 8 } }}>
       <Stack>
         {isMdUp && (
           <Typography variant="h3" mb={2} textTransform={'capitalize'}>
             {t('ingredients')}
           </Typography>
         )}
-        {ingredients.length === 0 ? (
-          <EmptyContent title={t('noEngredientsFound')} sx={{ mt: 8 }} />
-        ) : (
-          <Grid container spacing={2}>
-            {ingredients?.map((ingredient) => (
-              <Grid item xs={12} sm={6} md={4} key={ingredient?.id}>
-                <Card
-                  sx={{
-                    px: 1,
-                    position: 'relative',
-                    backgroundColor: (theme) => theme.palette.background.paper,
-                    boxShadow: (theme) => theme.customShadows.card,
-                  }}
-                >
-                  {/* Content */}
-                  <CardContent sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-                    <ListItem sx={{ pl: 0 }}>
-                      <ListItemIcon>
-                        <Typography variant="h4">{ingredient.icon}</Typography>
-                      </ListItemIcon>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography
-                          variant="subtitle2"
-                          color="text.secondary"
+
+        {/* Mobile layout - keep existing structure */}
+        {!isMdUp && (
+          <>
+            {ingredients.length === 0 ? (
+              <EmptyContent title={t('noEngredientsFound')} sx={{ mt: 8 }} />
+            ) : (
+              <Grid container spacing={2}>
+                {ingredients?.map((ingredient) => (
+                  <Grid item xs={12} sm={6} md={4} key={ingredient?.id}>
+                    <Card
+                      sx={{
+                        px: 1,
+                        position: 'relative',
+                        backgroundColor: (theme) => theme.palette.background.paper,
+                        boxShadow: (theme) => theme.customShadows.card,
+                      }}
+                    >
+                      {/* Content */}
+                      <CardContent sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+                        <ListItem sx={{ pl: 0 }}>
+                          <ListItemIcon>
+                            <Typography variant="h4">{ingredient.icon}</Typography>
+                          </ListItemIcon>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Typography
+                              variant="subtitle2"
+                              color="text.secondary"
+                              sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                maxWidth: '100%',
+                              }}
+                            >
+                              {ingredient.name[lang]}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              ~ {ingredient.serving.weightInGrams}g
+                            </Typography>
+                          </Box>
+                        </ListItem>
+                      </CardContent>
+
+                      {/* Actions */}
+                      <CardActions
+                        sx={{
+                          gap: 2,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          borderTop: 'solid 1px',
+                          borderColor: 'divider',
+                        }}
+                      >
+                        <IconButton size="small" onClick={() => handleOpenInfoDialog(ingredient)}>
+                          <Iconify icon="fluent:info-28-regular" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="info"
+                          onClick={() => handleEditIngredient(ingredient)}
+                        >
+                          <Iconify icon="akar-icons:edit" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleDeleteIngredient(ingredient)}
+                        >
+                          <Iconify icon="cuida:trash-outline" />
+                        </IconButton>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+          </>
+        )}
+
+        {/* Desktop layout - Grid with 3/4 for ingredients and 1/4 for sticky button */}
+        {isMdUp && (
+          <Grid container spacing={3}>
+            {/* Ingredients Grid - 3/4 width */}
+            <Grid item xs={12} md={9}>
+              {ingredients.length === 0 ? (
+                <EmptyContent title={t('noEngredientsFound')} sx={{ mt: 8 }} />
+              ) : (
+                <Grid container spacing={2}>
+                  {ingredients?.map((ingredient) => (
+                    <Grid item xs={12} sm={6} lg={4} key={ingredient?.id}>
+                      <Card
+                        sx={{
+                          px: 1,
+                          position: 'relative',
+                          backgroundColor: (theme) => theme.palette.background.paper,
+                          boxShadow: (theme) => theme.customShadows.card,
+                        }}
+                      >
+                        {/* Content */}
+                        <CardContent sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+                          <ListItem sx={{ pl: 0 }}>
+                            <ListItemIcon>
+                              <Typography variant="h4">{ingredient.icon}</Typography>
+                            </ListItemIcon>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Typography
+                                variant="subtitle2"
+                                color="text.secondary"
+                                sx={{
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  maxWidth: '100%',
+                                }}
+                              >
+                                {ingredient.name[lang]}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                ~ {ingredient.serving.weightInGrams}g
+                              </Typography>
+                            </Box>
+                          </ListItem>
+                        </CardContent>
+
+                        {/* Actions */}
+                        <CardActions
                           sx={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            maxWidth: '100%',
+                            gap: 2,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            borderTop: 'solid 1px',
+                            borderColor: 'divider',
                           }}
                         >
-                          {ingredient.name[lang]}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          ~ {ingredient.serving.weightInGrams}g
-                        </Typography>
-                      </Box>
-                    </ListItem>
-                  </CardContent>
+                          <IconButton size="small" onClick={() => handleOpenInfoDialog(ingredient)}>
+                            <Iconify icon="fluent:info-28-regular" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="info"
+                            onClick={() => handleEditIngredient(ingredient)}
+                          >
+                            <Iconify icon="akar-icons:edit" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDeleteIngredient(ingredient)}
+                          >
+                            <Iconify icon="cuida:trash-outline" />
+                          </IconButton>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Grid>
 
-                  {/* Actions */}
-                  <CardActions
+            {/* Sticky Add Button Column - 1/4 width */}
+            <Grid item xs={12} md={3}>
+              <Card
+                onClick={handleAddIngredient}
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease-in-out',
+                  border: `2px dashed ${theme.palette.divider}`,
+                  backgroundColor: 'transparent',
+                  minHeight: 125,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'sticky',
+                  top: 16,
+                  zIndex: 1,
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: alpha(theme.palette.primary.light, 0.1),
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    py: 1,
+                  }}
+                >
+                  <Iconify
+                    icon="eva:plus-fill"
                     sx={{
-                      gap: 2,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      borderTop: 'solid 1px',
-                      borderColor: 'divider',
+                      fontSize: 24,
+                      color: theme.palette.primary.main,
                     }}
-                  >
-                    <IconButton size="small" onClick={() => handleOpenInfoDialog(ingredient)}>
-                      <Iconify icon="fluent:info-28-regular" />
-                    </IconButton>
-                    <IconButton size="small" color="info" onClick={() => handleEditIngredient(ingredient)}>
-                      <Iconify icon="akar-icons:edit" />
-                    </IconButton>
-                    <IconButton size="small" color="error" onClick={() => handleDeleteIngredient(ingredient)}>
-                      <Iconify icon="cuida:trash-outline" />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+                  />
+                  <Typography variant="caption" color="primary" sx={{ fontWeight: 600 }}>
+                    {t('addIngredient')}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
           </Grid>
         )}
       </Stack>
@@ -321,12 +465,16 @@ export default function UserIngredientsView() {
         )}
       </Dialog>
 
-      {/* Floating Add Button */}
+      {/* Floating Add Button - Mobile only */}
       <CircleButton
         icon="eva:plus-fill"
         width={55}
         style={{ right: 16 }}
-        sx={{ position: 'absolute', bottom: 122 }}
+        sx={{
+          position: 'absolute',
+          bottom: 122,
+          display: { xs: 'block', md: 'none' },
+        }}
         onClick={handleAddIngredient}
       />
     </Container>

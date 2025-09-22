@@ -19,7 +19,7 @@ export default function ProfileBody({ fields, onEdit }) {
   return (
     <Grid container spacing={1}>
       {fields.map((field) => (
-        <Grid item xs={6} key={field.id} sx={{ flexGrow: 1 }} onClick={() => onEdit(field.name)}>
+        <Grid item xs={4} key={field.id} sx={{ flexGrow: 1 }} onClick={() => onEdit(field.name)}>
           <StyledFieldItem>
             <CardHeader
               sx={{

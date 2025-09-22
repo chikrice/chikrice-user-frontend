@@ -38,7 +38,7 @@ export default function MealCard({ meal, index, plan, ingredients, isAction = tr
     if (!ingredients.length && cardRef.current && index !== 0) {
       cardRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [ingredients]);
+  }, [ingredients, index]);
 
   return (
     <>

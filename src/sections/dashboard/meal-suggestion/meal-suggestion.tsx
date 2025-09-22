@@ -36,13 +36,13 @@ export default function MealSuggestion({ planId, mealNumber }: MealSuggestionPro
       <Box
         sx={{
           display: 'flex',
+          flexWrap: { md: 'wrap' },
           overflowX: 'auto',
           width: '100%',
           scrollSnapType: 'x mandatory',
           '::-webkit-scrollbar': { display: 'none' },
           px: 2,
-          mt: 1,
-          pb: 2,
+          py: 2,
           gap: 1.5,
         }}
       >
