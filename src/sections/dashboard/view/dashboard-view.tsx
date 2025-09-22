@@ -1,6 +1,7 @@
 import { Container, Box, Grid, useTheme, useMediaQuery } from '@mui/material';
 
 import useStore from 'src/store';
+import Scrollbar from 'src/components/scrollbar';
 import { ReloadPage } from 'src/components/error-screen';
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -9,7 +10,6 @@ import MacrosBar from '../macros-bar';
 import AddNewMeal from '../add-new-meal';
 import DayNavigator from '../day-navigator';
 import DesktopActionPanel from '../desktop-action-panel/desktop-action-panel';
-import Scrollbar from 'src/components/scrollbar';
 
 // -------------------------------------
 
@@ -66,7 +66,7 @@ export default function DashboardView() {
 
   // Desktop layout (two columns)
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ paddingInlineStart: { md: 6 }, paddingInlineEnd: { md: 8 } }}>
       <Grid container sx={{ minHeight: '100vh' }}>
         {/* Left Column - Scrollable Meals */}
         <Grid item xs={12} md={5.5}>

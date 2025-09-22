@@ -89,9 +89,10 @@ export default function DesktopActionPanel({
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          height: '400px',
-          maxHeight: '400px',
+          height: '440px',
+          maxHeight: '440px',
           boxShadow: (theme) => theme.customShadows.card,
+          bgcolor: (theme) => theme.palette.background.paper,
           borderRadius: '16px',
           overflow: 'hidden',
         }}
@@ -165,7 +166,7 @@ export default function DesktopActionPanel({
 
         {/* Content */}
         <Scrollbar sx={{ flex: 1, pt: 2, minHeight: 0 }}>
-          <Stack pb={2}>
+          <Stack sx={{ pb: { xs: 2, md: 0 } }}>
             {isTellAi.value ? (
               <MealInputAi mealIndex={mealIndex} />
             ) : (

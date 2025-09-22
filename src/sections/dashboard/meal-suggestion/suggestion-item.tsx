@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import styled from '@emotion/styled';
-import { ListItem, ListItemIcon, Paper, Typography } from '@mui/material';
+import { Card, CardContent, ListItem, ListItemIcon, Typography } from '@mui/material';
 
 import useStore from 'src/store';
 import { useLocales } from 'src/locales';
@@ -33,23 +32,27 @@ export default function SuggestionItem({ ingredients, meal, planId }: Suggestion
 
   return (
     <>
-      <StyledMealSuggestion elevation={3} onClick={handleClick}>
-        {ingredients.map((item, index) => (
-          <ListItem sx={{ p: 0.3 }} key={index}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <Typography variant="body2" color={'text.secondary'}>
-              {item.name[lang]}
-            </Typography>
-          </ListItem>
-        ))}
-      </StyledMealSuggestion>
+      <Card
+        onClick={handleClick}
+        sx={{
+          width: '100%',
+          minWidth: '200px',
+          cursor: 'pointer',
+          boxShadow: (theme) => theme.customShadows.card,
+          background: (theme) => theme.palette.background.paper,
+        }}
+      >
+        <CardContent>
+          {ingredients.map((item, index) => (
+            <ListItem sx={{ p: 0.3 }} key={index}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <Typography variant="body2" color={'text.secondary'}>
+                {item.name[lang]}
+              </Typography>
+            </ListItem>
+          ))}
+        </CardContent>
+      </Card>
     </>
   );
 }
-
-const StyledMealSuggestion = styled(Paper)(() => ({
-  padding: '.7rem ',
-  minWidth: 150,
-  borderRadius: 16,
-  width: 'fit-conent',
-}));

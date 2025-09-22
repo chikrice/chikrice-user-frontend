@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box, Container, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { isPastDate } from 'src/utils/format-time';
 
@@ -20,20 +20,18 @@ export default function MealsList({ plan }: MealsListProps) {
   return (
     <Box sx={{ pb: 45 }}>
       {!!plan?.meals?.length && (
-        <Container sx={{ mt: 2 }}>
-          <Stack spacing={1.5}>
-            {plan?.meals?.map((meal, index) => (
-              <MealCard
-                key={meal?.id ?? index}
-                index={index}
-                meal={meal}
-                plan={plan}
-                isAction={true}
-                ingredients={Object.values(meal?.ingredients).flat()}
-              />
-            ))}
-          </Stack>
-        </Container>
+        <Stack spacing={1.5} px={2} pt={2}>
+          {plan?.meals?.map((meal, index) => (
+            <MealCard
+              key={meal?.id ?? index}
+              index={index}
+              meal={meal}
+              plan={plan}
+              isAction={true}
+              ingredients={Object.values(meal?.ingredients).flat()}
+            />
+          ))}
+        </Stack>
       )}
 
       {!isMealSuggestions && !isPast && (

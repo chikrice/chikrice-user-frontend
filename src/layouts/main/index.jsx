@@ -19,7 +19,7 @@ export default function MainLayout({ children }) {
       <Box sx={{ display: 'flex', height: 1 }}>
         {isMdUp && <Sidebar />}
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: 1, maxWidth: '100vw' }}>
           <Header />
           <Box
             component="main"

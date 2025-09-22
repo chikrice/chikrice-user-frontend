@@ -94,7 +94,7 @@ export default function UserProfileView() {
   ];
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg" sx={{ paddingX: { md: 8 } }}>
       <Stack sx={{ mb: 10, px: 0 }}>
         {isMdUp && (
           <Typography variant="h3" mb={2} textTransform={'capitalize'}>

@@ -28,7 +28,7 @@ export default function ProgressView() {
   if (roadmapError) return <ReloadPage />;
 
   return (
-    <Container maxWidth="md" sx={{ pb: { xs: 20, md: 10 } }}>
+    <Container maxWidth={'lg'} sx={{ pb: 20, paddingX: { md: 8 } }}>
       {isMdUp && (
         <Typography variant="h3" mb={2} textTransform={'capitalize'}>
           {t('progress')}

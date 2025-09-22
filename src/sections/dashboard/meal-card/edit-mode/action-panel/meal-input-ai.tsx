@@ -45,7 +45,7 @@ export default function MealInputAi({ mealIndex }: MealInputAiProps) {
   }, []);
 
   return (
-    <Stack sx={{ px: 2, mt: 1, flexDirection: 'row' }} spacing={2}>
+    <Stack sx={{ px: 2, mt: 1, mb: 4, flexDirection: 'row' }} spacing={2}>
       <Textarea
         value={prompt}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt(e.target.value)}

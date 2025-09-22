@@ -192,7 +192,7 @@ export function palette(mode: ThemeMode): CustomPalette {
       neutral: alpha(grey[500], 0.12),
     },
     card: {
-      default: grey[800],
+      default: grey[700],
       soft: grey[800],
     },
     nav: {

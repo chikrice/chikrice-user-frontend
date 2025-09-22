@@ -89,7 +89,7 @@ export default function MacrosBar({ plan, ...other }: MacrosBarProps) {
       sx={{
         ...stickyBarStyles,
         boxShadow: { xs: theme.customShadows.macrosBar, md: theme.customShadows.card },
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: { xs: theme.palette.background.default, md: theme.palette.background.paper },
       }}
     >
       {renderMacroBar()}
