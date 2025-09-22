@@ -8,6 +8,13 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
   position: 'absolute',
   boxShadow: theme.customShadows.bottomNav,
   backgroundColor: theme.palette.background.default,
+
+  // Responsive styles using theme breakpoints
+  [theme.breakpoints.up('md')]: {
+    boxShadow: 'none',
+    position: 'relative',
+    bottom: 0,
+  },
 }));
 
 export const StyledNavigator = styled(Box)(() => ({

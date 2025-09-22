@@ -3,6 +3,7 @@ import { Box, Card, CardActions, CardContent, Stack, Typography } from '@mui/mat
 
 import { useTranslate } from 'src/locales';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useResponsive } from 'src/hooks/use-responsive';
 import CustomIconButton from 'src/components/custom-icon-button';
 
 // Import styles
@@ -29,11 +30,12 @@ export default function MealCard({ meal, index, plan, ingredients, isAction = tr
   const { t } = useTranslate();
 
   const isInfo = useBoolean();
+  const mdUp = useResponsive('up', 'md');
 
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ingredients.length && cardRef.current) {
+    if (!ingredients.length && cardRef.current && index !== 0) {
       cardRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [ingredients]);
@@ -73,14 +75,16 @@ export default function MealCard({ meal, index, plan, ingredients, isAction = tr
         </CardActions>
       </Card>
 
-      <EditActionPanel
-        mealId={meal.id}
-        mealIndex={index}
-        planId={plan.id}
-        isOpen={meal.mode === 'edit'}
-        canSave={!!ingredients.length}
-        selectedIngredients={ingredients}
-      />
+      {!mdUp && (
+        <EditActionPanel
+          mealId={meal.id}
+          mealIndex={index}
+          planId={plan.id}
+          isOpen={meal.mode === 'edit'}
+          canSave={!!ingredients.length}
+          selectedIngredients={ingredients}
+        />
+      )}
 
       <InfoDialog
         open={isInfo.value}
