@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0](https://github.com/chikrice/chikrice-user-frontend/compare/v1.5.0...v1.6.0) (2025-09-22)
+
+
+### Features
+
+* **ui:** add desktop-optimized layouts and enhanced user experience ([645dc6f](https://github.com/chikrice/chikrice-user-frontend/commit/645dc6fb8862d37592fdc362aa68ed63456ce387))
+* **ui:** add desktop-optimized layouts and enhanced user experience ([50077c7](https://github.com/chikrice/chikrice-user-frontend/commit/50077c7d6f232c15760dfff4d9513cfee6b3d9cb))
+
 ## [1.5.0](https://github.com/chikrice/chikrice-user-frontend/compare/v1.4.2...v1.5.0) (2025-09-19)
 
 
